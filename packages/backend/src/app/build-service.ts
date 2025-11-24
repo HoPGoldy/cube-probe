@@ -44,10 +44,6 @@ export const registerService = async (instance: AppInstance) => {
 
   const monitoredHostService = new MonitoredHostService({ prisma });
 
-  const endPointService = new EndPointService({
-    prisma,
-  });
-
   const resultService = new ResultService({
     prisma,
   });
@@ -55,6 +51,11 @@ export const registerService = async (instance: AppInstance) => {
   const cronService = new CronService({
     prisma,
     resultService,
+  });
+
+  const endPointService = new EndPointService({
+    prisma,
+    cronService,
   });
 
   const appControllerPlugin = async (server: AppInstance) => {

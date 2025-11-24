@@ -35,6 +35,21 @@ export const routes = createBrowserRouter(
           path: "/setting-application",
           element: lazyLoad(() => import("./pages/setting-application")),
         },
+        // 监控服务管理
+        {
+          path: "/monitored-host",
+          element: lazyLoad(() => import("./pages/monitored-host")),
+        },
+        // 监控端点管理
+        {
+          path: "/monitored-endpoint",
+          element: lazyLoad(() => import("./pages/monitored-endpoint")),
+        },
+        // 探测结果管理
+        {
+          path: "/probe-result",
+          element: lazyLoad(() => import("./pages/probe-result")),
+        },
         // 个人资料
         {
           path: "/user-profile",

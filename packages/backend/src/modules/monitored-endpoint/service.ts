@@ -1,15 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 import { SchemaEndPointCreateType, SchemaEndPointUpdateType } from "./schema";
+import { CronService } from "@/modules/probe-task/cron-service";
 
 interface ServiceOptions {
   prisma: PrismaClient;
+  cronService: CronService;
 }
 
 export class EndPointService {
   constructor(private options: ServiceOptions) {}
 
   async createEndPoint(data: SchemaEndPointCreateType) {
-    return await this.options.prisma.endPoint.create({
+    const endPoint = await this.options.prisma.endPoint.create({
       data: {
         serviceId: data.serviceId,
         name: data.name,
@@ -20,6 +22,13 @@ export class EndPointService {
         timeout: data.timeout || null,
       },
     });
+
+    // 如果端点启用，添加到定时任务调度器
+    if (endPoint.enabled) {
+      await this.options.cronService.addEndpointToScheduler(endPoint.id);
+    }
+
+    return endPoint;
   }
 
   async getEndPointById(id: string) {
@@ -47,7 +56,13 @@ export class EndPointService {
 
   async updateEndPoint(data: SchemaEndPointUpdateType) {
     const { id, ...updateData } = data;
-    return await this.options.prisma.endPoint.update({
+
+    // 获取更新前的状态
+    const oldEndPoint = await this.options.prisma.endPoint.findUnique({
+      where: { id },
+    });
+
+    const endPoint = await this.options.prisma.endPoint.update({
       where: { id },
       data: {
         ...updateData,
@@ -55,9 +70,30 @@ export class EndPointService {
           updateData.headers !== undefined ? updateData.headers : undefined,
       },
     });
+
+    // 处理定时任务调度器的更新
+    const wasEnabled = oldEndPoint?.enabled ?? false;
+    const isEnabled = endPoint.enabled;
+
+    if (wasEnabled && !isEnabled) {
+      // 从启用变为禁用：移除任务
+      this.options.cronService.removeEndpointFromScheduler(id);
+    } else if (!wasEnabled && isEnabled) {
+      // 从禁用变为启用：添加任务
+      await this.options.cronService.addEndpointToScheduler(id);
+    } else if (isEnabled) {
+      // 保持启用状态但配置可能变化：更新任务
+      await this.options.cronService.updateEndpointInScheduler(id);
+    }
+
+    return endPoint;
   }
 
   async deleteEndPoint(id: string) {
+    // 先从调度器移除任务
+    this.options.cronService.removeEndpointFromScheduler(id);
+
+    // 再删除数据库记录
     return await this.options.prisma.endPoint.delete({
       where: { id },
     });

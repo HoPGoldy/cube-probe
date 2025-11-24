@@ -97,7 +97,7 @@ export const registerController = async (options: ControllerOptions) => {
     {
       schema: {
         description: "Delete a service",
-        params: Type.Object({
+        body: Type.Object({
           id: Type.String(),
         }),
         response: {
@@ -106,7 +106,7 @@ export const registerController = async (options: ControllerOptions) => {
       },
     },
     async (req) => {
-      const { id } = req.params;
+      const { id } = req.body;
       await monitoredHostService.deleteService(id);
       return { success: true };
     },

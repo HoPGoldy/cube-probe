@@ -31,6 +31,18 @@ export const Sidebar: FC = () => {
         path: "/setting-user",
         name: "用户管理",
       },
+      {
+        path: "/monitored-host",
+        name: "监控服务",
+      },
+      {
+        path: "/monitored-endpoint",
+        name: "监控端点",
+      },
+      {
+        path: "/probe-result",
+        name: "探测结果",
+      },
     );
   }
 
