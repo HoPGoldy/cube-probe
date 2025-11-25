@@ -1,7 +1,7 @@
-import * as dotenv from "dotenv";
+import dotenvFlow from "dotenv-flow";
 import { nanoid } from "nanoid";
 
-dotenv.config();
+dotenvFlow.config();
 
 const getEnv = (key: string, defaultValue: string): string => {
   return process.env[key] ?? defaultValue;

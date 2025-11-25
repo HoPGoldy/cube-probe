@@ -30,7 +30,7 @@ export class PrismaService extends PrismaClient {
     if (result) {
       console.log("Created admin user:", result);
     } else {
-      console.log("User table is not empty, skipped seeding");
+      // console.log("User table is not empty, skipped seeding");
     }
   }
 }

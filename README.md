@@ -62,9 +62,9 @@ pnpm start:frontend
 
 ## 本地配置
 
-前端：进入 `packages/frontend` 目录，将 `.env` 文件复制一份 `.env.local`，并填写其中参数。
+如果需要自定义本地环境变量配置的话，可以进入对应的项目仓库，例如 `packages/frontend` 或者 `packages/backend`，将 `.env` 文件复制一份 `.env.local`，并填写其中参数。
 
-后端：进入 `packages/backend` 目录，将 `.env.example` 文件复制为 `.env`，并填写其中参数。
+`.env.local` 的配置会覆盖默认的 `.env`。
 
 ## 本地 docker 构建
 
