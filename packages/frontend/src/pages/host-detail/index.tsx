@@ -16,7 +16,10 @@ interface EndpointChartProps {
 const MAX_DATA_POINTS = 50;
 
 const EndpointChart: React.FC<EndpointChartProps> = ({ endpointId }) => {
-  const { data: resultsData } = useGetProbeResultListByEndpoint(endpointId, 50);
+  const { data: resultsData } = useGetProbeResultListByEndpoint(
+    endpointId,
+    MAX_DATA_POINTS,
+  );
   const results = resultsData?.data ?? [];
 
   const [chartData, setChartData] = useState<any[]>([]);
@@ -25,17 +28,28 @@ const EndpointChart: React.FC<EndpointChartProps> = ({ endpointId }) => {
   useEffect(() => {
     if (results.length === 0) return;
 
-    const newResults = results
-      .sort(
-        (a: any, b: any) =>
-          new Date(a.checkedAt).getTime() - new Date(b.checkedAt).getTime(),
-      )
-      .map((r: any) => ({
-        id: r.id,
-        time: utcdayjsFormat(r.checkedAt, "MM-DD HH:mm"),
-        responseTime: r.responseTime || 0,
-        status: r.success ? "成功" : "失败",
-      }));
+    const newResults = results.map((r: any) => ({
+      id: r.id,
+      time: utcdayjsFormat(r.checkedAt, "MM-DD HH:mm"),
+      responseTime: r.responseTime || 0,
+      status: r.success ? "成功" : "失败",
+    }));
+    console.log("results", newResults, chartData);
+
+    if (!chartData || chartData.length === 0) {
+      setChartData(newResults.slice(-MAX_DATA_POINTS));
+      return;
+    }
+
+    const lastId = chartData[chartData.length - 1]?.id;
+    console.log("lastId", lastId);
+
+    // 找到新数据：从老数据的最后一个id开始查找
+    const newLastId = newResults.findIndex((r) => r.id === lastId);
+    const newData = newResults.slice(newLastId + 1);
+    console.log("newData", newData);
+
+    // 追加新数据
 
     // 初始化数据
     if (chartData.length === 0) {
@@ -45,8 +59,6 @@ const EndpointChart: React.FC<EndpointChartProps> = ({ endpointId }) => {
     }
 
     // 找出新数据：从老数据的最后一个id开始查找
-    const lastId =
-      prevResultsRef.current[prevResultsRef.current.length - 1]?.id;
     if (!lastId) {
       setChartData(newResults.slice(-MAX_DATA_POINTS));
       prevResultsRef.current = newResults;

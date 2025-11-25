@@ -11,7 +11,7 @@ interface EchartsProps {
  */
 export const Echarts: FC<EchartsProps> = (props) => {
   const chartContainerRef = useRef(null);
-  const chartRef = useRef(null);
+  const chartRef = useRef<echarts.ECharts | null>(null);
 
   useEffect(() => {
     if (!props.options) return;
@@ -20,7 +20,7 @@ export const Echarts: FC<EchartsProps> = (props) => {
     }
     try {
       chartRef.current.setOption(props.options, {
-        notMerge: false, // 允许数据合并，启用动画
+        notMerge: false,
         lazyUpdate: false, // 立即更新
       });
     } catch (e) {
