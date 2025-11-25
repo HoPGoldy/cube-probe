@@ -10,18 +10,46 @@ interface EndpointChartProps {
 
 const MAX_DATA_POINTS = 50;
 
-export const EndpointChart: FC<EndpointChartProps> = ({ endpointId }) => {
+export const EndpointChart: FC<EndpointChartProps> = (props) => {
   const { data: resultsData } = useGetProbeResultListByEndpoint(
-    endpointId,
+    props.endpointId,
     MAX_DATA_POINTS,
   );
-  const results = (resultsData?.data ?? []).map((item) => ({
-    ...item,
-    time: utcdayjsFormat(item.createdAt, "MM-DD HH:mm"),
-    responseTime: item.responseTime,
-    status: item.success ? "成功" : "失败",
-  }));
-  console.log("results", results);
+
+  const results = (resultsData?.data ?? [])
+    .map((item) => ({
+      ...item,
+      time: utcdayjsFormat(item.createdAt, "MM-DD HH:mm:ss"),
+      responseTime: item.responseTime,
+      status: item.success ? "成功" : "失败",
+    }))
+    .reverse();
+
+  // const [results, setResults] = useState(generateMockData());
+
+  // const addNewData = () => {
+  //   const now = new Date();
+  //   const success = Math.random() > 0.1; // 90% 成功率
+  //   const responseTime = success
+  //     ? Math.floor(Math.random() * 500) + 50 // 成功时 50-550ms
+  //     : Math.floor(Math.random() * 1000) + 500; // 失败时 500-1500ms
+
+  //   const newData = {
+  //     id: nanoid(),
+  //     time: utcdayjs(now).format("MM-DD HH:mm:ss"),
+  //     responseTime,
+  //     status: success ? "成功" : "失败",
+  //     createdAt: now.toISOString(),
+  //     success,
+  //   };
+
+  //   results.push(newData);
+  //   // for 循环 shift 数据
+  //   while (results.length > MAX_DATA_POINTS) {
+  //     results.shift();
+  //   }
+  //   setResults([...results]);
+  // };
 
   if (results.length === 0) {
     return <EmptyTip title="暂无探测数据" />;
@@ -30,7 +58,7 @@ export const EndpointChart: FC<EndpointChartProps> = ({ endpointId }) => {
   // 计算最大响应时间，用于失败时的柱子高度
   const maxResponseTime = Math.max(...results.map((d) => d.responseTime));
 
-  const options = {
+  const options: echarts.EChartsOption = {
     animation: true,
     animationDuration: 800,
     animationEasing: "cubicOut" as const,
@@ -62,11 +90,13 @@ export const EndpointChart: FC<EndpointChartProps> = ({ endpointId }) => {
       right: 0,
       top: 0,
       bottom: 0,
+      containLabel: false,
     },
     xAxis: {
       type: "category" as const,
-      data: results.map((d) => d.time),
+      data: results.map((d) => d.createdAt),
       show: false,
+      boundaryGap: true,
     },
     yAxis: {
       type: "value" as const,
@@ -75,7 +105,9 @@ export const EndpointChart: FC<EndpointChartProps> = ({ endpointId }) => {
     series: [
       {
         type: "bar" as const,
+        barMaxWidth: 48,
         data: results.map((d) => ({
+          id: d.id,
           value: d.status === "失败" ? maxResponseTime : d.responseTime,
           itemStyle: {
             color: d.status === "成功" ? "#52c41a" : "#ff4d4f",
