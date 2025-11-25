@@ -1,166 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useGetMonitoredHostDetail } from "@/services/monitored-host";
 import { useGetEndpointList } from "@/services/monitored-endpoint";
-import { useGetProbeResultListByEndpoint } from "@/services/probe-result";
 import { Card, Spin, Empty, Tag, Flex, Space, Button } from "antd";
 import { usePageTitle } from "@/store/global";
-import { Echarts } from "@/components/echarts";
-
 import { utcdayjsFormat } from "@/utils/dayjs";
-
-interface EndpointChartProps {
-  endpointId: string;
-}
-
-const MAX_DATA_POINTS = 50;
-
-const EndpointChart: React.FC<EndpointChartProps> = ({ endpointId }) => {
-  const { data: resultsData } = useGetProbeResultListByEndpoint(
-    endpointId,
-    MAX_DATA_POINTS,
-  );
-  const results = resultsData?.data ?? [];
-
-  const [chartData, setChartData] = useState<any[]>([]);
-  const prevResultsRef = useRef<any[]>([]);
-
-  useEffect(() => {
-    if (results.length === 0) return;
-
-    const newResults = results.map((r: any) => ({
-      id: r.id,
-      time: utcdayjsFormat(r.checkedAt, "MM-DD HH:mm"),
-      responseTime: r.responseTime || 0,
-      status: r.success ? "成功" : "失败",
-    }));
-    console.log("results", newResults, chartData);
-
-    if (!chartData || chartData.length === 0) {
-      setChartData(newResults.slice(-MAX_DATA_POINTS));
-      return;
-    }
-
-    const lastId = chartData[chartData.length - 1]?.id;
-    console.log("lastId", lastId);
-
-    // 找到新数据：从老数据的最后一个id开始查找
-    const newLastId = newResults.findIndex((r) => r.id === lastId);
-    const newData = newResults.slice(newLastId + 1);
-    console.log("newData", newData);
-
-    // 追加新数据
-
-    // 初始化数据
-    if (chartData.length === 0) {
-      setChartData(newResults.slice(-MAX_DATA_POINTS));
-      prevResultsRef.current = newResults;
-      return;
-    }
-
-    // 找出新数据：从老数据的最后一个id开始查找
-    if (!lastId) {
-      setChartData(newResults.slice(-MAX_DATA_POINTS));
-      prevResultsRef.current = newResults;
-      return;
-    }
-
-    // 找到老数据最后一个id在新数组中的位置
-    const lastIndex = newResults.findIndex((r) => r.id === lastId);
-
-    // 如果找到了，lastIndex+1 之后的就是新数据
-    if (lastIndex !== -1 && lastIndex < newResults.length - 1) {
-      const newItems = newResults.slice(lastIndex + 1);
-
-      if (newItems.length > 0) {
-        // 有新数据，使用 push/shift 方式更新
-        setChartData((prev) => {
-          const updated = [...prev];
-
-          // 添加新数据到末尾
-          newItems.forEach((item) => {
-            updated.push(item);
-          });
-
-          // 如果超过最大数量，从开头移除
-          while (updated.length > MAX_DATA_POINTS) {
-            updated.shift();
-          }
-
-          return updated;
-        });
-      }
-    }
-
-    prevResultsRef.current = newResults;
-  }, [results]);
-
-  if (chartData.length === 0) {
-    return (
-      <Empty description="暂无探测数据" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-    );
-  }
-
-  // 计算最大响应时间，用于失败时的柱子高度
-  const maxResponseTime = Math.max(...chartData.map((d) => d.responseTime));
-
-  const options = {
-    animation: true,
-    animationDuration: 800,
-    animationEasing: "cubicOut" as const,
-    animationDurationUpdate: 800,
-    animationEasingUpdate: "cubicOut" as const,
-    tooltip: {
-      trigger: "axis" as const,
-      axisPointer: {
-        type: "shadow" as const,
-      },
-      formatter: (params: any) => {
-        const item = params[0];
-        const dataIndex = item.dataIndex;
-        const originalData = chartData[dataIndex];
-        return `
-          <div style="padding: 4px 8px;">
-            <div><strong>时间:</strong> ${originalData.time}</div>
-            <div><strong>响应时间:</strong> ${originalData.responseTime}ms</div>
-            <div><strong>状态:</strong> ${originalData.status}</div>
-          </div>
-        `;
-      },
-    },
-    legend: {
-      show: false,
-    },
-    grid: {
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-    },
-    xAxis: {
-      type: "category" as const,
-      data: chartData.map((d) => d.time),
-      show: false,
-    },
-    yAxis: {
-      type: "value" as const,
-      show: false,
-    },
-    series: [
-      {
-        type: "bar" as const,
-        data: chartData.map((d) => ({
-          value: d.status === "失败" ? maxResponseTime : d.responseTime,
-          itemStyle: {
-            color: d.status === "成功" ? "#52c41a" : "#ff4d4f",
-          },
-        })),
-      },
-    ],
-  };
-
-  return <Echarts options={options} />;
-};
+import { EmptyTip } from "@/components/empty-tip";
+import { EndpointChart } from "./endpoint-chart";
 
 const HostDetailPage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
@@ -247,7 +93,16 @@ const HostDetailPage: React.FC = () => {
       {/* Endpoints 列表 */}
       <Flex vertical gap={16}>
         {endpoints.length === 0 ? (
-          <Empty description="该服务暂无监控端点" />
+          <EmptyTip
+            className="mt-4"
+            title="暂未配置监控接口"
+            subTitle="点击下方按钮创建接口"
+            extra={
+              <Button type="primary" className="mt-2">
+                创建接口
+              </Button>
+            }
+          />
         ) : (
           endpoints.map(renderEndPointItem)
         )}

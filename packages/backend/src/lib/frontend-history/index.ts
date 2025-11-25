@@ -3,37 +3,37 @@ import fastifyStatic from "@fastify/static";
 import { PATH_FRONTEND_FILE } from "@/config/path";
 import { createErrorResponse } from "../unify-response";
 import { ErrorNotFound } from "@/types/error";
-import { ENV_FRONTEND_BASE_URL, ENV_IS_PROD } from "@/config/env";
+import { ENV_FRONTEND_BASE_URL, ENV_IS_DEV } from "@/config/env";
 import fs from "fs/promises";
 
 /**
  * 注册前端静态资源和 History 模式路由
  */
 export const registerFrontendHistory = async (server: FastifyInstance) => {
-  if (ENV_IS_PROD) {
-    // 对 index.html 的文本进行替换，把 {FRONTEND_BASE_URL} 替换为实际的前端基础路径
-    const initialIndexHtml = await fs.readFile(
-      PATH_FRONTEND_FILE + "/index.html",
-      "utf-8",
-    );
+  if (ENV_IS_DEV) return;
 
-    const replacedIndexHtml = initialIndexHtml.replace(
-      /\{FRONTEND_BASE_URL\}/g,
-      ENV_FRONTEND_BASE_URL,
-    );
+  // 对 index.html 的文本进行替换，把 {FRONTEND_BASE_URL} 替换为实际的前端基础路径
+  const initialIndexHtml = await fs.readFile(
+    PATH_FRONTEND_FILE + "/index.html",
+    "utf-8",
+  );
 
-    await fs.writeFile(
-      PATH_FRONTEND_FILE + "/index.html",
-      replacedIndexHtml,
-      "utf-8",
-    );
+  const replacedIndexHtml = initialIndexHtml.replace(
+    /\{FRONTEND_BASE_URL\}/g,
+    ENV_FRONTEND_BASE_URL,
+  );
 
-    // 注册静态文件服务
-    await server.register(fastifyStatic, {
-      root: PATH_FRONTEND_FILE,
-      prefix: "/",
-    });
-  }
+  await fs.writeFile(
+    PATH_FRONTEND_FILE + "/index.html",
+    replacedIndexHtml,
+    "utf-8",
+  );
+
+  // 注册静态文件服务
+  await server.register(fastifyStatic, {
+    root: PATH_FRONTEND_FILE,
+    prefix: "/",
+  });
 
   // 添加 hook 处理 SPA 路由
   server.setNotFoundHandler(
