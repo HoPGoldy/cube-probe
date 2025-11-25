@@ -1,9 +1,12 @@
 import { FC } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import s from "./styles.module.css";
 import { useAtomValue } from "jotai";
 import { stateUserJwtData } from "@/store/user";
 import { UserRole } from "@/services/user";
+import { useGetMonitoredHostList } from "@/services/monitored-host";
+import { Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 interface MenuItem {
   path: string;
@@ -12,7 +15,15 @@ interface MenuItem {
 
 export const Sidebar: FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const userInfo = useAtomValue(stateUserJwtData);
+
+  const { data: hostsData } = useGetMonitoredHostList({});
+  const hosts = hostsData?.data ?? [];
+
+  const handleCreateHost = () => {
+    navigate("/monitored-host?modal=add");
+  };
 
   const menuItems: MenuItem[] = [
     {
@@ -67,15 +78,42 @@ export const Sidebar: FC = () => {
 
       <div className="flex-grow flex-shrink overflow-y-auto noscrollbar overflow-x-hidden my-3">
         {menuItems.map(renderMenuItem)}
+
+        {userInfo.role === UserRole.ADMIN && hosts.length > 0 && (
+          <>
+            <div className="px-4 py-2 text-xs text-gray-500 font-semibold">
+              监控服务
+            </div>
+            {hosts.map((host: any) => {
+              const isActive = location.pathname === `/host-detail/${host.id}`;
+              const className = [s.menuItem];
+              if (isActive) className.push(s.menuItemActive);
+
+              return (
+                <Link to={`/host-detail/${host.id}`} key={host.id}>
+                  <div
+                    className={className.join(" ")}
+                    title={`${host.name} (${host.host}:${host.port})`}
+                  >
+                    <span className="truncate">{host.name}</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </>
+        )}
       </div>
 
-      {/* <Button
-        className={`${s.toolBtn} keep-antd-style`}
-        icon={<PlusOutlined />}
-        block
-      >
-        新建分组
-      </Button> */}
+      {userInfo.role === UserRole.ADMIN && (
+        <Button
+          className={`${s.toolBtn} keep-antd-style`}
+          icon={<PlusOutlined />}
+          block
+          onClick={handleCreateHost}
+        >
+          创建监控服务
+        </Button>
+      )}
     </section>
   );
 };

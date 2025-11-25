@@ -40,6 +40,11 @@ export const routes = createBrowserRouter(
           path: "/monitored-host",
           element: lazyLoad(() => import("./pages/monitored-host")),
         },
+        // 监控服务详情
+        {
+          path: "/host-detail/:hostId",
+          element: lazyLoad(() => import("./pages/host-detail")),
+        },
         // 监控端点管理
         {
           path: "/monitored-endpoint",

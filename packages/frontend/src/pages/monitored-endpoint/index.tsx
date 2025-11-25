@@ -18,6 +18,9 @@ import { usePageTitle } from "@/store/global";
 
 const MonitoredEndpointPage: React.FC = () => {
   usePageTitle("监控端点管理");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const hostId = searchParams.get("hostId");
+
   const [searchValues, setSearchValues] = useState({});
   const [paginationValues, setPaginationValues] = useState({
     page: 1,
@@ -28,7 +31,11 @@ const MonitoredEndpointPage: React.FC = () => {
     data: listData,
     refetch: reloadList,
     isFetching: loadingList,
-  } = useGetEndpointList({ ...searchValues, ...paginationValues });
+  } = useGetEndpointList({
+    ...searchValues,
+    ...paginationValues,
+    ...(hostId ? { serviceId: hostId } : {}),
+  });
 
   const { data: servicesData } = useGetMonitoredHostList({});
 
@@ -40,8 +47,6 @@ const MonitoredEndpointPage: React.FC = () => {
 
   const services = servicesData?.data ?? [];
   const serviceMap = new Map(services.map((s: any) => [s.id, s.name]));
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const onAdd = () => {
     searchParams.set("modal", DetailPageType.Add);

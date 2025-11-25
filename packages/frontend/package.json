@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
+    "@ant-design/plots": "^2.6.6",
     "@bytemd/plugin-gfm": "^1.20.2",
     "@bytemd/plugin-highlight": "^1.21.0",
     "@bytemd/react": "^1.20.2",
