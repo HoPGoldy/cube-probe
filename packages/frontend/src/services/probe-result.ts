@@ -22,6 +22,7 @@ export const useGetProbeResultListByEndpoint = (
   return useQuery({
     queryKey: ["probe-result/list-by-endpoint", endPointId, limit],
     enabled: !!endPointId,
+    refetchInterval: 30000,
     queryFn: () =>
       requestPost("probe-result/list-by-endpoint", { endPointId, limit }),
   });

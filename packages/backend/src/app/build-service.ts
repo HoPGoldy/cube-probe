@@ -19,7 +19,6 @@ import { EndPointService } from "@/modules/monitored-endpoint/service";
 import { ResultService } from "@/modules/monitored-result/service";
 import { CodeExecutorService } from "@/modules/code-executor/service";
 import { CronService } from "@/modules/probe-task/cron-service";
-import { IntervalProbeService } from "@/modules/probe-task/interval-service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 
@@ -52,12 +51,6 @@ export const registerService = async (instance: AppInstance) => {
   });
 
   const cronService = new CronService({
-    prisma,
-    resultService,
-  });
-
-  // 新的间隔调度服务（可与 CronService 同时使用）
-  const intervalProbeService = new IntervalProbeService({
     prisma,
     resultService,
   });
@@ -127,11 +120,9 @@ export const registerService = async (instance: AppInstance) => {
       server,
     });
 
-    // Start the probe schedulers after controllers are registered
+    // Start the probe scheduler after controllers are registered
     setImmediate(async () => {
       await cronService.startProbeScheduler();
-      // 如果需要启用间隔调度服务，取消下面的注释：
-      // await intervalProbeService.startProbeScheduler();
     });
   };
 

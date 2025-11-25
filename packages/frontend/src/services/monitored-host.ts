@@ -12,11 +12,12 @@ export const useGetMonitoredHostList = (query: MonitoredHostListQueryDto) => {
 };
 
 export const useGetMonitoredHostDetail = (id: string) => {
-  return useQuery({
+  const result = useQuery({
     queryKey: ["monitored-host/detail", id],
     enabled: !!id,
     queryFn: () => requestPost("monitored-host/get", { id }),
   });
+  return { ...result, hostDetail: result.data?.data };
 };
 
 export interface MonitoredHostCreateDto {
