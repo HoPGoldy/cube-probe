@@ -45,6 +45,8 @@ export const DetailModal: FC = () => {
         headers: endpointDetail.headers
           ? JSON.stringify(endpointDetail.headers, null, 2)
           : "",
+        // bodyContent 已经是字符串，直接使用
+        bodyContent: endpointDetail.bodyContent || "",
       };
 
       form.setFieldsValue(formValues);
@@ -80,6 +82,25 @@ export const DetailModal: FC = () => {
       values.headers = null;
     }
 
+    // bodyContent 直接作为字符串保存，不需要解析
+    // 只在用户选择了 json 或 x-www-form-urlencoded 时验证 JSON 格式
+    if (values.bodyContent) {
+      const contentType = values.bodyContentType || "json";
+      if (contentType === "json" || contentType === "x-www-form-urlencoded") {
+        try {
+          JSON.parse(values.bodyContent); // 验证格式但不保存解析结果
+        } catch {
+          Modal.error({
+            title: "格式错误",
+            content: `请求体内容必须是有效的JSON格式（当前编码类型: ${contentType}）`,
+          });
+          return false;
+        }
+      }
+    } else {
+      values.bodyContent = null;
+    }
+
     if (isAdd) {
       const resp = await runAddEndpoint(values);
       if (resp?.code !== 200) return false;
@@ -113,6 +134,7 @@ export const DetailModal: FC = () => {
             enabled: true,
             method: "GET",
             timeout: 10000,
+            bodyContentType: "json",
           }}
           style={{
             marginTop: 16,
@@ -206,6 +228,35 @@ export const DetailModal: FC = () => {
                 min={1}
                 max={300000}
                 placeholder="10000"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="请求体编码"
+              name="bodyContentType"
+              tooltip="请求体的编码类型"
+            >
+              <Select
+                placeholder="请选择请求体编码类型"
+                options={[
+                  { label: "JSON", value: "json" },
+                  {
+                    label: "x-www-form-urlencoded",
+                    value: "x-www-form-urlencoded",
+                  },
+                  { label: "XML", value: "xml" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="请求体内容"
+              name="bodyContent"
+              tooltip="请求体的内容。JSON/Form编码时输入JSON格式，XML编码时直接输入XML字符串"
+            >
+              <Input.TextArea
+                rows={4}
+                placeholder='JSON/Form: {"key": "value"}&#10;XML: <root>...</root>'
               />
             </Form.Item>
 

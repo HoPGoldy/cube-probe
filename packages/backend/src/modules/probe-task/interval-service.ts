@@ -129,6 +129,59 @@ export class IntervalProbeService {
         timeout,
       };
 
+      // 处理请求体
+      if (endPoint.bodyContent && typeof endPoint.bodyContent === "string") {
+        const contentType = endPoint.bodyContentType || "json";
+
+        switch (contentType) {
+          case "json": {
+            config.headers = {
+              ...config.headers,
+              "Content-Type": "application/json",
+            };
+            // 解析 JSON 字符串
+            try {
+              config.data = JSON.parse(endPoint.bodyContent);
+            } catch (error) {
+              console.log(
+                `[Interval] Failed to parse JSON body for endpoint ${endPointId}`,
+              );
+              config.data = endPoint.bodyContent;
+            }
+            break;
+          }
+          case "x-www-form-urlencoded": {
+            config.headers = {
+              ...config.headers,
+              "Content-Type": "application/x-www-form-urlencoded",
+            };
+            // 解析 JSON 字符串，然后转换为 URLSearchParams
+            try {
+              const bodyObj = JSON.parse(endPoint.bodyContent);
+              const params = new URLSearchParams();
+              Object.entries(bodyObj).forEach(([key, value]) => {
+                params.append(key, String(value));
+              });
+              config.data = params.toString();
+            } catch (error) {
+              console.log(
+                `[Interval] Failed to parse form body for endpoint ${endPointId}`,
+              );
+              config.data = endPoint.bodyContent;
+            }
+            break;
+          }
+          case "xml":
+            config.headers = {
+              ...config.headers,
+              "Content-Type": "application/xml",
+            };
+            // 直接使用字符串作为 XML
+            config.data = endPoint.bodyContent;
+            break;
+        }
+      }
+
       startTime = Date.now();
       const response = await axios(config);
       const responseTime = Date.now() - startTime;

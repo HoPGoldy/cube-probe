@@ -38,6 +38,8 @@ export interface EndpointCreateDto {
   intervalTime?: number;
   enabled?: boolean;
   timeout?: number;
+  bodyContentType?: "json" | "x-www-form-urlencoded" | "xml";
+  bodyContent?: string;
 }
 
 export const useCreateEndpoint = () => {

@@ -67,6 +67,13 @@ export const SchemaEndPointCreate = Type.Object({
       maximum: 300000,
     }), // Max 5 minutes
   ),
+  bodyContentType: Type.Optional(
+    Type.String({
+      description: "请求体编码类型",
+      enum: ["json", "x-www-form-urlencoded", "xml"],
+    }),
+  ),
+  bodyContent: Type.Optional(Type.String({ description: "请求体内容" })),
 });
 
 export type SchemaEndPointCreateType = Type.Static<typeof SchemaEndPointCreate>;
@@ -92,6 +99,8 @@ export const SchemaEndPointDetail = Type.Object({
   intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
   timeout: Type.Union([Type.Integer(), Type.Null()]),
+  bodyContentType: Type.Union([Type.String(), Type.Null()]),
+  bodyContent: Type.Union([Type.String(), Type.Null()]),
 });
 
 export type SchemaEndPointDetailType = Type.Static<typeof SchemaEndPointDetail>;
@@ -164,6 +173,8 @@ export const createEndPointDetailVo = (
     intervalTime: data.intervalTime,
     enabled: data.enabled,
     timeout: data.timeout,
+    bodyContentType: data.bodyContentType,
+    bodyContent: data.bodyContent,
   };
 };
 

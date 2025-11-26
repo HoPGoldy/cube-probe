@@ -91,18 +91,20 @@ model Service {
 }
 
 model EndPoint {
-  id           String        @id @default(uuid())
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  serviceId    String
-  name         String
-  url          String?
-  method       String?       @default("GET") // HTTP method: GET, POST, PUT, DELETE, etc.
-  headers      Json?
-  intervalTime Int? // in seconds
-  enabled      Boolean       @default(true)
-  timeout      Int? // in milliseconds
-  results      ProbeResult[]
+  id              String        @id @default(uuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  serviceId       String
+  name            String
+  url             String?
+  method          String?       @default("GET") // HTTP method: GET, POST, PUT, DELETE, etc.
+  headers         Json?
+  intervalTime    Int? // in seconds
+  enabled         Boolean       @default(true)
+  timeout         Int? // in milliseconds
+  bodyContentType String?       @default("json") // Request body encoding: json, x-www-form-urlencoded, xml
+  bodyContent     String? // Request body content
+  results         ProbeResult[]
 
   service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
