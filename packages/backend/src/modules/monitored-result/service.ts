@@ -27,36 +27,30 @@ export class ResultService {
     });
   }
 
-  async getProbeResultsByEndPointId(endPointId: string, limit?: number) {
-    return await this.options.prisma.probeResult.findMany({
-      where: { endPointId },
-      orderBy: {
-        timestamp: "desc",
-      },
-      take: limit || 50, // Default to 50 records
-    });
-  }
+  async getProbeResults(params: {
+    endPointId?: string;
+    serviceId?: string;
+    limit?: number;
+  }) {
+    const { endPointId, serviceId, limit } = params;
 
-  async getProbeResultsByServiceId(serviceId: string, limit?: number) {
-    return await this.options.prisma.probeResult.findMany({
-      where: {
-        endPoint: {
-          serviceId,
-        },
-      },
-      orderBy: {
-        timestamp: "desc",
-      },
-      take: limit || 100, // Default to 100 records
-    });
-  }
+    // 构建查询条件
+    const where: any = {};
 
-  async getAllProbeResults(limit?: number) {
+    if (endPointId) {
+      where.endPointId = endPointId;
+    } else if (serviceId) {
+      where.endPoint = {
+        serviceId,
+      };
+    }
+
     return await this.options.prisma.probeResult.findMany({
+      where,
       orderBy: {
         timestamp: "desc",
       },
-      take: limit || 100, // Default to 100 records
+      take: limit || 100, // 默认 100 条记录
     });
   }
 

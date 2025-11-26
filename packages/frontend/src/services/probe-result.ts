@@ -6,38 +6,21 @@ export interface ProbeResultListQueryDto extends CommonListQueryDto {
   endPointId?: string;
   serviceId?: string;
   limit?: number;
+  refetchInterval?: number;
 }
 
 export const useGetProbeResultList = (query?: ProbeResultListQueryDto) => {
-  return useQuery({
-    queryKey: ["probe-result/list", query],
-    queryFn: () => requestPost("probe-result/list", query || {}),
-  });
-};
+  const { refetchInterval, ...params } = query || {};
 
-export const useGetProbeResultListByEndpoint = (
-  endPointId: string,
-  limit?: number,
-  refetchInterval = 30 * 1000,
-) => {
   return useQuery({
-    queryKey: ["probe-result/list-by-endpoint", endPointId, limit],
-    enabled: !!endPointId,
+    queryKey: ["probe-result/list", params],
+    enabled: params.endPointId
+      ? !!params.endPointId
+      : params.serviceId
+        ? !!params.serviceId
+        : true,
     refetchInterval,
-    queryFn: () =>
-      requestPost("probe-result/list-by-endpoint", { endPointId, limit }),
-  });
-};
-
-export const useGetProbeResultListByService = (
-  serviceId: string,
-  limit?: number,
-) => {
-  return useQuery({
-    queryKey: ["probe-result/list-by-service", serviceId, limit],
-    enabled: !!serviceId,
-    queryFn: () =>
-      requestPost("probe-result/list-by-service", { serviceId, limit }),
+    queryFn: () => requestPost("probe-result/list", params),
   });
 };
 
@@ -71,12 +54,6 @@ export const useCreateProbeResult = () => {
       requestPost("probe-result/create", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["probe-result/list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["probe-result/list-by-endpoint"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["probe-result/list-by-service"],
-      });
       queryClient.invalidateQueries({ queryKey: ["probe-result/latest"] });
     },
   });
@@ -87,12 +64,6 @@ export const useDeleteProbeResult = () => {
     mutationFn: (id: string) => requestPost("probe-result/delete", { id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["probe-result/list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["probe-result/list-by-endpoint"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["probe-result/list-by-service"],
-      });
       queryClient.invalidateQueries({ queryKey: ["probe-result/latest"] });
     },
   });

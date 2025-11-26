@@ -1,6 +1,6 @@
 import { Echarts } from "@/components/echarts";
 import { EmptyTip } from "@/components/empty-tip";
-import { useGetProbeResultListByEndpoint } from "@/services/probe-result";
+import { useGetProbeResultList } from "@/services/probe-result";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { FC } from "react";
 
@@ -12,11 +12,11 @@ interface EndpointChartProps {
 const MAX_DATA_POINTS = 50;
 
 export const EndpointChart: FC<EndpointChartProps> = (props) => {
-  const { data: resultsData } = useGetProbeResultListByEndpoint(
-    props.endpointId,
-    MAX_DATA_POINTS,
-    props.refetchInterval,
-  );
+  const { data: resultsData } = useGetProbeResultList({
+    endPointId: props.endpointId,
+    limit: MAX_DATA_POINTS,
+    refetchInterval: props.refetchInterval,
+  });
 
   const results = (resultsData?.data ?? [])
     .map((item) => ({

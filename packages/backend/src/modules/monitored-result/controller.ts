@@ -59,61 +59,25 @@ export const registerController = async (options: ControllerOptions) => {
   );
 
   server.post(
-    "/probe-result/list-by-endpoint",
-    {
-      schema: {
-        description: "Get probe results for an endpoint",
-        body: Type.Object({
-          endPointId: Type.String(),
-          limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })),
-        }),
-        response: {
-          200: Type.Array(SchemaProbeResultDetail),
-        },
-      },
-    },
-    async (req) => {
-      const { endPointId, limit } = req.body;
-      const results = await resultService.getProbeResultsByEndPointId(
-        endPointId,
-        limit,
-      );
-      return results.map(createProbeResultDetailVo);
-    },
-  );
-
-  server.post(
-    "/probe-result/list-by-service",
-    {
-      schema: {
-        description: "Get probe results for a service",
-        body: Type.Object({
-          serviceId: Type.String(),
-          limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })),
-        }),
-        response: {
-          200: Type.Array(SchemaProbeResultDetail),
-        },
-      },
-    },
-    async (req) => {
-      const { serviceId, limit } = req.body;
-      const results = await resultService.getProbeResultsByServiceId(
-        serviceId,
-        limit,
-      );
-      return results.map(createProbeResultDetailVo);
-    },
-  );
-
-  server.post(
     "/probe-result/list",
     {
       schema: {
-        description: "Get all probe results",
+        description: "Get probe results with optional filters",
         body: Type.Optional(
           Type.Object({
-            limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 1000 })),
+            endPointId: Type.Optional(
+              Type.String({ description: "筛选特定端点的结果" }),
+            ),
+            serviceId: Type.Optional(
+              Type.String({ description: "筛选特定服务的结果" }),
+            ),
+            limit: Type.Optional(
+              Type.Integer({
+                minimum: 1,
+                maximum: 1000,
+                description: "返回结果数量限制",
+              }),
+            ),
           }),
         ),
         response: {
@@ -122,8 +86,12 @@ export const registerController = async (options: ControllerOptions) => {
       },
     },
     async (req) => {
-      const limit = req.body?.limit;
-      const results = await resultService.getAllProbeResults(limit);
+      const { endPointId, serviceId, limit } = req.body || {};
+      const results = await resultService.getProbeResults({
+        endPointId,
+        serviceId,
+        limit,
+      });
       return results.map(createProbeResultDetailVo);
     },
   );
