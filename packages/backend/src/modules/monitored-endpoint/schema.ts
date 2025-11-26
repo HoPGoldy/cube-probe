@@ -49,6 +49,12 @@ export const SchemaEndPointCreate = Type.Object({
     maxLength: 100,
   }),
   url: Type.Optional(Type.String({ description: "接口URL" })),
+  method: Type.Optional(
+    Type.String({
+      description: "HTTP请求方法",
+      enum: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    }),
+  ),
   headers: Type.Optional(Type.Any({ description: "自定义请求头JSON" })),
   intervalTime: Type.Optional(
     Type.Integer({ description: "探测间隔时间(秒)", minimum: 1 }),
@@ -81,6 +87,7 @@ export const SchemaEndPointDetail = Type.Object({
   serviceId: Type.String(),
   name: Type.String(),
   url: Type.Union([Type.String(), Type.Null()]),
+  method: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
   intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
@@ -152,6 +159,7 @@ export const createEndPointDetailVo = (
     serviceId: data.serviceId,
     name: data.name,
     url: data.url,
+    method: data.method,
     headers: data.headers,
     intervalTime: data.intervalTime,
     enabled: data.enabled,

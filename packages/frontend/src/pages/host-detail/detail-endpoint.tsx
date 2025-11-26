@@ -1,6 +1,6 @@
 import { useDetailType } from "@/utils/use-detail-type";
 import { FC, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   Form,
   Input,
@@ -17,10 +17,15 @@ import {
 } from "@/services/monitored-endpoint";
 import { useGetMonitoredHostList } from "@/services/monitored-host";
 
-export const DetailModal: FC = () => {
+export const DETAIL_TYPE_KEY = "ep-modal";
+
+export const DETAIL_ID_KEY = "ep-id";
+
+export const EndpointDetailModal: FC = () => {
+  const { hostId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const detailType = searchParams.get("modal");
-  const detailId = searchParams.get("id");
+  const detailType = searchParams.get(DETAIL_TYPE_KEY);
+  const detailId = searchParams.get(DETAIL_ID_KEY);
 
   const isOpen = !!detailType;
   const { isAdd, isEdit, isReadonly } = useDetailType(detailType);
@@ -56,14 +61,16 @@ export const DetailModal: FC = () => {
   const [form] = Form.useForm();
 
   const onCancel = () => {
-    searchParams.delete("modal");
-    searchParams.delete("id");
+    searchParams.delete(DETAIL_TYPE_KEY);
+    searchParams.delete(DETAIL_ID_KEY);
     setSearchParams(searchParams, { replace: true });
   };
 
   const onSave = async () => {
     await form.validateFields();
     const values = form.getFieldsValue();
+
+    values.serviceId = hostId;
 
     // Parse headers if provided
     if (values.headers) {
@@ -110,38 +117,19 @@ export const DetailModal: FC = () => {
           layout="vertical"
           disabled={isReadonly}
           initialValues={{
+            serviceId: hostId,
             enabled: true,
             method: "GET",
             timeout: 10000,
           }}
           style={{
             marginTop: 16,
-            maxHeight: "60vh",
-            overflowY: "auto",
-            overflowX: "hidden",
+            // maxHeight: "60vh",
+            // overflowY: "auto",
+            // overflowX: "hidden",
           }}
         >
           <Skeleton active loading={isLoading}>
-            <Form.Item
-              label="所属服务"
-              name="serviceId"
-              rules={[{ required: true, message: "请选择所属服务" }]}
-            >
-              <Select
-                placeholder="请选择所属服务"
-                options={services.map((s: any) => ({
-                  label: s.name,
-                  value: s.id,
-                }))}
-                showSearch
-                filterOption={(input, option) =>
-                  String(option?.label ?? "")
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
-              />
-            </Form.Item>
-
             <Form.Item
               label="端点名称"
               name="name"

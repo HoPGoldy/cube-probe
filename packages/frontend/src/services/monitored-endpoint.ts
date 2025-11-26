@@ -33,6 +33,7 @@ export interface EndpointCreateDto {
   serviceId: string;
   name: string;
   url?: string;
+  method?: string;
   headers?: any;
   intervalTime?: number;
   enabled?: boolean;

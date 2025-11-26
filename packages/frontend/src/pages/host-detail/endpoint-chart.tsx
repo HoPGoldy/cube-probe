@@ -78,7 +78,7 @@ export const EndpointChart: FC<EndpointChartProps> = (props) => {
         return `
           <div style="padding: 4px 8px;">
             <div><strong>时间:</strong> ${originalData.time}</div>
-            <div><strong>响应时间:</strong> ${originalData.responseTime}ms</div>
+            <div><strong>响应时间:</strong> ${originalData.responseTime || "-"}ms</div>
             <div><strong>状态:</strong> ${originalData.status}</div>
           </div>
         `;
@@ -110,7 +110,7 @@ export const EndpointChart: FC<EndpointChartProps> = (props) => {
         barMaxWidth: 48,
         data: results.map((d) => ({
           id: d.id,
-          value: d.status === "失败" ? maxResponseTime : d.responseTime,
+          value: d.responseTime || maxResponseTime,
           itemStyle: {
             color: d.status === "成功" ? "#52c41a" : "#ff4d4f",
           },

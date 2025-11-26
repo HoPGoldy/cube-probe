@@ -97,6 +97,13 @@ const MonitoredEndpointPage: React.FC = () => {
       render: (text) => text || "-",
     },
     {
+      title: "请求方法",
+      dataIndex: "method",
+      align: "center",
+      width: 100,
+      render: (text) => text || "GET",
+    },
+    {
       title: "超时(ms)",
       dataIndex: "timeout",
       align: "center",

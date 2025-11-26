@@ -26,6 +26,7 @@ export class IntervalProbeService {
    * 执行探测请求
    */
   private executeProbe = async (endPointId: string) => {
+    let startTime = 0;
     try {
       // 获取 endpoint 详情
       const endPoint = await this.options.prisma.endPoint.findUnique({
@@ -60,10 +61,11 @@ export class IntervalProbeService {
 
       const headers = endPoint.headers || service.headers || {};
       const timeout = endPoint.timeout || 10000; // 默认 10 秒
+      const method = endPoint.method || "GET"; // HTTP 请求方法，默认 GET
 
       // 准备请求配置
       const config: AxiosRequestConfig = {
-        method: "GET",
+        method,
         url,
         headers:
           typeof headers === "object" && headers !== null
@@ -72,7 +74,7 @@ export class IntervalProbeService {
         timeout,
       };
 
-      const startTime = Date.now();
+      startTime = Date.now();
       const response = await axios(config);
       const responseTime = Date.now() - startTime;
 
@@ -87,7 +89,7 @@ export class IntervalProbeService {
       });
 
       console.log(
-        `[Interval] Probe completed for endpoint ${endPointId}: Status ${response.status}, Response time: ${responseTime}ms`,
+        `[Interval] Probe completed for endpoint ${endPointId}: Method ${method} Status ${response.status}, Response time: ${responseTime}ms`,
       );
     } catch (error: any) {
       // 确定错误详情
@@ -106,11 +108,13 @@ export class IntervalProbeService {
         message = error.message || "Request failed";
       }
 
+      const responseTime = startTime === 0 ? 0 : Date.now() - startTime;
+
       // 在数据库中创建失败的探测结果
       await this.options.resultService.createProbeResult({
         endPointId,
         status: status ?? undefined,
-        responseTime: 0,
+        responseTime,
         timestamp: new Date().toISOString(),
         success: false,
         message,

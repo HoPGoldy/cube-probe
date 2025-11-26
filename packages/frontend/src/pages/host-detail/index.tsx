@@ -10,17 +10,7 @@ import {
   useGetEndpointList,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import {
-  Card,
-  Spin,
-  Empty,
-  Tag,
-  Flex,
-  Space,
-  Button,
-  Modal,
-  Switch,
-} from "antd";
+import { Card, Spin, Empty, Flex, Space, Button, Modal, Switch } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
@@ -29,9 +19,14 @@ import {
   DETAIL_TYPE_KEY as EP_DETAIL_TYPE_KEY,
   DETAIL_ID_KEY as EP_DETAIL_ID_KEY,
   EndpointDetailModal,
-} from "./endpoint-detail";
+} from "./detail-endpoint";
 import { DetailPageType } from "@/utils/use-detail-type";
 import { CloseOutlined } from "@ant-design/icons";
+import {
+  DETAIL_TYPE_KEY as HOST_DETAIL_TYPE_KEY,
+  DETAIL_ID_KEY as HOST_DETAIL_ID_KEY,
+  HostDetailModal,
+} from "./detail-host";
 
 const HostDetailPage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
@@ -82,6 +77,12 @@ const HostDetailPage: React.FC = () => {
         await deleteEndpoint(item.id);
       },
     });
+  };
+
+  const onEditHost = (id: string) => {
+    searchParams.set(HOST_DETAIL_TYPE_KEY, DetailPageType.Edit);
+    searchParams.set(HOST_DETAIL_ID_KEY, id);
+    setSearchParams(searchParams, { replace: true });
   };
 
   const onSwitchEnabled = async (item: any) => {
@@ -174,7 +175,7 @@ const HostDetailPage: React.FC = () => {
               <Button type="primary" onClick={onAddEndpoint}>
                 创建接口
               </Button>
-              <Button>编辑</Button>
+              <Button onClick={() => onEditHost(hostDetail.id)}>编辑</Button>
               <Button>复制</Button>
               <Button
                 danger
@@ -204,6 +205,7 @@ const HostDetailPage: React.FC = () => {
       </Flex>
 
       <EndpointDetailModal />
+      <HostDetailModal />
       {contextHolder}
     </>
   );

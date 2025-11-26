@@ -97,6 +97,7 @@ model EndPoint {
   serviceId    String
   name         String
   url          String?
+  method       String?       @default("GET") // HTTP method: GET, POST, PUT, DELETE, etc.
   headers      Json?
   intervalTime Int? // in seconds
   enabled      Boolean       @default(true)

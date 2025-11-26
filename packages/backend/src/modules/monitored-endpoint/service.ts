@@ -16,6 +16,7 @@ export class EndPointService {
         serviceId: data.serviceId,
         name: data.name,
         url: data.url,
+        method: data.method || "GET",
         headers: data.headers || null,
         intervalTime: data.intervalTime || null,
         enabled: data.enabled ?? true,

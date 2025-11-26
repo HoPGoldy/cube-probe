@@ -1,20 +1,18 @@
 import { useDetailType } from "@/utils/use-detail-type";
 import { FC, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Form, Input, InputNumber, Modal, Skeleton, Switch } from "antd";
 import {
-  useCreateEndpoint,
-  useGetEndpointDetail,
-  useUpdateEndpoint,
-} from "@/services/monitored-endpoint";
-import { useGetMonitoredHostList } from "@/services/monitored-host";
+  useCreateMonitoredHost,
+  useGetMonitoredHostDetail,
+  useUpdateMonitoredHost,
+} from "@/services/monitored-host";
 
-export const DETAIL_TYPE_KEY = "ep-modal";
+export const DETAIL_TYPE_KEY = "host-modal";
 
-export const DETAIL_ID_KEY = "ep-id";
+export const DETAIL_ID_KEY = "host-id";
 
-export const EndpointDetailModal: FC = () => {
-  const { hostId } = useParams();
+export const HostDetailModal: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const detailType = searchParams.get(DETAIL_TYPE_KEY);
   const detailId = searchParams.get(DETAIL_ID_KEY);
@@ -22,25 +20,23 @@ export const EndpointDetailModal: FC = () => {
   const isOpen = !!detailType;
   const { isAdd, isEdit, isReadonly } = useDetailType(detailType);
 
-  const { mutateAsync: runAddEndpoint, isPending: adding } =
-    useCreateEndpoint();
-  const { mutateAsync: runEditEndpoint, isPending: updating } =
-    useUpdateEndpoint();
-  const { data: endpointDetailResp, isLoading } =
-    useGetEndpointDetail(detailId);
-  const { data: servicesResp } = useGetMonitoredHostList({});
+  const { mutateAsync: runAddHost, isPending: adding } =
+    useCreateMonitoredHost();
+  const { mutateAsync: runEditHost, isPending: updating } =
+    useUpdateMonitoredHost();
+  const { data: hostDetailResp, isLoading } =
+    useGetMonitoredHostDetail(detailId);
 
-  const endpointDetail = endpointDetailResp?.data;
-  const services = servicesResp?.data ?? [];
+  const hostDetail = hostDetailResp?.data;
 
   useEffect(() => {
     const convert = async () => {
-      if (!endpointDetail) return;
+      if (!hostDetail) return;
 
       const formValues = {
-        ...endpointDetail,
-        headers: endpointDetail.headers
-          ? JSON.stringify(endpointDetail.headers, null, 2)
+        ...hostDetail,
+        headers: hostDetail.headers
+          ? JSON.stringify(hostDetail.headers, null, 2)
           : "",
       };
 
@@ -48,7 +44,7 @@ export const EndpointDetailModal: FC = () => {
     };
 
     convert();
-  }, [endpointDetail]);
+  }, [hostDetail]);
 
   const [form] = Form.useForm();
 
@@ -61,8 +57,6 @@ export const EndpointDetailModal: FC = () => {
   const onSave = async () => {
     await form.validateFields();
     const values = form.getFieldsValue();
-
-    values.serviceId = hostId;
 
     // Parse headers if provided
     if (values.headers) {
@@ -79,11 +73,19 @@ export const EndpointDetailModal: FC = () => {
       values.headers = null;
     }
 
+    if (!values.url) {
+      delete values.url;
+    }
+
+    if (!values.intervalTime) {
+      delete values.intervalTime;
+    }
+
     if (isAdd) {
-      const resp = await runAddEndpoint(values);
+      const resp = await runAddHost(values);
       if (resp?.code !== 200) return false;
     } else if (isEdit) {
-      const resp = await runEditEndpoint({ id: detailId, ...values });
+      const resp = await runEditHost({ id: detailId, ...values });
       if (resp?.code !== 200) return false;
     }
 
@@ -94,7 +96,7 @@ export const EndpointDetailModal: FC = () => {
   return (
     <>
       <Modal
-        title={isAdd ? "新增监控端点" : "编辑监控端点"}
+        title={isAdd ? "新增监控服务" : "编辑监控服务"}
         open={isOpen}
         onOk={onSave}
         width={600}
@@ -109,9 +111,7 @@ export const EndpointDetailModal: FC = () => {
           layout="vertical"
           disabled={isReadonly}
           initialValues={{
-            serviceId: hostId,
             enabled: true,
-            timeout: 10000,
           }}
           style={{
             marginTop: 16,
@@ -122,25 +122,25 @@ export const EndpointDetailModal: FC = () => {
         >
           <Skeleton active loading={isLoading}>
             <Form.Item
-              label="端点名称"
+              label="服务名称"
               name="name"
-              rules={[{ required: true, message: "请输入端点名称" }]}
+              rules={[{ required: true, message: "请输入服务名称" }]}
             >
-              <Input placeholder="请输入端点名称" />
+              <Input placeholder="请输入服务名称" />
             </Form.Item>
 
             <Form.Item
-              label="URL"
+              label="基础URL"
               name="url"
-              tooltip="端点的URL，如果为空则继承服务的URL"
+              tooltip="服务的基础URL，端点可以继承此URL"
             >
-              <Input placeholder="例如: /api/health" />
+              <Input placeholder="例如: https://api.example.com" />
             </Form.Item>
 
             <Form.Item
               label="请求头 (JSON)"
               name="headers"
-              tooltip="自定义请求头，使用JSON格式，为空则继承服务的请求头"
+              tooltip="自定义请求头，使用JSON格式"
             >
               <Input.TextArea
                 rows={4}
@@ -151,25 +151,12 @@ export const EndpointDetailModal: FC = () => {
             <Form.Item
               label="探测间隔 (秒)"
               name="intervalTime"
-              tooltip="定时探测的间隔时间（秒），为空则继承服务的间隔时间"
+              tooltip="定时探测的间隔时间（秒），端点可以继承此配置"
             >
               <InputNumber
                 style={{ width: "100%" }}
                 min={1}
                 placeholder="例如: 60 (每60秒执行一次)"
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="超时时间 (毫秒)"
-              name="timeout"
-              tooltip="请求超时时间，默认10000毫秒"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                min={1}
-                max={300000}
-                placeholder="10000"
               />
             </Form.Item>
 
