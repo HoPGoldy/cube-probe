@@ -110,7 +110,14 @@ export class IntervalProbeService {
         return;
       }
 
-      const headers = endPoint.headers || service.headers || {};
+      const headers = {
+        ...(typeof service.headers === "object" && service.headers !== null
+          ? (service.headers as Record<string, string>)
+          : {}),
+        ...(typeof endPoint.headers === "object" && endPoint.headers !== null
+          ? (endPoint.headers as Record<string, string>)
+          : {}),
+      };
       const timeout = endPoint.timeout || 10000; // 默认 10 秒
       const method = endPoint.method || "GET"; // HTTP 请求方法，默认 GET
 
@@ -118,10 +125,7 @@ export class IntervalProbeService {
       const config: AxiosRequestConfig = {
         method,
         url,
-        headers:
-          typeof headers === "object" && headers !== null
-            ? (headers as Record<string, string>)
-            : {},
+        headers,
         timeout,
       };
 
