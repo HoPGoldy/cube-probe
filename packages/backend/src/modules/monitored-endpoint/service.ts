@@ -1,10 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { SchemaEndPointCreateType, SchemaEndPointUpdateType } from "./schema";
-import { CronService } from "@/modules/probe-task/cron-service";
+import { IntervalProbeService } from "@/modules/probe-task/interval-service";
 
 interface ServiceOptions {
   prisma: PrismaClient;
-  cronService: CronService;
+  intervalProbeService: IntervalProbeService;
 }
 
 export class EndPointService {
@@ -17,7 +17,7 @@ export class EndPointService {
         name: data.name,
         url: data.url,
         headers: data.headers || null,
-        cronExpression: data.cronExpression || null,
+        intervalTime: data.intervalTime || null,
         enabled: data.enabled ?? true,
         timeout: data.timeout || null,
       },
@@ -25,7 +25,9 @@ export class EndPointService {
 
     // 如果端点启用，添加到定时任务调度器
     if (endPoint.enabled) {
-      await this.options.cronService.addEndpointToScheduler(endPoint.id);
+      await this.options.intervalProbeService.addEndpointToScheduler(
+        endPoint.id,
+      );
     }
 
     return endPoint;
@@ -77,13 +79,13 @@ export class EndPointService {
 
     if (wasEnabled && !isEnabled) {
       // 从启用变为禁用：移除任务
-      this.options.cronService.removeEndpointFromScheduler(id);
+      this.options.intervalProbeService.removeEndpointFromScheduler(id);
     } else if (!wasEnabled && isEnabled) {
       // 从禁用变为启用：添加任务
-      await this.options.cronService.addEndpointToScheduler(id);
+      await this.options.intervalProbeService.addEndpointToScheduler(id);
     } else if (isEnabled) {
       // 保持启用状态但配置可能变化：更新任务
-      await this.options.cronService.updateEndpointInScheduler(id);
+      await this.options.intervalProbeService.updateEndpointInScheduler(id);
     }
 
     return endPoint;
@@ -91,7 +93,7 @@ export class EndPointService {
 
   async deleteEndPoint(id: string) {
     // 先从调度器移除任务
-    this.options.cronService.removeEndpointFromScheduler(id);
+    this.options.intervalProbeService.removeEndpointFromScheduler(id);
 
     // 再删除数据库记录
     return await this.options.prisma.endPoint.delete({

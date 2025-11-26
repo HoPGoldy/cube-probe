@@ -1,7 +1,7 @@
 import { useDetailType } from "@/utils/use-detail-type";
 import { FC, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Form, Input, Modal, Skeleton, Switch } from "antd";
+import { Form, Input, InputNumber, Modal, Skeleton, Switch } from "antd";
 import {
   useCreateMonitoredHost,
   useGetMonitoredHostDetail,
@@ -137,11 +137,15 @@ export const DetailModal: FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Cron表达式"
-              name="cronExpression"
-              tooltip="定时执行的Cron表达式，端点可以继承此配置"
+              label="探测间隔 (秒)"
+              name="intervalTime"
+              tooltip="定时探测的间隔时间（秒），端点可以继承此配置"
             >
-              <Input placeholder="例如: */5 * * * * (每5分钟)" />
+              <InputNumber
+                style={{ width: "100%" }}
+                min={1}
+                placeholder="例如: 60 (每60秒执行一次)"
+              />
             </Form.Item>
 
             <Form.Item label="启用状态" name="enabled" valuePropName="checked">

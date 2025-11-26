@@ -34,7 +34,7 @@ export interface EndpointCreateDto {
   name: string;
   url?: string;
   headers?: any;
-  cronExpression?: string;
+  intervalTime?: number;
   enabled?: boolean;
   timeout?: number;
 }

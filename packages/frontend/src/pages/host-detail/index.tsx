@@ -149,7 +149,10 @@ const HostDetailPage: React.FC = () => {
         </Flex>
         {/* 探测结果图表 */}
         <div className="mt-4 w-full h-[70px]">
-          <EndpointChart endpointId={endpoint.id} />
+          <EndpointChart
+            endpointId={endpoint.id}
+            refetchInterval={endpoint.intervalTime * 1000}
+          />
         </div>
       </Card>
     );

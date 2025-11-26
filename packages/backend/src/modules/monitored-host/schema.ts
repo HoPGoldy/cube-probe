@@ -10,8 +10,8 @@ export const SchemaServiceCreate = Type.Object({
   }),
   url: Type.Optional(Type.String({ description: "服务基础URL" })),
   headers: Type.Optional(Type.Any({ description: "自定义请求头JSON" })),
-  cronExpression: Type.Optional(
-    Type.String({ description: "默认Cron表达式", minLength: 1, maxLength: 50 }),
+  intervalTime: Type.Optional(
+    Type.Integer({ description: "默认探测间隔时间(秒)", minimum: 1 }),
   ),
   enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
 });
@@ -34,7 +34,7 @@ export const SchemaServiceDetail = Type.Object({
   name: Type.String(),
   url: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
-  cronExpression: Type.Union([Type.String(), Type.Null()]),
+  intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
 });
 
@@ -50,8 +50,8 @@ export const SchemaEndPointCreate = Type.Object({
   }),
   url: Type.Optional(Type.String({ description: "接口URL" })),
   headers: Type.Optional(Type.Any({ description: "自定义请求头JSON" })),
-  cronExpression: Type.Optional(
-    Type.String({ description: "Cron表达式", minLength: 1, maxLength: 50 }),
+  intervalTime: Type.Optional(
+    Type.Integer({ description: "探测间隔时间(秒)", minimum: 1 }),
   ),
   enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
   timeout: Type.Optional(
@@ -82,7 +82,7 @@ export const SchemaEndPointDetail = Type.Object({
   name: Type.String(),
   url: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
-  cronExpression: Type.Union([Type.String(), Type.Null()]),
+  intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
   timeout: Type.Union([Type.Integer(), Type.Null()]),
 });
@@ -137,7 +137,7 @@ export const createServiceDetailVo = (
     name: data.name,
     url: data.url,
     headers: data.headers,
-    cronExpression: data.cronExpression,
+    intervalTime: data.intervalTime,
     enabled: data.enabled,
   };
 };
@@ -153,7 +153,7 @@ export const createEndPointDetailVo = (
     name: data.name,
     url: data.url,
     headers: data.headers,
-    cronExpression: data.cronExpression,
+    intervalTime: data.intervalTime,
     enabled: data.enabled,
     timeout: data.timeout,
   };

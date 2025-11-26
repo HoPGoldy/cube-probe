@@ -18,11 +18,12 @@ export const useGetProbeResultList = (query?: ProbeResultListQueryDto) => {
 export const useGetProbeResultListByEndpoint = (
   endPointId: string,
   limit?: number,
+  refetchInterval = 30 * 1000,
 ) => {
   return useQuery({
     queryKey: ["probe-result/list-by-endpoint", endPointId, limit],
     enabled: !!endPointId,
-    refetchInterval: 30000,
+    refetchInterval,
     queryFn: () =>
       requestPost("probe-result/list-by-endpoint", { endPointId, limit }),
   });

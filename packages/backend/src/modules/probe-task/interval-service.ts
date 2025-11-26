@@ -138,32 +138,18 @@ export class IntervalProbeService {
 
     // 为每个 endpoint 调度任务
     for (const endpoint of endpoints) {
-      // 这里需要一个新字段来存储间隔秒数
-      // 暂时使用 timeout 字段转换为秒数作为示例
-      // 实际应该在数据库 schema 中添加 intervalSeconds 字段
-      const intervalSeconds = this.getIntervalSeconds(endpoint);
+      // 使用 endpoint 的 intervalTime，如果没有则使用 service 的 intervalTime
+      const intervalTime =
+        endpoint.intervalTime || endpoint.service.intervalTime;
 
-      if (intervalSeconds > 0) {
-        await this.addEndpointToScheduler(endpoint.id, intervalSeconds);
+      if (intervalTime && intervalTime > 0) {
+        await this.addEndpointToScheduler(endpoint.id, intervalTime);
       }
     }
 
     console.log(
       `[Interval] Probe scheduler started with ${this.activeTasks.size} tasks`,
     );
-  }
-
-  /**
-   * 获取 endpoint 的间隔秒数
-   * 临时实现：从某个字段推断，实际应该有专门的字段
-   */
-  private getIntervalSeconds(endpoint: any): number {
-    // TODO: 实际应该从 endpoint.intervalSeconds 或 service.intervalSeconds 获取
-    // 这里作为示例，假设如果没有 cronExpression，就使用 60 秒间隔
-    if (!endpoint.cronExpression) {
-      return 60; // 默认 60 秒
-    }
-    return 0; // 有 cron 表达式就不使用间隔模式
   }
 
   /**
@@ -182,17 +168,9 @@ export class IntervalProbeService {
   /**
    * 添加新 endpoint 到调度器
    * @param endPointId endpoint ID
-   * @param intervalSeconds 间隔秒数
+   * @param intervalSeconds 间隔秒数（如果不提供，会从数据库读取）
    */
-  async addEndpointToScheduler(endPointId: string, intervalSeconds: number) {
-    // 验证间隔时间
-    if (intervalSeconds <= 0) {
-      console.log(
-        `[Interval] Invalid interval ${intervalSeconds} for endpoint ${endPointId}`,
-      );
-      return;
-    }
-
+  async addEndpointToScheduler(endPointId: string, intervalSeconds?: number) {
     // 获取 endpoint 详情
     const endpoint = await this.options.prisma.endPoint.findUnique({
       where: { id: endPointId },
@@ -202,6 +180,18 @@ export class IntervalProbeService {
     });
 
     if (!endpoint || !endpoint.enabled) {
+      return;
+    }
+
+    // 如果未提供间隔时间，从 endpoint 或 service 获取
+    const effectiveInterval =
+      intervalSeconds ?? endpoint.intervalTime ?? endpoint.service.intervalTime;
+
+    // 验证间隔时间
+    if (!effectiveInterval || effectiveInterval <= 0) {
+      console.log(
+        `[Interval] No valid interval time for endpoint ${endPointId}`,
+      );
       return;
     }
 
@@ -219,16 +209,16 @@ export class IntervalProbeService {
       if (task) {
         task.lastExecutionTime = Date.now();
       }
-    }, intervalSeconds * 1000); // 转换为毫秒
+    }, effectiveInterval * 1000); // 转换为毫秒
 
     this.activeTasks.set(endPointId, {
       intervalId,
-      intervalSeconds,
+      intervalSeconds: effectiveInterval,
       lastExecutionTime: Date.now(),
     });
 
     console.log(
-      `[Interval] Scheduled probe for endpoint ${endPointId} with interval: ${intervalSeconds}s`,
+      `[Interval] Scheduled probe for endpoint ${endPointId} with interval: ${effectiveInterval}s`,
     );
 
     // 立即执行一次
@@ -249,12 +239,12 @@ export class IntervalProbeService {
   /**
    * 更新调度器中的 endpoint
    */
-  async updateEndpointInScheduler(endPointId: string, intervalSeconds: number) {
+  async updateEndpointInScheduler(endPointId: string) {
     // 先移除旧任务
     this.removeEndpointFromScheduler(endPointId);
 
-    // 然后添加更新后的任务
-    await this.addEndpointToScheduler(endPointId, intervalSeconds);
+    // 然后添加更新后的任务（会自动从数据库读取最新的 intervalTime）
+    await this.addEndpointToScheduler(endPointId);
   }
 
   /**

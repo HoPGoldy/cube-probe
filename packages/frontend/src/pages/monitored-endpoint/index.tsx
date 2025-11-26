@@ -104,8 +104,8 @@ const MonitoredEndpointPage: React.FC = () => {
       render: (text) => text || "-",
     },
     {
-      title: "Cron表达式",
-      dataIndex: "cronExpression",
+      title: "间隔时间(秒)",
+      dataIndex: "intervalTime",
       align: "center",
       width: 130,
       render: (text) => text || "-",

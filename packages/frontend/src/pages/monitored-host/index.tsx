@@ -79,8 +79,8 @@ const MonitoredHostPage: React.FC = () => {
       render: (text) => text || "-",
     },
     {
-      title: "Cron表达式",
-      dataIndex: "cronExpression",
+      title: "间隔时间(秒)",
+      dataIndex: "intervalTime",
       align: "center",
       width: 150,
       render: (text) => text || "-",

@@ -24,7 +24,7 @@ export interface MonitoredHostCreateDto {
   name: string;
   url?: string;
   headers?: any;
-  cronExpression?: string;
+  intervalTime?: number;
   enabled?: boolean;
 }
 

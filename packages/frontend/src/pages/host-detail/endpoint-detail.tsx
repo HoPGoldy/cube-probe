@@ -149,11 +149,15 @@ export const EndpointDetailModal: FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Cron表达式"
-              name="cronExpression"
-              tooltip="定时执行的Cron表达式，为空则继承服务的Cron表达式"
+              label="探测间隔 (秒)"
+              name="intervalTime"
+              tooltip="定时探测的间隔时间（秒），为空则继承服务的间隔时间"
             >
-              <Input placeholder="例如: */5 * * * * (每5分钟)" />
+              <InputNumber
+                style={{ width: "100%" }}
+                min={1}
+                placeholder="例如: 60 (每60秒执行一次)"
+              />
             </Form.Item>
 
             <Form.Item

@@ -6,6 +6,7 @@ import { FC } from "react";
 
 interface EndpointChartProps {
   endpointId: string;
+  refetchInterval: number;
 }
 
 const MAX_DATA_POINTS = 50;
@@ -14,6 +15,7 @@ export const EndpointChart: FC<EndpointChartProps> = (props) => {
   const { data: resultsData } = useGetProbeResultListByEndpoint(
     props.endpointId,
     MAX_DATA_POINTS,
+    props.refetchInterval,
   );
 
   const results = (resultsData?.data ?? [])

@@ -79,29 +79,29 @@ model AppConfig {
 }
 
 model Service {
-  id             String     @id @default(uuid())
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  name           String
-  url            String?
-  headers        Json?
-  cronExpression String?
-  enabled        Boolean    @default(true)
-  endpoints      EndPoint[]
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  name         String
+  url          String?
+  headers      Json?
+  intervalTime Int? // in seconds
+  enabled      Boolean    @default(true)
+  endpoints    EndPoint[]
 }
 
 model EndPoint {
-  id             String        @id @default(uuid())
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  serviceId      String
-  name           String
-  url            String?
-  headers        Json?
-  cronExpression String?
-  enabled        Boolean       @default(true)
-  timeout        Int? // in milliseconds
-  results        ProbeResult[]
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  serviceId    String
+  name         String
+  url          String?
+  headers      Json?
+  intervalTime Int? // in seconds
+  enabled      Boolean       @default(true)
+  timeout      Int? // in milliseconds
+  results      ProbeResult[]
 
   service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
