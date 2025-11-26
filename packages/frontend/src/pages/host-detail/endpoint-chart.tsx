@@ -52,7 +52,7 @@ export const EndpointChart: FC<EndpointChartProps> = (props) => {
   // };
 
   if (results.length === 0) {
-    return <EmptyTip title="暂无探测数据" />;
+    return <EmptyTip className="pt-4" title="暂无探测数据" />;
   }
 
   // 计算最大响应时间，用于失败时的柱子高度
