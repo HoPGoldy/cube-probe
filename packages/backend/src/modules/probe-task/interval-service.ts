@@ -14,6 +14,43 @@ interface IntervalTask {
 }
 
 /**
+ * 构建探测请求的完整 URL
+ * @param endpointUrl endpoint 的 URL（可能是完整 URL 或路径）
+ * @param serviceUrl service 的 URL（基础域名）
+ * @returns 完整的请求 URL
+ */
+function buildProbeUrl(
+  endpointUrl: string | null,
+  serviceUrl: string | null,
+): string | null {
+  // endpoint.url 存在
+  if (endpointUrl) {
+    // 如果是完整 URL（以 http:// 或 https:// 开头），直接使用
+    if (
+      endpointUrl.startsWith("http://") ||
+      endpointUrl.startsWith("https://")
+    ) {
+      return endpointUrl;
+    }
+
+    // 否则是路径，需要拼接 service.url
+    if (!serviceUrl) {
+      return null;
+    }
+
+    // 确保 baseUrl 不以 / 结尾，path 以 / 开头
+    const baseUrl = serviceUrl.endsWith("/")
+      ? serviceUrl.slice(0, -1)
+      : serviceUrl;
+    const path = endpointUrl.startsWith("/") ? endpointUrl : `/${endpointUrl}`;
+    return `${baseUrl}${path}`;
+  }
+
+  // endpoint.url 为空，直接使用 service.url
+  return serviceUrl;
+}
+
+/**
  * 基于间隔时间的定时任务服务
  * 使用秒为单位的间隔执行定时探测任务
  */
@@ -52,10 +89,24 @@ export class IntervalProbeService {
         return;
       }
 
-      // 优先使用 endpoint 的值，否则回退到 service 的值
-      const url = endPoint.url || service.url;
+      // 构建完整 URL
+      const url = buildProbeUrl(endPoint.url, service.url);
       if (!url) {
-        console.log(`No URL found for endpoint ${endPointId}, skipping probe`);
+        const message = endPoint.url
+          ? `Invalid URL configuration: endpoint.url is a relative path but service.url is missing`
+          : `Invalid URL configuration: both endpoint.url and service.url are missing`;
+
+        console.log(`[Interval] ${message} for endpoint ${endPointId}`);
+
+        // 记录失败结果到数据库
+        await this.options.resultService.createProbeResult({
+          endPointId,
+          status: undefined,
+          responseTime: 0,
+          timestamp: new Date().toISOString(),
+          success: false,
+          message,
+        });
         return;
       }
 

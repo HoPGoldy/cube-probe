@@ -80,6 +80,7 @@ export const EndpointChart: FC<EndpointChartProps> = (props) => {
             <div><strong>时间:</strong> ${originalData.time}</div>
             <div><strong>响应时间:</strong> ${originalData.responseTime || "-"}ms</div>
             <div><strong>状态:</strong> ${originalData.status}</div>
+            ${originalData.message ? `<div><strong>信息:</strong> ${originalData.message}</div>` : ""}
           </div>
         `;
       },
