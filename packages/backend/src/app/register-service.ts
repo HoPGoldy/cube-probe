@@ -5,20 +5,11 @@ import { registerController as registerAttachmentController } from "@/modules/at
 import { registerController as registerApplicationController } from "@/modules/application/controller";
 import { registerController as registerWebAuthnController } from "@/modules/webauthn/controller";
 import { registerController as registerAppConfigController } from "@/modules/app-config/controller";
-import { registerController as registerMonitoredHostController } from "@/modules/monitored-host/controller";
-import { registerController as registerEndPointController } from "@/modules/monitored-endpoint/controller";
-import { registerController as registerResultController } from "@/modules/monitored-result/controller";
-import { registerController as registerCodeExecutorController } from "@/modules/code-executor/controller";
 import { UserService } from "@/modules/user/service";
 import { AttachmentService } from "@/modules/attachment/service";
 import { ApplicationService } from "@/modules/application/service";
 import { WebAuthnService } from "@/modules/webauthn/service";
 import { AppConfigService } from "@/modules/app-config/service";
-import { MonitoredHostService } from "@/modules/monitored-host/service";
-import { EndPointService } from "@/modules/monitored-endpoint/service";
-import { ResultService } from "@/modules/monitored-result/service";
-import { CodeExecutorService } from "@/modules/code-executor/service";
-import { CronService } from "@/modules/probe-task/cron-service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 
@@ -31,39 +22,25 @@ export const registerService = async (instance: AppInstance) => {
 
   await prisma.seed();
 
-  const userService = new UserService({ prisma });
+  const userService = new UserService({
+    prisma,
+  });
 
-  const attachmentService = new AttachmentService({ prisma });
+  const attachmentService = new AttachmentService({
+    prisma,
+  });
 
-  const applicationService = new ApplicationService({ prisma });
+  const applicationService = new ApplicationService({
+    prisma,
+  });
 
-  const appConfigService = new AppConfigService({ prisma });
+  const appConfigService = new AppConfigService({
+    prisma,
+  });
 
   const webAuthnService = new WebAuthnService({
     prisma,
     appConfigService,
-  });
-
-  const monitoredHostService = new MonitoredHostService({ prisma });
-
-  const resultService = new ResultService({
-    prisma,
-  });
-
-  const cronService = new CronService({
-    prisma,
-    resultService,
-  });
-
-  const endPointService = new EndPointService({
-    prisma,
-    cronService,
-  });
-
-  const codeExecutorService = new CodeExecutorService({
-    enableHttp: true, // 启用 HTTP 请求功能
-    httpTimeout: 10000, // HTTP 请求超时 10 秒
-    // allowedDomains: ['api.example.com', '*.github.com'], // 可选：限制允许的域名
   });
 
   const appControllerPlugin = async (server: AppInstance) => {
@@ -98,31 +75,6 @@ export const registerService = async (instance: AppInstance) => {
     registerAppConfigController({
       appConfigService,
       server,
-    });
-
-    registerMonitoredHostController({
-      monitoredHostService,
-      server,
-    });
-
-    registerEndPointController({
-      endPointService,
-      server,
-    });
-
-    registerResultController({
-      resultService,
-      server,
-    });
-
-    registerCodeExecutorController({
-      codeExecutorService,
-      server,
-    });
-
-    // Start the probe scheduler after controllers are registered
-    setImmediate(async () => {
-      await cronService.startProbeScheduler();
     });
   };
 

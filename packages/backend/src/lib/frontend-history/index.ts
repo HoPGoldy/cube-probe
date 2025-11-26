@@ -10,6 +10,7 @@ import fs from "fs/promises";
  * 注册前端静态资源和 History 模式路由
  */
 export const registerFrontendHistory = async (server: FastifyInstance) => {
+  // 开发环境下不启用该功能，由前端开发服务器处理
   if (ENV_IS_DEV) return;
 
   // 对 index.html 的文本进行替换，把 {FRONTEND_BASE_URL} 替换为实际的前端基础路径
