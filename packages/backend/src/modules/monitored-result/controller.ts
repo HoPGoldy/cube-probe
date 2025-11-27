@@ -39,7 +39,7 @@ export const registerController = async (options: ControllerOptions) => {
       schema: {
         description: "Get probe result by ID",
         body: Type.Object({
-          id: Type.String(),
+          id: Type.Integer(),
         }),
         response: {
           200: SchemaProbeResultDetail,
@@ -118,7 +118,7 @@ export const registerController = async (options: ControllerOptions) => {
       schema: {
         description: "Delete a probe result",
         body: Type.Object({
-          id: Type.String(),
+          id: Type.Integer(),
         }),
         response: {
           200: Type.Object({ success: Type.Boolean() }),

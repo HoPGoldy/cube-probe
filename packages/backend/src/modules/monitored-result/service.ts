@@ -20,7 +20,7 @@ export class ResultService {
     });
   }
 
-  async getProbeResultById(id: string) {
+  async getProbeResultById(id: number) {
     return await this.options.prisma.probeResult.findUnique({
       where: { id },
     });
@@ -53,7 +53,7 @@ export class ResultService {
     });
   }
 
-  async deleteProbeResult(id: string) {
+  async deleteProbeResult(id: number) {
     return await this.options.prisma.probeResult.delete({
       where: { id },
     });
@@ -64,7 +64,7 @@ export class ResultService {
     // Get the most recent probe result for each endpoint
     const latestResults = await this.options.prisma.$queryRaw<
       Array<{
-        id: string;
+        id: number;
         createdAt: Date;
         endPointId: string;
         status: number | null;

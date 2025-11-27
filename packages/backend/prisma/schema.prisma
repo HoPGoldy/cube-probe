@@ -110,7 +110,7 @@ model EndPoint {
 }
 
 model ProbeResult {
-  id           String   @id @default(uuid())
+  id           Int      @id @default(autoincrement())
   createdAt    DateTime @default(now())
   endPointId   String
   status       Int?

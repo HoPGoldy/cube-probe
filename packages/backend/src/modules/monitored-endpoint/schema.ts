@@ -127,7 +127,7 @@ export type SchemaProbeResultCreateType = Type.Static<
 >;
 
 export const SchemaProbeResultDetail = Type.Object({
-  id: Type.String(),
+  id: Type.Integer(),
   createdAt: Type.String({ format: "date-time" }),
   endPointId: Type.String(),
   status: Type.Union([Type.Integer(), Type.Null()]),
