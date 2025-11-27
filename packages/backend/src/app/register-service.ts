@@ -19,6 +19,7 @@ import { EndPointService } from "@/modules/monitored-endpoint/service";
 import { ResultService } from "@/modules/monitored-result/service";
 import { CodeExecutorService } from "@/modules/code-executor/service";
 import { IntervalProbeService } from "@/modules/probe-task/interval-service";
+import { ProbeResultCleanupService } from "@/modules/probe-result-cleanup/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 
@@ -61,6 +62,10 @@ export const registerService = async (instance: AppInstance) => {
   const intervalProbeService = new IntervalProbeService({
     prisma,
     resultService,
+  });
+
+  const probeResultCleanupService = new ProbeResultCleanupService({
+    prisma,
   });
 
   const endPointService = new EndPointService({
@@ -131,6 +136,7 @@ export const registerService = async (instance: AppInstance) => {
     // Start the probe scheduler after controllers are registered
     setImmediate(async () => {
       await intervalProbeService.startProbeScheduler();
+      await probeResultCleanupService.startCleanupScheduler();
     });
   };
 
