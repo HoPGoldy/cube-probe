@@ -62,9 +62,9 @@ export const SchemaEndPointCreate = Type.Object({
   enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
   timeout: Type.Optional(
     Type.Integer({
-      description: "请求超时时间(毫秒)",
+      description: "请求超时时间(秒)",
       minimum: 1,
-      maximum: 300000,
+      maximum: 300,
     }), // Max 5 minutes
   ),
   bodyContentType: Type.Optional(

@@ -118,7 +118,7 @@ export class IntervalProbeService {
           ? (endPoint.headers as Record<string, string>)
           : {}),
       };
-      const timeout = endPoint.timeout || 10000; // 默认 10 秒
+      const timeout = (endPoint.timeout || 10) * 1000; // 默认 10 秒，转换为毫秒
       const method = endPoint.method || "GET"; // HTTP 请求方法，默认 GET
 
       // 准备请求配置

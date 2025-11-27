@@ -101,7 +101,7 @@ model EndPoint {
   headers         Json?
   intervalTime    Int? // in seconds
   enabled         Boolean       @default(true)
-  timeout         Int? // in milliseconds
+  timeout         Int? // in seconds
   bodyContentType String?       @default("json") // Request body encoding: json, x-www-form-urlencoded, xml
   bodyContent     String? // Request body content
   results         ProbeResult[]

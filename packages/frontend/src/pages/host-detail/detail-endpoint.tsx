@@ -141,7 +141,7 @@ export const EndpointDetailModal: FC = () => {
             serviceId: hostId,
             enabled: true,
             method: "GET",
-            timeout: 10000,
+            timeout: 10,
             bodyContentType: "json",
           }}
           style={{
@@ -236,15 +236,15 @@ export const EndpointDetailModal: FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="超时时间 (毫秒)"
+              label="超时时间 (秒)"
               name="timeout"
-              tooltip="请求超时时间，默认10000毫秒"
+              tooltip="请求超时时间，默认10秒"
             >
               <InputNumber
                 style={{ width: "100%" }}
                 min={1}
-                max={300000}
-                placeholder="10000"
+                max={300}
+                placeholder="10"
               />
             </Form.Item>
 
