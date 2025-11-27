@@ -1,6 +1,6 @@
 import type { UserService } from "@/modules/user/service";
 import bcrypt from "bcryptjs";
-import { UserRole } from "@prisma/client";
+import { UserRole } from "@db/client";
 import { signJwtToken } from "./utils";
 import { AppInstance } from "@/types";
 import { ErrorUnauthorized } from "@/types/error";

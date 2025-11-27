@@ -50,3 +50,8 @@ export const PATH_FRONTEND_FILE = ensurePathExists(
  * 日志文件存储目录
  */
 export const PATH_LOG = ensurePathExists(join(PATH_ROOT, "logs"));
+
+/**
+ * 数据库文件路径
+ */
+export const PATH_DATABASE = join(PATH_ROOT, "main.db");

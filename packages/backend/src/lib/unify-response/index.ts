@@ -1,6 +1,6 @@
 import { ENV_IS_DEV } from "@/config/env";
 import { ErrorHttp } from "@/types/error";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { PrismaClientKnownRequestError } from "@db/internal/prismaNamespace";
 import type { FastifyInstance } from "fastify";
 // import Value from "typebox/value";
 

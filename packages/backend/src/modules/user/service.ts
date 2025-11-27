@@ -1,7 +1,7 @@
 import { hashPassword } from "@/lib/crypto";
 import { nanoid } from "nanoid";
 import bcrypt from "bcryptjs";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@db/client";
 import {
   SchemaChangePasswordType,
   SchemaUserCreateType,

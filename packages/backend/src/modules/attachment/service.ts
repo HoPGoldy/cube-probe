@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient, Prisma } from "@db/client";
 import { createHash, createHmac } from "crypto";
 import { writeFile } from "fs/promises";
 import { join } from "path";

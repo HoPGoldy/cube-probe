@@ -1,5 +1,5 @@
 import NodeCache from "@cacheable/node-cache";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@db/client";
 import { SchemaAppConfigType } from "./schema";
 
 interface ServiceOptions {

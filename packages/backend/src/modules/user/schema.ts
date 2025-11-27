@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User } from "@db/client";
 import { Type } from "typebox";
 
 export const SchemaUserDetail = Type.Object({

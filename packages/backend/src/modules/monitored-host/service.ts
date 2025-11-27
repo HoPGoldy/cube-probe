@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@db/client";
 import { SchemaServiceCreateType, SchemaServiceUpdateType } from "./schema";
 
 interface ServiceOptions {
@@ -14,7 +14,6 @@ export class MonitoredHostService {
         name: data.name,
         url: data.url,
         headers: data.headers || null,
-        cronExpression: data.cronExpression || null,
         enabled: data.enabled ?? true,
       },
     });

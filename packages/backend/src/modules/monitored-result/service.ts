@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@db/client";
 import { SchemaProbeResultCreateType } from "./schema";
 
 interface ServiceOptions {

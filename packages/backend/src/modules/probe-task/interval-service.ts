@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@db/client";
 import { ResultService } from "@/modules/monitored-result/service";
 
 interface ServiceOptions {

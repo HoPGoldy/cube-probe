@@ -1,5 +1,4 @@
 import { AppInstance } from "@/types";
-import { User } from "@prisma/client";
 
 export const signJwtToken = (
   server: AppInstance,

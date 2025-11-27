@@ -10,8 +10,8 @@ import {
   type VerifiedRegistrationResponse,
   type VerifiedAuthenticationResponse,
 } from "@simplewebauthn/server";
-import { WebAuthnCredential, User } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+import { WebAuthnCredential, User } from "@db/client";
+import { PrismaClient } from "@db/client";
 import { NodeCache } from "@cacheable/node-cache";
 import {
   ErrorChallengeTimeout,

@@ -1,4 +1,4 @@
-import { Attachment } from "@prisma/client";
+import { Attachment } from "@db/client";
 import { Type } from "typebox";
 
 export const SchemaAttachmentInfo = Type.Object({

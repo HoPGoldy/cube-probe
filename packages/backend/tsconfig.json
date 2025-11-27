@@ -10,7 +10,8 @@
     "strictNullChecks": true,
     "noImplicitAny": false,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@db/*": ["./prisma/client/*"]
     }
   }
 }

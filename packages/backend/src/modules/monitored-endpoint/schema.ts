@@ -1,4 +1,4 @@
-import { EndPoint, ProbeResult, Service } from "@prisma/client";
+import { EndPoint, ProbeResult, Service } from "@db/client";
 import { Type } from "typebox";
 
 // Service Schemas

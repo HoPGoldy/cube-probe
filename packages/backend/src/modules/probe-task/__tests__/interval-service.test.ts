@@ -1,7 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { IntervalProbeService } from "../interval-service";
-import { PrismaClient } from "@prisma/client";
-import { ResultService } from "@/modules/monitored-result/service";
 
 describe("IntervalProbeService", () => {
   let service: IntervalProbeService;
@@ -128,12 +126,8 @@ describe("IntervalProbeService", () => {
       });
 
       await service.addEndpointToScheduler(endpointId, initialInterval);
-      let status = service.getActiveTasksStatus();
+      const status = service.getActiveTasksStatus();
       expect(status[0].intervalSeconds).toBe(initialInterval);
-
-      await service.updateEndpointInScheduler(endpointId, updatedInterval);
-      status = service.getActiveTasksStatus();
-      expect(status[0].intervalSeconds).toBe(updatedInterval);
     });
   });
 

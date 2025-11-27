@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@db/client";
 import { SchemaEndPointCreateType, SchemaEndPointUpdateType } from "./schema";
 import { IntervalProbeService } from "@/modules/probe-task/interval-service";
 

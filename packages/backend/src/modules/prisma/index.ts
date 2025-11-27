@@ -1,13 +1,15 @@
 import { hashPassword, shaWithSalt } from "@/lib/crypto";
-import { PrismaClient, UserRole } from "@prisma/client";
+import { PrismaClient, UserRole } from "@db/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PATH_DATABASE } from "@/config/path";
 
 export class PrismaService extends PrismaClient {
   constructor() {
-    super();
-  }
+    const adapter = new PrismaBetterSqlite3({
+      url: `file:${PATH_DATABASE}`,
+    });
 
-  async onModuleInit() {
-    await this.$connect();
+    super({ adapter });
   }
 
   async seed() {

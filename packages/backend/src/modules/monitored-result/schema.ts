@@ -1,4 +1,4 @@
-import { ProbeResult } from "@prisma/client";
+import { ProbeResult } from "@db/client";
 import { Type } from "typebox";
 
 // ProbeResult Schemas
