@@ -115,9 +115,11 @@ model ProbeResult {
   endPointId   String
   status       Int?
   responseTime Int? // in milliseconds
-  timestamp    DateTime
   success      Boolean
   message      String?
 
   endPoint EndPoint @relation(fields: [endPointId], references: [id], onDelete: Cascade)
+
+  @@index([endPointId, createdAt(sort: Desc)])
+  @@index([createdAt])
 }

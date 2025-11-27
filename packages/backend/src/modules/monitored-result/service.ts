@@ -14,7 +14,6 @@ export class ResultService {
         endPointId: data.endPointId,
         status: data.status || null,
         responseTime: data.responseTime || null,
-        timestamp: data.timestamp ? new Date(data.timestamp) : new Date(),
         success: data.success,
         message: data.message || null,
       },
@@ -48,7 +47,7 @@ export class ResultService {
     return await this.options.prisma.probeResult.findMany({
       where,
       orderBy: {
-        timestamp: "desc",
+        createdAt: "desc",
       },
       take: limit || 100, // 默认 100 条记录
     });
@@ -70,7 +69,6 @@ export class ResultService {
         endPointId: string;
         status: number | null;
         responseTime: number | null;
-        timestamp: Date;
         success: boolean;
         message: string | null;
       }>
@@ -78,11 +76,11 @@ export class ResultService {
       SELECT pr.*
       FROM ProbeResult pr
       INNER JOIN (
-        SELECT endPointId, MAX(timestamp) as maxTimestamp
+        SELECT endPointId, MAX(createdAt) as maxCreatedAt
         FROM ProbeResult
         GROUP BY endPointId
-      ) groupedpr ON pr.endPointId = groupedpr.endPointId AND pr.timestamp = groupedpr.maxTimestamp
-      ORDER BY pr.timestamp DESC
+      ) groupedpr ON pr.endPointId = groupedpr.endPointId AND pr.createdAt = groupedpr.maxCreatedAt
+      ORDER BY pr.createdAt DESC
     `;
 
     return latestResults;

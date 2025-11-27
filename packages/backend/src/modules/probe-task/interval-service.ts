@@ -103,7 +103,6 @@ export class IntervalProbeService {
           endPointId,
           status: undefined,
           responseTime: 0,
-          timestamp: new Date().toISOString(),
           success: false,
           message,
         });
@@ -191,7 +190,6 @@ export class IntervalProbeService {
         endPointId,
         status: response.status,
         responseTime,
-        timestamp: new Date().toISOString(),
         success: true,
         message: "Success",
       });
@@ -223,7 +221,6 @@ export class IntervalProbeService {
         endPointId,
         status: status ?? undefined,
         responseTime,
-        timestamp: new Date().toISOString(),
         success: false,
         message,
       });

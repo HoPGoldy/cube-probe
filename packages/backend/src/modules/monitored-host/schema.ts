@@ -102,7 +102,6 @@ export const SchemaProbeResultCreate = Type.Object({
       maximum: 300000,
     }),
   ),
-  timestamp: Type.String({ format: "date-time", description: "检查时间戳" }),
   success: Type.Boolean({ description: "是否成功" }),
   message: Type.Optional(Type.String({ description: "详细信息或错误消息" })),
 });
@@ -117,7 +116,6 @@ export const SchemaProbeResultDetail = Type.Object({
   endPointId: Type.String(),
   status: Type.Union([Type.Integer(), Type.Null()]),
   responseTime: Type.Union([Type.Integer(), Type.Null()]),
-  timestamp: Type.String({ format: "date-time" }),
   success: Type.Boolean(),
   message: Type.Union([Type.String(), Type.Null()]),
 });
@@ -168,7 +166,6 @@ export const createProbeResultDetailVo = (
     endPointId: data.endPointId,
     status: data.status,
     responseTime: data.responseTime,
-    timestamp: data.timestamp.toISOString(),
     success: data.success,
     message: data.message,
   };
