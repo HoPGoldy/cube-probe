@@ -24,7 +24,12 @@ export const routes = createBrowserRouter(
     {
       path: "/",
       children: [
-        { index: true, element: <Navigate to="/user-profile" /> },
+        { index: true, element: <Navigate to="/home" /> },
+        // 首页 - 监控服务列表
+        {
+          path: "/home",
+          element: lazyLoad(() => import("./pages/home")),
+        },
         // 用户管理
         {
           path: "/setting-user",

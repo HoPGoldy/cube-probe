@@ -5,7 +5,7 @@ import { useAtomValue } from "jotai";
 import { stateUserJwtData } from "@/store/user";
 import { UserRole } from "@/services/user";
 import { useGetMonitoredHostList } from "@/services/monitored-host";
-import { Button } from "antd";
+import { Button, Flex } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 interface MenuItem {
@@ -77,13 +77,10 @@ export const Sidebar: FC = () => {
       </div>
 
       <div className="flex-grow flex-shrink overflow-y-auto noscrollbar overflow-x-hidden my-3">
-        {menuItems.map(renderMenuItem)}
+        {/* {menuItems.map(renderMenuItem)} */}
 
-        {userInfo.role === UserRole.ADMIN && hosts.length > 0 && (
+        {hosts.length > 0 && (
           <>
-            <div className="px-4 py-2 text-xs text-gray-500 font-semibold">
-              监控服务
-            </div>
             {hosts.map((host: any) => {
               const isActive = location.pathname === `/host-detail/${host.id}`;
               const className = [s.menuItem];
@@ -104,16 +101,29 @@ export const Sidebar: FC = () => {
         )}
       </div>
 
-      {userInfo.role === UserRole.ADMIN && (
-        <Button
-          className={`${s.toolBtn} keep-antd-style`}
-          icon={<PlusOutlined />}
-          block
-          onClick={handleCreateHost}
-        >
-          创建监控服务
-        </Button>
-      )}
+      <Flex vertical gap={8}>
+        {userInfo.role === UserRole.ADMIN && (
+          <Button
+            className={`${s.toolBtn} keep-antd-style`}
+            icon={<PlusOutlined />}
+            block
+            onClick={handleCreateHost}
+          >
+            创建监控服务
+          </Button>
+        )}
+        {userInfo.role === UserRole.ADMIN && (
+          <Link to="/home">
+            <Button
+              className={`${s.toolBtn} keep-antd-style`}
+              block
+              onClick={handleCreateHost}
+            >
+              主面板
+            </Button>
+          </Link>
+        )}
+      </Flex>
     </section>
   );
 };

@@ -49,7 +49,7 @@ describe("ProbeStatsAggregationService", () => {
           _min: { responseTime: 50 },
           _max: { responseTime: 200 },
         },
-      ]);
+      ] as any);
 
       // Mock 成功次数
       prismaMock.probeResult.count.mockResolvedValue(8);
@@ -59,9 +59,9 @@ describe("ProbeStatsAggregationService", () => {
         _avg: { responseTime: 100 },
         _min: { responseTime: 50 },
         _max: { responseTime: 180 },
-      });
+      } as any);
 
-      prismaMock.probeHourlyStat.upsert.mockResolvedValue({});
+      prismaMock.probeHourlyStat.upsert.mockResolvedValue({} as any);
 
       const result = await service.triggerManualHourlyAggregation();
 
@@ -83,15 +83,15 @@ describe("ProbeStatsAggregationService", () => {
         { endPointId: "ep-1", _count: { id: 5 } },
         { endPointId: "ep-2", _count: { id: 10 } },
         { endPointId: "ep-3", _count: { id: 3 } },
-      ]);
+      ] as any);
 
       prismaMock.probeResult.count.mockResolvedValue(4);
       prismaMock.probeResult.aggregate.mockResolvedValue({
         _avg: { responseTime: 100 },
         _min: { responseTime: 50 },
         _max: { responseTime: 150 },
-      });
-      prismaMock.probeHourlyStat.upsert.mockResolvedValue({});
+      } as any);
+      prismaMock.probeHourlyStat.upsert.mockResolvedValue({} as any);
 
       const result = await service.triggerManualHourlyAggregation();
 
@@ -102,15 +102,15 @@ describe("ProbeStatsAggregationService", () => {
     it("没有成功请求时 avgResponseTime 应为 null", async () => {
       prismaMock.probeResult.groupBy.mockResolvedValue([
         { endPointId: "ep-1", _count: { id: 5 } },
-      ]);
+      ] as any);
 
       prismaMock.probeResult.count.mockResolvedValue(0); // 没有成功的
       prismaMock.probeResult.aggregate.mockResolvedValue({
         _avg: { responseTime: null },
         _min: { responseTime: null },
         _max: { responseTime: null },
-      });
-      prismaMock.probeHourlyStat.upsert.mockResolvedValue({});
+      } as any);
+      prismaMock.probeHourlyStat.upsert.mockResolvedValue({} as any);
 
       await service.triggerManualHourlyAggregation();
 
@@ -140,15 +140,15 @@ describe("ProbeStatsAggregationService", () => {
           _min: { minResponseTime: 30 },
           _max: { maxResponseTime: 500 },
         },
-      ]);
+      ] as any);
 
       // Mock 获取小时详情（用于计算加权平均）
       prismaMock.probeHourlyStat.findMany.mockResolvedValue([
         { successCount: 50, avgResponseTime: 100 },
         { successCount: 45, avgResponseTime: 120 },
-      ]);
+      ] as any);
 
-      prismaMock.probeDailyStat.upsert.mockResolvedValue({});
+      prismaMock.probeDailyStat.upsert.mockResolvedValue({} as any);
 
       const result = await service.triggerManualDailyAggregation();
 
@@ -176,10 +176,10 @@ describe("ProbeStatsAggregationService", () => {
           _min: { minResponseTime: 50 },
           _max: { maxResponseTime: 200 },
         },
-      ]);
+      ] as any);
 
       prismaMock.probeHourlyStat.findMany.mockResolvedValue([]);
-      prismaMock.probeDailyStat.upsert.mockResolvedValue({});
+      prismaMock.probeDailyStat.upsert.mockResolvedValue({} as any);
 
       await service.triggerManualDailyAggregation();
 
@@ -196,10 +196,10 @@ describe("ProbeStatsAggregationService", () => {
           _min: { minResponseTime: null },
           _max: { maxResponseTime: null },
         },
-      ]);
+      ] as any);
 
       prismaMock.probeHourlyStat.findMany.mockResolvedValue([]);
-      prismaMock.probeDailyStat.upsert.mockResolvedValue({});
+      prismaMock.probeDailyStat.upsert.mockResolvedValue({} as any);
 
       await service.triggerManualDailyAggregation();
 
@@ -214,10 +214,10 @@ describe("ProbeStatsAggregationService", () => {
       prismaMock.probeDailyStat.count.mockResolvedValue(30);
       prismaMock.probeHourlyStat.findFirst.mockResolvedValue({
         hourTimestamp: new Date("2025-11-28T10:00:00Z"),
-      });
+      } as any);
       prismaMock.probeDailyStat.findFirst.mockResolvedValue({
         date: new Date("2025-11-27T00:00:00Z"),
-      });
+      } as any);
 
       const stats = await service.getAggregationStats();
 
