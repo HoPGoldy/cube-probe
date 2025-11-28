@@ -3,7 +3,7 @@ import fastifyStatic from "@fastify/static";
 import { PATH_FRONTEND_FILE } from "@/config/path";
 import { createErrorResponse } from "../unify-response";
 import { ErrorNotFound } from "@/types/error";
-import { ENV_FRONTEND_BASE_URL, ENV_IS_DEV } from "@/config/env";
+import { ENV_FRONTEND_BASE_URL, ENV_IS_PROD } from "@/config/env";
 import fs from "fs/promises";
 
 /**
@@ -11,7 +11,7 @@ import fs from "fs/promises";
  */
 export const registerFrontendHistory = async (server: FastifyInstance) => {
   // 开发环境下不启用该功能，由前端开发服务器处理
-  if (ENV_IS_DEV) return;
+  if (!ENV_IS_PROD) return;
 
   // 对 index.html 的文本进行替换，把 {FRONTEND_BASE_URL} 替换为实际的前端基础路径
   const initialIndexHtml = await fs.readFile(

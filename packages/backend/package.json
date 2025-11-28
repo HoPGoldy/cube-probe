@@ -59,6 +59,7 @@
     "pino-pretty": "^13.1.2",
     "pkgroll": "^2.20.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.13"
+    "vitest": "^4.0.13",
+    "vitest-mock-extended": "^3.1.0"
   }
 }

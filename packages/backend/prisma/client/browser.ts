@@ -57,3 +57,13 @@ export type EndPoint = Prisma.EndPointModel
  * 
  */
 export type ProbeResult = Prisma.ProbeResultModel
+/**
+ * Model ProbeHourlyStat
+ * 
+ */
+export type ProbeHourlyStat = Prisma.ProbeHourlyStatModel
+/**
+ * Model ProbeDailyStat
+ * 
+ */
+export type ProbeDailyStat = Prisma.ProbeDailyStatModel

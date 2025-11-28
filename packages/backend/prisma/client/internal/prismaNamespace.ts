@@ -391,7 +391,9 @@ export const ModelName = {
   AppConfig: 'AppConfig',
   Service: 'Service',
   EndPoint: 'EndPoint',
-  ProbeResult: 'ProbeResult'
+  ProbeResult: 'ProbeResult',
+  ProbeHourlyStat: 'ProbeHourlyStat',
+  ProbeDailyStat: 'ProbeDailyStat'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult"
+    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1005,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProbeHourlyStat: {
+      payload: Prisma.$ProbeHourlyStatPayload<ExtArgs>
+      fields: Prisma.ProbeHourlyStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProbeHourlyStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProbeHourlyStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>
+        }
+        findFirst: {
+          args: Prisma.ProbeHourlyStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProbeHourlyStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>
+        }
+        findMany: {
+          args: Prisma.ProbeHourlyStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>[]
+        }
+        create: {
+          args: Prisma.ProbeHourlyStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>
+        }
+        createMany: {
+          args: Prisma.ProbeHourlyStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProbeHourlyStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>[]
+        }
+        delete: {
+          args: Prisma.ProbeHourlyStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>
+        }
+        update: {
+          args: Prisma.ProbeHourlyStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProbeHourlyStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProbeHourlyStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProbeHourlyStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProbeHourlyStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeHourlyStatPayload>
+        }
+        aggregate: {
+          args: Prisma.ProbeHourlyStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProbeHourlyStat>
+        }
+        groupBy: {
+          args: Prisma.ProbeHourlyStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeHourlyStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProbeHourlyStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeHourlyStatCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProbeDailyStat: {
+      payload: Prisma.$ProbeDailyStatPayload<ExtArgs>
+      fields: Prisma.ProbeDailyStatFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProbeDailyStatFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProbeDailyStatFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>
+        }
+        findFirst: {
+          args: Prisma.ProbeDailyStatFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProbeDailyStatFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>
+        }
+        findMany: {
+          args: Prisma.ProbeDailyStatFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>[]
+        }
+        create: {
+          args: Prisma.ProbeDailyStatCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>
+        }
+        createMany: {
+          args: Prisma.ProbeDailyStatCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProbeDailyStatCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>[]
+        }
+        delete: {
+          args: Prisma.ProbeDailyStatDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>
+        }
+        update: {
+          args: Prisma.ProbeDailyStatUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProbeDailyStatDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProbeDailyStatUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProbeDailyStatUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProbeDailyStatUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeDailyStatPayload>
+        }
+        aggregate: {
+          args: Prisma.ProbeDailyStatAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProbeDailyStat>
+        }
+        groupBy: {
+          args: Prisma.ProbeDailyStatGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeDailyStatGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProbeDailyStatCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeDailyStatCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1146,12 +1296,38 @@ export const ProbeResultScalarFieldEnum = {
   endPointId: 'endPointId',
   status: 'status',
   responseTime: 'responseTime',
-  timestamp: 'timestamp',
   success: 'success',
   message: 'message'
 } as const
 
 export type ProbeResultScalarFieldEnum = (typeof ProbeResultScalarFieldEnum)[keyof typeof ProbeResultScalarFieldEnum]
+
+
+export const ProbeHourlyStatScalarFieldEnum = {
+  endPointId: 'endPointId',
+  hourTimestamp: 'hourTimestamp',
+  totalChecks: 'totalChecks',
+  successCount: 'successCount',
+  avgResponseTime: 'avgResponseTime',
+  minResponseTime: 'minResponseTime',
+  maxResponseTime: 'maxResponseTime'
+} as const
+
+export type ProbeHourlyStatScalarFieldEnum = (typeof ProbeHourlyStatScalarFieldEnum)[keyof typeof ProbeHourlyStatScalarFieldEnum]
+
+
+export const ProbeDailyStatScalarFieldEnum = {
+  endPointId: 'endPointId',
+  date: 'date',
+  totalChecks: 'totalChecks',
+  successCount: 'successCount',
+  uptimePercentage: 'uptimePercentage',
+  avgResponseTime: 'avgResponseTime',
+  minResponseTime: 'minResponseTime',
+  maxResponseTime: 'maxResponseTime'
+} as const
+
+export type ProbeDailyStatScalarFieldEnum = (typeof ProbeDailyStatScalarFieldEnum)[keyof typeof ProbeDailyStatScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1343,6 +1519,8 @@ export type GlobalOmitConfig = {
   service?: Prisma.ServiceOmit
   endPoint?: Prisma.EndPointOmit
   probeResult?: Prisma.ProbeResultOmit
+  probeHourlyStat?: Prisma.ProbeHourlyStatOmit
+  probeDailyStat?: Prisma.ProbeDailyStatOmit
 }
 
 /* Types for Logging */

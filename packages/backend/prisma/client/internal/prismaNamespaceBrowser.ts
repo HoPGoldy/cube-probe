@@ -58,7 +58,9 @@ export const ModelName = {
   AppConfig: 'AppConfig',
   Service: 'Service',
   EndPoint: 'EndPoint',
-  ProbeResult: 'ProbeResult'
+  ProbeResult: 'ProbeResult',
+  ProbeHourlyStat: 'ProbeHourlyStat',
+  ProbeDailyStat: 'ProbeDailyStat'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -181,12 +183,38 @@ export const ProbeResultScalarFieldEnum = {
   endPointId: 'endPointId',
   status: 'status',
   responseTime: 'responseTime',
-  timestamp: 'timestamp',
   success: 'success',
   message: 'message'
 } as const
 
 export type ProbeResultScalarFieldEnum = (typeof ProbeResultScalarFieldEnum)[keyof typeof ProbeResultScalarFieldEnum]
+
+
+export const ProbeHourlyStatScalarFieldEnum = {
+  endPointId: 'endPointId',
+  hourTimestamp: 'hourTimestamp',
+  totalChecks: 'totalChecks',
+  successCount: 'successCount',
+  avgResponseTime: 'avgResponseTime',
+  minResponseTime: 'minResponseTime',
+  maxResponseTime: 'maxResponseTime'
+} as const
+
+export type ProbeHourlyStatScalarFieldEnum = (typeof ProbeHourlyStatScalarFieldEnum)[keyof typeof ProbeHourlyStatScalarFieldEnum]
+
+
+export const ProbeDailyStatScalarFieldEnum = {
+  endPointId: 'endPointId',
+  date: 'date',
+  totalChecks: 'totalChecks',
+  successCount: 'successCount',
+  uptimePercentage: 'uptimePercentage',
+  avgResponseTime: 'avgResponseTime',
+  minResponseTime: 'minResponseTime',
+  maxResponseTime: 'maxResponseTime'
+} as const
+
+export type ProbeDailyStatScalarFieldEnum = (typeof ProbeDailyStatScalarFieldEnum)[keyof typeof ProbeDailyStatScalarFieldEnum]
 
 
 export const SortOrder = {

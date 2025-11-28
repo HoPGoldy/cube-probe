@@ -91,20 +91,22 @@ model Service {
 }
 
 model EndPoint {
-  id              String        @id @default(uuid())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   serviceId       String
   name            String
   url             String?
-  method          String?       @default("GET") // HTTP method: GET, POST, PUT, DELETE, etc.
+  method          String?           @default("GET") // HTTP method: GET, POST, PUT, DELETE, etc.
   headers         Json?
   intervalTime    Int? // in seconds
-  enabled         Boolean       @default(true)
+  enabled         Boolean           @default(true)
   timeout         Int? // in seconds
-  bodyContentType String?       @default("json") // Request body encoding: json, x-www-form-urlencoded, xml
+  bodyContentType String?           @default("json") // Request body encoding: json, x-www-form-urlencoded, xml
   bodyContent     String? // Request body content
   results         ProbeResult[]
+  hourlyStats     ProbeHourlyStat[]
+  dailyStats      ProbeDailyStat[]
 
   service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
@@ -122,4 +124,37 @@ model ProbeResult {
 
   @@index([endPointId, createdAt(sort: Desc)])
   @@index([createdAt])
+}
+
+// 小时级聚合统计表
+model ProbeHourlyStat {
+  endPointId      String
+  hourTimestamp   DateTime // 精确到小时，例如 '2025-11-27 16:00:00'
+  totalChecks     Int // 这一小时内执行的总次数
+  successCount    Int // 成功次数
+  avgResponseTime Int? // 平均响应时间 (毫秒)
+  minResponseTime Int? // 最小响应时间
+  maxResponseTime Int? // 最大响应时间
+
+  endPoint EndPoint @relation(fields: [endPointId], references: [id], onDelete: Cascade)
+
+  @@id([endPointId, hourTimestamp])
+  @@index([hourTimestamp])
+}
+
+// 日级聚合统计表
+model ProbeDailyStat {
+  endPointId       String
+  date             DateTime // 只精确到天，例如 '2025-11-27 00:00:00'
+  totalChecks      Int // 全天执行的总次数
+  successCount     Int // 成功次数
+  uptimePercentage Float? // 在线率百分比，例如 99.95
+  avgResponseTime  Int? // 平均响应时间 (毫秒)
+  minResponseTime  Int? // 全天最小响应时间
+  maxResponseTime  Int? // 全天最大响应时间
+
+  endPoint EndPoint @relation(fields: [endPointId], references: [id], onDelete: Cascade)
+
+  @@id([endPointId, date])
+  @@index([date])
 }

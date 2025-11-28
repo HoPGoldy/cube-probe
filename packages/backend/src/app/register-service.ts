@@ -20,6 +20,7 @@ import { ResultService } from "@/modules/monitored-result/service";
 import { CodeExecutorService } from "@/modules/code-executor/service";
 import { IntervalProbeService } from "@/modules/probe-task/interval-service";
 import { ProbeResultCleanupService } from "@/modules/probe-result-cleanup/service";
+import { ProbeStatsAggregationService } from "@/modules/probe-stats-aggregation/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 
@@ -65,6 +66,10 @@ export const registerService = async (instance: AppInstance) => {
   });
 
   const probeResultCleanupService = new ProbeResultCleanupService({
+    prisma,
+  });
+
+  const probeStatsAggregationService = new ProbeStatsAggregationService({
     prisma,
   });
 
@@ -137,6 +142,7 @@ export const registerService = async (instance: AppInstance) => {
     setImmediate(async () => {
       await intervalProbeService.startProbeScheduler();
       await probeResultCleanupService.startCleanupScheduler();
+      await probeStatsAggregationService.startAggregationScheduler();
     });
   };
 

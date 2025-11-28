@@ -27,33 +27,33 @@ export type AggregateProbeResult = {
 }
 
 export type ProbeResultAvgAggregateOutputType = {
+  id: number | null
   status: number | null
   responseTime: number | null
 }
 
 export type ProbeResultSumAggregateOutputType = {
+  id: number | null
   status: number | null
   responseTime: number | null
 }
 
 export type ProbeResultMinAggregateOutputType = {
-  id: string | null
+  id: number | null
   createdAt: Date | null
   endPointId: string | null
   status: number | null
   responseTime: number | null
-  timestamp: Date | null
   success: boolean | null
   message: string | null
 }
 
 export type ProbeResultMaxAggregateOutputType = {
-  id: string | null
+  id: number | null
   createdAt: Date | null
   endPointId: string | null
   status: number | null
   responseTime: number | null
-  timestamp: Date | null
   success: boolean | null
   message: string | null
 }
@@ -64,7 +64,6 @@ export type ProbeResultCountAggregateOutputType = {
   endPointId: number
   status: number
   responseTime: number
-  timestamp: number
   success: number
   message: number
   _all: number
@@ -72,11 +71,13 @@ export type ProbeResultCountAggregateOutputType = {
 
 
 export type ProbeResultAvgAggregateInputType = {
+  id?: true
   status?: true
   responseTime?: true
 }
 
 export type ProbeResultSumAggregateInputType = {
+  id?: true
   status?: true
   responseTime?: true
 }
@@ -87,7 +88,6 @@ export type ProbeResultMinAggregateInputType = {
   endPointId?: true
   status?: true
   responseTime?: true
-  timestamp?: true
   success?: true
   message?: true
 }
@@ -98,7 +98,6 @@ export type ProbeResultMaxAggregateInputType = {
   endPointId?: true
   status?: true
   responseTime?: true
-  timestamp?: true
   success?: true
   message?: true
 }
@@ -109,7 +108,6 @@ export type ProbeResultCountAggregateInputType = {
   endPointId?: true
   status?: true
   responseTime?: true
-  timestamp?: true
   success?: true
   message?: true
   _all?: true
@@ -202,12 +200,11 @@ export type ProbeResultGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 export type ProbeResultGroupByOutputType = {
-  id: string
+  id: number
   createdAt: Date
   endPointId: string
   status: number | null
   responseTime: number | null
-  timestamp: Date
   success: boolean
   message: string | null
   _count: ProbeResultCountAggregateOutputType | null
@@ -236,12 +233,11 @@ export type ProbeResultWhereInput = {
   AND?: Prisma.ProbeResultWhereInput | Prisma.ProbeResultWhereInput[]
   OR?: Prisma.ProbeResultWhereInput[]
   NOT?: Prisma.ProbeResultWhereInput | Prisma.ProbeResultWhereInput[]
-  id?: Prisma.StringFilter<"ProbeResult"> | string
+  id?: Prisma.IntFilter<"ProbeResult"> | number
   createdAt?: Prisma.DateTimeFilter<"ProbeResult"> | Date | string
   endPointId?: Prisma.StringFilter<"ProbeResult"> | string
   status?: Prisma.IntNullableFilter<"ProbeResult"> | number | null
   responseTime?: Prisma.IntNullableFilter<"ProbeResult"> | number | null
-  timestamp?: Prisma.DateTimeFilter<"ProbeResult"> | Date | string
   success?: Prisma.BoolFilter<"ProbeResult"> | boolean
   message?: Prisma.StringNullableFilter<"ProbeResult"> | string | null
   endPoint?: Prisma.XOR<Prisma.EndPointScalarRelationFilter, Prisma.EndPointWhereInput>
@@ -253,14 +249,13 @@ export type ProbeResultOrderByWithRelationInput = {
   endPointId?: Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   responseTime?: Prisma.SortOrderInput | Prisma.SortOrder
-  timestamp?: Prisma.SortOrder
   success?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
   endPoint?: Prisma.EndPointOrderByWithRelationInput
 }
 
 export type ProbeResultWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
+  id?: number
   AND?: Prisma.ProbeResultWhereInput | Prisma.ProbeResultWhereInput[]
   OR?: Prisma.ProbeResultWhereInput[]
   NOT?: Prisma.ProbeResultWhereInput | Prisma.ProbeResultWhereInput[]
@@ -268,7 +263,6 @@ export type ProbeResultWhereUniqueInput = Prisma.AtLeast<{
   endPointId?: Prisma.StringFilter<"ProbeResult"> | string
   status?: Prisma.IntNullableFilter<"ProbeResult"> | number | null
   responseTime?: Prisma.IntNullableFilter<"ProbeResult"> | number | null
-  timestamp?: Prisma.DateTimeFilter<"ProbeResult"> | Date | string
   success?: Prisma.BoolFilter<"ProbeResult"> | boolean
   message?: Prisma.StringNullableFilter<"ProbeResult"> | string | null
   endPoint?: Prisma.XOR<Prisma.EndPointScalarRelationFilter, Prisma.EndPointWhereInput>
@@ -280,7 +274,6 @@ export type ProbeResultOrderByWithAggregationInput = {
   endPointId?: Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   responseTime?: Prisma.SortOrderInput | Prisma.SortOrder
-  timestamp?: Prisma.SortOrder
   success?: Prisma.SortOrder
   message?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProbeResultCountOrderByAggregateInput
@@ -294,88 +287,77 @@ export type ProbeResultScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProbeResultScalarWhereWithAggregatesInput | Prisma.ProbeResultScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProbeResultScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProbeResultScalarWhereWithAggregatesInput | Prisma.ProbeResultScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"ProbeResult"> | string
+  id?: Prisma.IntWithAggregatesFilter<"ProbeResult"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProbeResult"> | Date | string
   endPointId?: Prisma.StringWithAggregatesFilter<"ProbeResult"> | string
   status?: Prisma.IntNullableWithAggregatesFilter<"ProbeResult"> | number | null
   responseTime?: Prisma.IntNullableWithAggregatesFilter<"ProbeResult"> | number | null
-  timestamp?: Prisma.DateTimeWithAggregatesFilter<"ProbeResult"> | Date | string
   success?: Prisma.BoolWithAggregatesFilter<"ProbeResult"> | boolean
   message?: Prisma.StringNullableWithAggregatesFilter<"ProbeResult"> | string | null
 }
 
 export type ProbeResultCreateInput = {
-  id?: string
   createdAt?: Date | string
   status?: number | null
   responseTime?: number | null
-  timestamp: Date | string
   success: boolean
   message?: string | null
   endPoint: Prisma.EndPointCreateNestedOneWithoutResultsInput
 }
 
 export type ProbeResultUncheckedCreateInput = {
-  id?: string
+  id?: number
   createdAt?: Date | string
   endPointId: string
   status?: number | null
   responseTime?: number | null
-  timestamp: Date | string
   success: boolean
   message?: string | null
 }
 
 export type ProbeResultUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   endPoint?: Prisma.EndPointUpdateOneRequiredWithoutResultsNestedInput
 }
 
 export type ProbeResultUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPointId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProbeResultCreateManyInput = {
-  id?: string
+  id?: number
   createdAt?: Date | string
   endPointId: string
   status?: number | null
   responseTime?: number | null
-  timestamp: Date | string
   success: boolean
   message?: string | null
 }
 
 export type ProbeResultUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProbeResultUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endPointId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -396,12 +378,12 @@ export type ProbeResultCountOrderByAggregateInput = {
   endPointId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
-  timestamp?: Prisma.SortOrder
   success?: Prisma.SortOrder
   message?: Prisma.SortOrder
 }
 
 export type ProbeResultAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
 }
@@ -412,7 +394,6 @@ export type ProbeResultMaxOrderByAggregateInput = {
   endPointId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
-  timestamp?: Prisma.SortOrder
   success?: Prisma.SortOrder
   message?: Prisma.SortOrder
 }
@@ -423,12 +404,12 @@ export type ProbeResultMinOrderByAggregateInput = {
   endPointId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
-  timestamp?: Prisma.SortOrder
   success?: Prisma.SortOrder
   message?: Prisma.SortOrder
 }
 
 export type ProbeResultSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
   status?: Prisma.SortOrder
   responseTime?: Prisma.SortOrder
 }
@@ -476,21 +457,18 @@ export type ProbeResultUncheckedUpdateManyWithoutEndPointNestedInput = {
 }
 
 export type ProbeResultCreateWithoutEndPointInput = {
-  id?: string
   createdAt?: Date | string
   status?: number | null
   responseTime?: number | null
-  timestamp: Date | string
   success: boolean
   message?: string | null
 }
 
 export type ProbeResultUncheckedCreateWithoutEndPointInput = {
-  id?: string
+  id?: number
   createdAt?: Date | string
   status?: number | null
   responseTime?: number | null
-  timestamp: Date | string
   success: boolean
   message?: string | null
 }
@@ -524,52 +502,46 @@ export type ProbeResultScalarWhereInput = {
   AND?: Prisma.ProbeResultScalarWhereInput | Prisma.ProbeResultScalarWhereInput[]
   OR?: Prisma.ProbeResultScalarWhereInput[]
   NOT?: Prisma.ProbeResultScalarWhereInput | Prisma.ProbeResultScalarWhereInput[]
-  id?: Prisma.StringFilter<"ProbeResult"> | string
+  id?: Prisma.IntFilter<"ProbeResult"> | number
   createdAt?: Prisma.DateTimeFilter<"ProbeResult"> | Date | string
   endPointId?: Prisma.StringFilter<"ProbeResult"> | string
   status?: Prisma.IntNullableFilter<"ProbeResult"> | number | null
   responseTime?: Prisma.IntNullableFilter<"ProbeResult"> | number | null
-  timestamp?: Prisma.DateTimeFilter<"ProbeResult"> | Date | string
   success?: Prisma.BoolFilter<"ProbeResult"> | boolean
   message?: Prisma.StringNullableFilter<"ProbeResult"> | string | null
 }
 
 export type ProbeResultCreateManyEndPointInput = {
-  id?: string
+  id?: number
   createdAt?: Date | string
   status?: number | null
   responseTime?: number | null
-  timestamp: Date | string
   success: boolean
   message?: string | null
 }
 
 export type ProbeResultUpdateWithoutEndPointInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProbeResultUncheckedUpdateWithoutEndPointInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type ProbeResultUncheckedUpdateManyWithoutEndPointInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   responseTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   success?: Prisma.BoolFieldUpdateOperationsInput | boolean
   message?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -582,7 +554,6 @@ export type ProbeResultSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   endPointId?: boolean
   status?: boolean
   responseTime?: boolean
-  timestamp?: boolean
   success?: boolean
   message?: boolean
   endPoint?: boolean | Prisma.EndPointDefaultArgs<ExtArgs>
@@ -594,7 +565,6 @@ export type ProbeResultSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   endPointId?: boolean
   status?: boolean
   responseTime?: boolean
-  timestamp?: boolean
   success?: boolean
   message?: boolean
   endPoint?: boolean | Prisma.EndPointDefaultArgs<ExtArgs>
@@ -606,7 +576,6 @@ export type ProbeResultSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   endPointId?: boolean
   status?: boolean
   responseTime?: boolean
-  timestamp?: boolean
   success?: boolean
   message?: boolean
   endPoint?: boolean | Prisma.EndPointDefaultArgs<ExtArgs>
@@ -618,12 +587,11 @@ export type ProbeResultSelectScalar = {
   endPointId?: boolean
   status?: boolean
   responseTime?: boolean
-  timestamp?: boolean
   success?: boolean
   message?: boolean
 }
 
-export type ProbeResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "endPointId" | "status" | "responseTime" | "timestamp" | "success" | "message", ExtArgs["result"]["probeResult"]>
+export type ProbeResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "endPointId" | "status" | "responseTime" | "success" | "message", ExtArgs["result"]["probeResult"]>
 export type ProbeResultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   endPoint?: boolean | Prisma.EndPointDefaultArgs<ExtArgs>
 }
@@ -640,12 +608,11 @@ export type $ProbeResultPayload<ExtArgs extends runtime.Types.Extensions.Interna
     endPoint: Prisma.$EndPointPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
+    id: number
     createdAt: Date
     endPointId: string
     status: number | null
     responseTime: number | null
-    timestamp: Date
     success: boolean
     message: string | null
   }, ExtArgs["result"]["probeResult"]>
@@ -1072,12 +1039,11 @@ export interface Prisma__ProbeResultClient<T, Null = never, ExtArgs extends runt
  * Fields of the ProbeResult model
  */
 export interface ProbeResultFieldRefs {
-  readonly id: Prisma.FieldRef<"ProbeResult", 'String'>
+  readonly id: Prisma.FieldRef<"ProbeResult", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ProbeResult", 'DateTime'>
   readonly endPointId: Prisma.FieldRef<"ProbeResult", 'String'>
   readonly status: Prisma.FieldRef<"ProbeResult", 'Int'>
   readonly responseTime: Prisma.FieldRef<"ProbeResult", 'Int'>
-  readonly timestamp: Prisma.FieldRef<"ProbeResult", 'DateTime'>
   readonly success: Prisma.FieldRef<"ProbeResult", 'Boolean'>
   readonly message: Prisma.FieldRef<"ProbeResult", 'String'>
 }
