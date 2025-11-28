@@ -328,35 +328,157 @@ export class ProbeStatsAggregationService {
   }
 
   /**
-   * 获取聚合统计信息
+   * 获取端点的多时间范围统计数据
+   * @param endpointId 端点 ID
    */
-  async getAggregationStats() {
-    const hourlyCount = await this.options.prisma.probeHourlyStat.count();
-    const dailyCount = await this.options.prisma.probeDailyStat.count();
+  async getEndpointMultiRangeStats(endpointId: string) {
+    const now = dayjs();
 
-    const latestHourly = await this.options.prisma.probeHourlyStat.findFirst({
-      orderBy: {
-        hourTimestamp: "desc",
-      },
-      select: {
-        hourTimestamp: true,
+    // 获取最新一条探测结果
+    const latestResult = await this.options.prisma.probeResult.findFirst({
+      where: { endPointId: endpointId },
+      orderBy: { createdAt: "desc" },
+      select: { responseTime: true, success: true, createdAt: true },
+    });
+
+    // 时间范围定义
+    const ranges = {
+      "24h": now.subtract(24, "hour").toDate(),
+      "30d": now.subtract(30, "day").startOf("day").toDate(),
+      "1y": now.subtract(1, "year").startOf("day").toDate(),
+    };
+
+    // 获取 24 小时统计（从小时表 + 当前小时实时数据）
+    const currentHourStart = now.startOf("hour").toDate();
+    const hourlyStats = await this.options.prisma.probeHourlyStat.findMany({
+      where: {
+        endPointId: endpointId,
+        hourTimestamp: { gte: ranges["24h"] },
       },
     });
 
-    const latestDaily = await this.options.prisma.probeDailyStat.findFirst({
-      orderBy: {
-        date: "desc",
+    // 当前小时实时数据
+    const currentHourData = await this.options.prisma.probeResult.aggregate({
+      where: {
+        endPointId: endpointId,
+        createdAt: { gte: currentHourStart },
       },
-      select: {
-        date: true,
+      _count: { id: true },
+      _avg: { responseTime: true },
+    });
+    const currentHourSuccess = await this.options.prisma.probeResult.count({
+      where: {
+        endPointId: endpointId,
+        createdAt: { gte: currentHourStart },
+        success: true,
       },
     });
+
+    // 计算 24h 统计
+    const totalChecks24h =
+      hourlyStats.reduce((sum, h) => sum + h.totalChecks, 0) +
+      currentHourData._count.id;
+    const successCount24h =
+      hourlyStats.reduce((sum, h) => sum + h.successCount, 0) +
+      currentHourSuccess;
+    let avgResponseTime24h: number | null = null;
+
+    const hourlyWithAvg = hourlyStats.filter(
+      (h) => h.avgResponseTime !== null && h.successCount > 0,
+    );
+    if (hourlyWithAvg.length > 0 || currentHourSuccess > 0) {
+      const totalWeight =
+        hourlyWithAvg.reduce((sum, h) => sum + h.successCount, 0) +
+        currentHourSuccess;
+      const weightedSum =
+        hourlyWithAvg.reduce(
+          (sum, h) => sum + h.successCount * (h.avgResponseTime || 0),
+          0,
+        ) +
+        currentHourSuccess * (currentHourData._avg.responseTime || 0);
+      avgResponseTime24h =
+        totalWeight > 0 ? Math.round(weightedSum / totalWeight) : null;
+    }
+
+    // 获取 30 天和 1 年统计（从日表）
+    const dailyStats = await this.options.prisma.probeDailyStat.findMany({
+      where: {
+        endPointId: endpointId,
+        date: { gte: ranges["1y"] },
+      },
+    });
+
+    // 计算不同范围的统计
+    const calcRangeStats = (startDate: Date) => {
+      const filtered = dailyStats.filter((d) => d.date >= startDate);
+      const totalChecks = filtered.reduce((sum, d) => sum + d.totalChecks, 0);
+      const successCount = filtered.reduce((sum, d) => sum + d.successCount, 0);
+      return {
+        totalChecks,
+        successCount,
+        uptimePercentage:
+          totalChecks > 0
+            ? Math.round((successCount / totalChecks) * 10000) / 100
+            : null,
+      };
+    };
+
+    const stats30d = calcRangeStats(ranges["30d"]);
+    const stats1y = calcRangeStats(ranges["1y"]);
+
+    // 补充今天的数据到 30d 和 1y
+    const todayStart = now.startOf("day").toDate();
+    const todayHourlyStats = hourlyStats.filter(
+      (h) => h.hourTimestamp >= todayStart,
+    );
+    const todayChecks =
+      todayHourlyStats.reduce((sum, h) => sum + h.totalChecks, 0) +
+      currentHourData._count.id;
+    const todaySuccess =
+      todayHourlyStats.reduce((sum, h) => sum + h.successCount, 0) +
+      currentHourSuccess;
+
+    stats30d.totalChecks += todayChecks;
+    stats30d.successCount += todaySuccess;
+    stats30d.uptimePercentage =
+      stats30d.totalChecks > 0
+        ? Math.round((stats30d.successCount / stats30d.totalChecks) * 10000) /
+          100
+        : null;
+
+    stats1y.totalChecks += todayChecks;
+    stats1y.successCount += todaySuccess;
+    stats1y.uptimePercentage =
+      stats1y.totalChecks > 0
+        ? Math.round((stats1y.successCount / stats1y.totalChecks) * 10000) / 100
+        : null;
 
     return {
-      hourlyRecords: hourlyCount,
-      dailyRecords: dailyCount,
-      latestHourlyTimestamp: latestHourly?.hourTimestamp,
-      latestDailyDate: latestDaily?.date,
+      endpointId,
+      current: {
+        responseTime: latestResult?.responseTime ?? null,
+        success: latestResult?.success ?? null,
+        timestamp: latestResult?.createdAt ?? null,
+      },
+      stats24h: {
+        totalChecks: totalChecks24h,
+        successCount: successCount24h,
+        uptimePercentage:
+          totalChecks24h > 0
+            ? Math.round((successCount24h / totalChecks24h) * 10000) / 100
+            : null,
+        avgResponseTime: avgResponseTime24h,
+      },
+      stats30d: {
+        totalChecks: stats30d.totalChecks,
+        successCount: stats30d.successCount,
+        uptimePercentage: stats30d.uptimePercentage,
+      },
+      stats1y: {
+        totalChecks: stats1y.totalChecks,
+        successCount: stats1y.successCount,
+        uptimePercentage: stats1y.uptimePercentage,
+      },
     };
   }
 }

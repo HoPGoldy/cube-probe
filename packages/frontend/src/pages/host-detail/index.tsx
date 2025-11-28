@@ -10,11 +10,10 @@ import {
   useGetEndpointList,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import { Card, Spin, Empty, Flex, Space, Button, Modal, Switch } from "antd";
+import { Spin, Empty, Flex, Space, Button, Modal, Switch } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
-import { EndpointChart } from "./endpoint-chart";
 import {
   DETAIL_TYPE_KEY as EP_DETAIL_TYPE_KEY,
   DETAIL_ID_KEY as EP_DETAIL_ID_KEY,
@@ -27,6 +26,7 @@ import {
   DETAIL_ID_KEY as HOST_DETAIL_ID_KEY,
   HostDetailModal,
 } from "./detail-host";
+import { EndpointItem } from "./endpoint-item";
 
 const HostDetailPage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
@@ -118,47 +118,6 @@ const HostDetailPage: React.FC = () => {
     );
   }
 
-  const renderEndPointItem = (endpoint: any) => {
-    return (
-      <Card key={endpoint.id} styles={{ body: { padding: 16 } }}>
-        <Flex className="w-full">
-          <div className="w-full">
-            <Flex gap={16} justify="space-between" align="center">
-              <Flex className="text-2xl font-bold" align="center" gap={8}>
-                {endpoint.name}
-              </Flex>
-              <Space>
-                <Switch
-                  checkedChildren="已启用"
-                  unCheckedChildren="已禁用"
-                  checked={endpoint.enabled}
-                  onChange={() => onSwitchEndpointEnabled(endpoint)}
-                />
-                <Button onClick={() => onEditEndpoint(endpoint.id)}>
-                  配置
-                </Button>
-                <Button>复制</Button>
-                <Button
-                  danger
-                  icon={<CloseOutlined />}
-                  onClick={() => onEndpointDeleteConfirm(endpoint)}
-                ></Button>
-              </Space>
-            </Flex>
-            <div>{endpoint.url}</div>
-          </div>
-        </Flex>
-        {/* 探测结果图表 */}
-        <div className="mt-4 w-full h-[70px]">
-          <EndpointChart
-            endpointId={endpoint.id}
-            refetchInterval={endpoint.intervalTime * 1000}
-          />
-        </div>
-      </Card>
-    );
-  };
-
   return (
     <>
       <Flex vertical gap={16} className="m-4">
@@ -196,10 +155,18 @@ const HostDetailPage: React.FC = () => {
             <EmptyTip
               className="mt-8"
               title="暂未配置监控接口"
-              subTitle="点击右上角“创建接口”按钮继续"
+              subTitle={'点击右上角"创建接口"按钮继续'}
             />
           ) : (
-            endpoints.map(renderEndPointItem)
+            endpoints.map((endpoint: any) => (
+              <EndpointItem
+                key={endpoint.id}
+                endpoint={endpoint}
+                onEdit={onEditEndpoint}
+                onSwitchEnabled={onSwitchEndpointEnabled}
+                onDelete={onEndpointDeleteConfirm}
+              />
+            ))
           )}
         </Flex>
       </Flex>

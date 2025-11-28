@@ -9,6 +9,7 @@ import { registerController as registerMonitoredHostController } from "@/modules
 import { registerController as registerEndPointController } from "@/modules/monitored-endpoint/controller";
 import { registerController as registerResultController } from "@/modules/monitored-result/controller";
 import { registerController as registerCodeExecutorController } from "@/modules/code-executor/controller";
+import { registerController as registerProbeStatsController } from "@/modules/probe-stats-aggregation/controller";
 import { UserService } from "@/modules/user/service";
 import { AttachmentService } from "@/modules/attachment/service";
 import { ApplicationService } from "@/modules/application/service";
@@ -135,6 +136,11 @@ export const registerService = async (instance: AppInstance) => {
 
     registerCodeExecutorController({
       codeExecutorService,
+      server,
+    });
+
+    registerProbeStatsController({
+      probeStatsAggregationService,
       server,
     });
 
