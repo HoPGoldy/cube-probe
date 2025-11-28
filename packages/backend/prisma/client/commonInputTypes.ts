@@ -231,6 +231,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumEndPointTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EndPointType | Prisma.EnumEndPointTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EndPointType[]
+  notIn?: $Enums.EndPointType[]
+  not?: Prisma.NestedEnumEndPointTypeFilter<$PrismaModel> | $Enums.EndPointType
+}
+
+export type EnumEndPointTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EndPointType | Prisma.EnumEndPointTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EndPointType[]
+  notIn?: $Enums.EndPointType[]
+  not?: Prisma.NestedEnumEndPointTypeWithAggregatesFilter<$PrismaModel> | $Enums.EndPointType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEndPointTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEndPointTypeFilter<$PrismaModel>
+}
+
 export type FloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | null
@@ -468,6 +485,23 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumEndPointTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EndPointType | Prisma.EnumEndPointTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EndPointType[]
+  notIn?: $Enums.EndPointType[]
+  not?: Prisma.NestedEnumEndPointTypeFilter<$PrismaModel> | $Enums.EndPointType
+}
+
+export type NestedEnumEndPointTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EndPointType | Prisma.EnumEndPointTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EndPointType[]
+  notIn?: $Enums.EndPointType[]
+  not?: Prisma.NestedEnumEndPointTypeWithAggregatesFilter<$PrismaModel> | $Enums.EndPointType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEndPointTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEndPointTypeFilter<$PrismaModel>
 }
 
 export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {

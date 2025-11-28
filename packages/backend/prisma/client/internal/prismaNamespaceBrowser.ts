@@ -164,14 +164,16 @@ export const EndPointScalarFieldEnum = {
   updatedAt: 'updatedAt',
   serviceId: 'serviceId',
   name: 'name',
+  type: 'type',
   url: 'url',
   method: 'method',
   headers: 'headers',
-  intervalTime: 'intervalTime',
-  enabled: 'enabled',
   timeout: 'timeout',
   bodyContentType: 'bodyContentType',
-  bodyContent: 'bodyContent'
+  bodyContent: 'bodyContent',
+  codeContent: 'codeContent',
+  intervalTime: 'intervalTime',
+  enabled: 'enabled'
 } as const
 
 export type EndPointScalarFieldEnum = (typeof EndPointScalarFieldEnum)[keyof typeof EndPointScalarFieldEnum]

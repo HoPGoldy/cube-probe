@@ -78,6 +78,11 @@ model AppConfig {
   updatedAt DateTime @updatedAt
 }
 
+enum EndPointType {
+  CONFIG // 配置模式：填写 URL、请求方法、请求头、请求体等
+  CODE // 编码模式：填写代码内容
+}
+
 model Service {
   id           String     @id @default(uuid())
   createdAt    DateTime   @default(now())
@@ -96,14 +101,19 @@ model EndPoint {
   updatedAt       DateTime          @updatedAt
   serviceId       String
   name            String
+  type            EndPointType      @default(CONFIG) // 端点类型：CONFIG 或 CODE
+  // CONFIG 模式字段
   url             String?
   method          String?           @default("GET") // HTTP method: GET, POST, PUT, DELETE, etc.
   headers         Json?
-  intervalTime    Int? // in seconds
-  enabled         Boolean           @default(true)
   timeout         Int? // in seconds
   bodyContentType String?           @default("json") // Request body encoding: json, x-www-form-urlencoded, xml
   bodyContent     String? // Request body content
+  // CODE 模式字段
+  codeContent     String? // 代码内容
+  // 通用字段
+  intervalTime    Int? // in seconds
+  enabled         Boolean           @default(true)
   results         ProbeResult[]
   hourlyStats     ProbeHourlyStat[]
   dailyStats      ProbeDailyStat[]

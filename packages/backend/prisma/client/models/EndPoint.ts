@@ -27,13 +27,13 @@ export type AggregateEndPoint = {
 }
 
 export type EndPointAvgAggregateOutputType = {
-  intervalTime: number | null
   timeout: number | null
+  intervalTime: number | null
 }
 
 export type EndPointSumAggregateOutputType = {
-  intervalTime: number | null
   timeout: number | null
+  intervalTime: number | null
 }
 
 export type EndPointMinAggregateOutputType = {
@@ -42,13 +42,15 @@ export type EndPointMinAggregateOutputType = {
   updatedAt: Date | null
   serviceId: string | null
   name: string | null
+  type: $Enums.EndPointType | null
   url: string | null
   method: string | null
-  intervalTime: number | null
-  enabled: boolean | null
   timeout: number | null
   bodyContentType: string | null
   bodyContent: string | null
+  codeContent: string | null
+  intervalTime: number | null
+  enabled: boolean | null
 }
 
 export type EndPointMaxAggregateOutputType = {
@@ -57,13 +59,15 @@ export type EndPointMaxAggregateOutputType = {
   updatedAt: Date | null
   serviceId: string | null
   name: string | null
+  type: $Enums.EndPointType | null
   url: string | null
   method: string | null
-  intervalTime: number | null
-  enabled: boolean | null
   timeout: number | null
   bodyContentType: string | null
   bodyContent: string | null
+  codeContent: string | null
+  intervalTime: number | null
+  enabled: boolean | null
 }
 
 export type EndPointCountAggregateOutputType = {
@@ -72,26 +76,28 @@ export type EndPointCountAggregateOutputType = {
   updatedAt: number
   serviceId: number
   name: number
+  type: number
   url: number
   method: number
   headers: number
-  intervalTime: number
-  enabled: number
   timeout: number
   bodyContentType: number
   bodyContent: number
+  codeContent: number
+  intervalTime: number
+  enabled: number
   _all: number
 }
 
 
 export type EndPointAvgAggregateInputType = {
-  intervalTime?: true
   timeout?: true
+  intervalTime?: true
 }
 
 export type EndPointSumAggregateInputType = {
-  intervalTime?: true
   timeout?: true
+  intervalTime?: true
 }
 
 export type EndPointMinAggregateInputType = {
@@ -100,13 +106,15 @@ export type EndPointMinAggregateInputType = {
   updatedAt?: true
   serviceId?: true
   name?: true
+  type?: true
   url?: true
   method?: true
-  intervalTime?: true
-  enabled?: true
   timeout?: true
   bodyContentType?: true
   bodyContent?: true
+  codeContent?: true
+  intervalTime?: true
+  enabled?: true
 }
 
 export type EndPointMaxAggregateInputType = {
@@ -115,13 +123,15 @@ export type EndPointMaxAggregateInputType = {
   updatedAt?: true
   serviceId?: true
   name?: true
+  type?: true
   url?: true
   method?: true
-  intervalTime?: true
-  enabled?: true
   timeout?: true
   bodyContentType?: true
   bodyContent?: true
+  codeContent?: true
+  intervalTime?: true
+  enabled?: true
 }
 
 export type EndPointCountAggregateInputType = {
@@ -130,14 +140,16 @@ export type EndPointCountAggregateInputType = {
   updatedAt?: true
   serviceId?: true
   name?: true
+  type?: true
   url?: true
   method?: true
   headers?: true
-  intervalTime?: true
-  enabled?: true
   timeout?: true
   bodyContentType?: true
   bodyContent?: true
+  codeContent?: true
+  intervalTime?: true
+  enabled?: true
   _all?: true
 }
 
@@ -233,14 +245,16 @@ export type EndPointGroupByOutputType = {
   updatedAt: Date
   serviceId: string
   name: string
+  type: $Enums.EndPointType
   url: string | null
   method: string | null
   headers: runtime.JsonValue | null
-  intervalTime: number | null
-  enabled: boolean
   timeout: number | null
   bodyContentType: string | null
   bodyContent: string | null
+  codeContent: string | null
+  intervalTime: number | null
+  enabled: boolean
   _count: EndPointCountAggregateOutputType | null
   _avg: EndPointAvgAggregateOutputType | null
   _sum: EndPointSumAggregateOutputType | null
@@ -272,14 +286,16 @@ export type EndPointWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"EndPoint"> | Date | string
   serviceId?: Prisma.StringFilter<"EndPoint"> | string
   name?: Prisma.StringFilter<"EndPoint"> | string
+  type?: Prisma.EnumEndPointTypeFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   headers?: Prisma.JsonNullableFilter<"EndPoint">
-  intervalTime?: Prisma.IntNullableFilter<"EndPoint"> | number | null
-  enabled?: Prisma.BoolFilter<"EndPoint"> | boolean
   timeout?: Prisma.IntNullableFilter<"EndPoint"> | number | null
   bodyContentType?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   bodyContent?: Prisma.StringNullableFilter<"EndPoint"> | string | null
+  codeContent?: Prisma.StringNullableFilter<"EndPoint"> | string | null
+  intervalTime?: Prisma.IntNullableFilter<"EndPoint"> | number | null
+  enabled?: Prisma.BoolFilter<"EndPoint"> | boolean
   results?: Prisma.ProbeResultListRelationFilter
   hourlyStats?: Prisma.ProbeHourlyStatListRelationFilter
   dailyStats?: Prisma.ProbeDailyStatListRelationFilter
@@ -292,14 +308,16 @@ export type EndPointOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrderInput | Prisma.SortOrder
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
-  intervalTime?: Prisma.SortOrderInput | Prisma.SortOrder
-  enabled?: Prisma.SortOrder
   timeout?: Prisma.SortOrderInput | Prisma.SortOrder
   bodyContentType?: Prisma.SortOrderInput | Prisma.SortOrder
   bodyContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  codeContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  intervalTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  enabled?: Prisma.SortOrder
   results?: Prisma.ProbeResultOrderByRelationAggregateInput
   hourlyStats?: Prisma.ProbeHourlyStatOrderByRelationAggregateInput
   dailyStats?: Prisma.ProbeDailyStatOrderByRelationAggregateInput
@@ -315,14 +333,16 @@ export type EndPointWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"EndPoint"> | Date | string
   serviceId?: Prisma.StringFilter<"EndPoint"> | string
   name?: Prisma.StringFilter<"EndPoint"> | string
+  type?: Prisma.EnumEndPointTypeFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   headers?: Prisma.JsonNullableFilter<"EndPoint">
-  intervalTime?: Prisma.IntNullableFilter<"EndPoint"> | number | null
-  enabled?: Prisma.BoolFilter<"EndPoint"> | boolean
   timeout?: Prisma.IntNullableFilter<"EndPoint"> | number | null
   bodyContentType?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   bodyContent?: Prisma.StringNullableFilter<"EndPoint"> | string | null
+  codeContent?: Prisma.StringNullableFilter<"EndPoint"> | string | null
+  intervalTime?: Prisma.IntNullableFilter<"EndPoint"> | number | null
+  enabled?: Prisma.BoolFilter<"EndPoint"> | boolean
   results?: Prisma.ProbeResultListRelationFilter
   hourlyStats?: Prisma.ProbeHourlyStatListRelationFilter
   dailyStats?: Prisma.ProbeDailyStatListRelationFilter
@@ -335,14 +355,16 @@ export type EndPointOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrderInput | Prisma.SortOrder
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
-  intervalTime?: Prisma.SortOrderInput | Prisma.SortOrder
-  enabled?: Prisma.SortOrder
   timeout?: Prisma.SortOrderInput | Prisma.SortOrder
   bodyContentType?: Prisma.SortOrderInput | Prisma.SortOrder
   bodyContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  codeContent?: Prisma.SortOrderInput | Prisma.SortOrder
+  intervalTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  enabled?: Prisma.SortOrder
   _count?: Prisma.EndPointCountOrderByAggregateInput
   _avg?: Prisma.EndPointAvgOrderByAggregateInput
   _max?: Prisma.EndPointMaxOrderByAggregateInput
@@ -359,14 +381,16 @@ export type EndPointScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EndPoint"> | Date | string
   serviceId?: Prisma.StringWithAggregatesFilter<"EndPoint"> | string
   name?: Prisma.StringWithAggregatesFilter<"EndPoint"> | string
+  type?: Prisma.EnumEndPointTypeWithAggregatesFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
   headers?: Prisma.JsonNullableWithAggregatesFilter<"EndPoint">
-  intervalTime?: Prisma.IntNullableWithAggregatesFilter<"EndPoint"> | number | null
-  enabled?: Prisma.BoolWithAggregatesFilter<"EndPoint"> | boolean
   timeout?: Prisma.IntNullableWithAggregatesFilter<"EndPoint"> | number | null
   bodyContentType?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
   bodyContent?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
+  codeContent?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
+  intervalTime?: Prisma.IntNullableWithAggregatesFilter<"EndPoint"> | number | null
+  enabled?: Prisma.BoolWithAggregatesFilter<"EndPoint"> | boolean
 }
 
 export type EndPointCreateInput = {
@@ -374,14 +398,16 @@ export type EndPointCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultCreateNestedManyWithoutEndPointInput
   hourlyStats?: Prisma.ProbeHourlyStatCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatCreateNestedManyWithoutEndPointInput
@@ -394,14 +420,16 @@ export type EndPointUncheckedCreateInput = {
   updatedAt?: Date | string
   serviceId: string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultUncheckedCreateNestedManyWithoutEndPointInput
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedCreateNestedManyWithoutEndPointInput
@@ -412,14 +440,16 @@ export type EndPointUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUpdateManyWithoutEndPointNestedInput
   hourlyStats?: Prisma.ProbeHourlyStatUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUpdateManyWithoutEndPointNestedInput
@@ -432,14 +462,16 @@ export type EndPointUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUncheckedUpdateManyWithoutEndPointNestedInput
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedUpdateManyWithoutEndPointNestedInput
@@ -451,14 +483,16 @@ export type EndPointCreateManyInput = {
   updatedAt?: Date | string
   serviceId: string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
 }
 
 export type EndPointUpdateManyMutationInput = {
@@ -466,14 +500,16 @@ export type EndPointUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type EndPointUncheckedUpdateManyInput = {
@@ -482,14 +518,16 @@ export type EndPointUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type EndPointListRelationFilter = {
@@ -508,19 +546,21 @@ export type EndPointCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   url?: Prisma.SortOrder
   method?: Prisma.SortOrder
   headers?: Prisma.SortOrder
-  intervalTime?: Prisma.SortOrder
-  enabled?: Prisma.SortOrder
   timeout?: Prisma.SortOrder
   bodyContentType?: Prisma.SortOrder
   bodyContent?: Prisma.SortOrder
+  codeContent?: Prisma.SortOrder
+  intervalTime?: Prisma.SortOrder
+  enabled?: Prisma.SortOrder
 }
 
 export type EndPointAvgOrderByAggregateInput = {
-  intervalTime?: Prisma.SortOrder
   timeout?: Prisma.SortOrder
+  intervalTime?: Prisma.SortOrder
 }
 
 export type EndPointMaxOrderByAggregateInput = {
@@ -529,13 +569,15 @@ export type EndPointMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   url?: Prisma.SortOrder
   method?: Prisma.SortOrder
-  intervalTime?: Prisma.SortOrder
-  enabled?: Prisma.SortOrder
   timeout?: Prisma.SortOrder
   bodyContentType?: Prisma.SortOrder
   bodyContent?: Prisma.SortOrder
+  codeContent?: Prisma.SortOrder
+  intervalTime?: Prisma.SortOrder
+  enabled?: Prisma.SortOrder
 }
 
 export type EndPointMinOrderByAggregateInput = {
@@ -544,18 +586,20 @@ export type EndPointMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  type?: Prisma.SortOrder
   url?: Prisma.SortOrder
   method?: Prisma.SortOrder
-  intervalTime?: Prisma.SortOrder
-  enabled?: Prisma.SortOrder
   timeout?: Prisma.SortOrder
   bodyContentType?: Prisma.SortOrder
   bodyContent?: Prisma.SortOrder
+  codeContent?: Prisma.SortOrder
+  intervalTime?: Prisma.SortOrder
+  enabled?: Prisma.SortOrder
 }
 
 export type EndPointSumOrderByAggregateInput = {
-  intervalTime?: Prisma.SortOrder
   timeout?: Prisma.SortOrder
+  intervalTime?: Prisma.SortOrder
 }
 
 export type EndPointScalarRelationFilter = {
@@ -605,6 +649,10 @@ export type EndPointUncheckedUpdateManyWithoutServiceNestedInput = {
   deleteMany?: Prisma.EndPointScalarWhereInput | Prisma.EndPointScalarWhereInput[]
 }
 
+export type EnumEndPointTypeFieldUpdateOperationsInput = {
+  set?: $Enums.EndPointType
+}
+
 export type EndPointCreateNestedOneWithoutResultsInput = {
   create?: Prisma.XOR<Prisma.EndPointCreateWithoutResultsInput, Prisma.EndPointUncheckedCreateWithoutResultsInput>
   connectOrCreate?: Prisma.EndPointCreateOrConnectWithoutResultsInput
@@ -652,14 +700,16 @@ export type EndPointCreateWithoutServiceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultCreateNestedManyWithoutEndPointInput
   hourlyStats?: Prisma.ProbeHourlyStatCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatCreateNestedManyWithoutEndPointInput
@@ -670,14 +720,16 @@ export type EndPointUncheckedCreateWithoutServiceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultUncheckedCreateNestedManyWithoutEndPointInput
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedCreateNestedManyWithoutEndPointInput
@@ -717,14 +769,16 @@ export type EndPointScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"EndPoint"> | Date | string
   serviceId?: Prisma.StringFilter<"EndPoint"> | string
   name?: Prisma.StringFilter<"EndPoint"> | string
+  type?: Prisma.EnumEndPointTypeFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   headers?: Prisma.JsonNullableFilter<"EndPoint">
-  intervalTime?: Prisma.IntNullableFilter<"EndPoint"> | number | null
-  enabled?: Prisma.BoolFilter<"EndPoint"> | boolean
   timeout?: Prisma.IntNullableFilter<"EndPoint"> | number | null
   bodyContentType?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   bodyContent?: Prisma.StringNullableFilter<"EndPoint"> | string | null
+  codeContent?: Prisma.StringNullableFilter<"EndPoint"> | string | null
+  intervalTime?: Prisma.IntNullableFilter<"EndPoint"> | number | null
+  enabled?: Prisma.BoolFilter<"EndPoint"> | boolean
 }
 
 export type EndPointCreateWithoutResultsInput = {
@@ -732,14 +786,16 @@ export type EndPointCreateWithoutResultsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   hourlyStats?: Prisma.ProbeHourlyStatCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatCreateNestedManyWithoutEndPointInput
   service: Prisma.ServiceCreateNestedOneWithoutEndpointsInput
@@ -751,14 +807,16 @@ export type EndPointUncheckedCreateWithoutResultsInput = {
   updatedAt?: Date | string
   serviceId: string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedCreateNestedManyWithoutEndPointInput
 }
@@ -784,14 +842,16 @@ export type EndPointUpdateWithoutResultsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hourlyStats?: Prisma.ProbeHourlyStatUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUpdateManyWithoutEndPointNestedInput
   service?: Prisma.ServiceUpdateOneRequiredWithoutEndpointsNestedInput
@@ -803,14 +863,16 @@ export type EndPointUncheckedUpdateWithoutResultsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedUpdateManyWithoutEndPointNestedInput
 }
@@ -820,14 +882,16 @@ export type EndPointCreateWithoutHourlyStatsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatCreateNestedManyWithoutEndPointInput
   service: Prisma.ServiceCreateNestedOneWithoutEndpointsInput
@@ -839,14 +903,16 @@ export type EndPointUncheckedCreateWithoutHourlyStatsInput = {
   updatedAt?: Date | string
   serviceId: string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultUncheckedCreateNestedManyWithoutEndPointInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedCreateNestedManyWithoutEndPointInput
 }
@@ -872,14 +938,16 @@ export type EndPointUpdateWithoutHourlyStatsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUpdateManyWithoutEndPointNestedInput
   service?: Prisma.ServiceUpdateOneRequiredWithoutEndpointsNestedInput
@@ -891,14 +959,16 @@ export type EndPointUncheckedUpdateWithoutHourlyStatsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUncheckedUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedUpdateManyWithoutEndPointNestedInput
 }
@@ -908,14 +978,16 @@ export type EndPointCreateWithoutDailyStatsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultCreateNestedManyWithoutEndPointInput
   hourlyStats?: Prisma.ProbeHourlyStatCreateNestedManyWithoutEndPointInput
   service: Prisma.ServiceCreateNestedOneWithoutEndpointsInput
@@ -927,14 +999,16 @@ export type EndPointUncheckedCreateWithoutDailyStatsInput = {
   updatedAt?: Date | string
   serviceId: string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
   results?: Prisma.ProbeResultUncheckedCreateNestedManyWithoutEndPointInput
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedCreateNestedManyWithoutEndPointInput
 }
@@ -960,14 +1034,16 @@ export type EndPointUpdateWithoutDailyStatsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUpdateManyWithoutEndPointNestedInput
   hourlyStats?: Prisma.ProbeHourlyStatUpdateManyWithoutEndPointNestedInput
   service?: Prisma.ServiceUpdateOneRequiredWithoutEndpointsNestedInput
@@ -979,14 +1055,16 @@ export type EndPointUncheckedUpdateWithoutDailyStatsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUncheckedUpdateManyWithoutEndPointNestedInput
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedUpdateManyWithoutEndPointNestedInput
 }
@@ -996,14 +1074,16 @@ export type EndPointCreateManyServiceInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
   timeout?: number | null
   bodyContentType?: string | null
   bodyContent?: string | null
+  codeContent?: string | null
+  intervalTime?: number | null
+  enabled?: boolean
 }
 
 export type EndPointUpdateWithoutServiceInput = {
@@ -1011,14 +1091,16 @@ export type EndPointUpdateWithoutServiceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUpdateManyWithoutEndPointNestedInput
   hourlyStats?: Prisma.ProbeHourlyStatUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUpdateManyWithoutEndPointNestedInput
@@ -1029,14 +1111,16 @@ export type EndPointUncheckedUpdateWithoutServiceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   results?: Prisma.ProbeResultUncheckedUpdateManyWithoutEndPointNestedInput
   hourlyStats?: Prisma.ProbeHourlyStatUncheckedUpdateManyWithoutEndPointNestedInput
   dailyStats?: Prisma.ProbeDailyStatUncheckedUpdateManyWithoutEndPointNestedInput
@@ -1047,14 +1131,16 @@ export type EndPointUncheckedUpdateManyWithoutServiceInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   timeout?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   bodyContentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bodyContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  codeContent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -1112,14 +1198,16 @@ export type EndPointSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   serviceId?: boolean
   name?: boolean
+  type?: boolean
   url?: boolean
   method?: boolean
   headers?: boolean
-  intervalTime?: boolean
-  enabled?: boolean
   timeout?: boolean
   bodyContentType?: boolean
   bodyContent?: boolean
+  codeContent?: boolean
+  intervalTime?: boolean
+  enabled?: boolean
   results?: boolean | Prisma.EndPoint$resultsArgs<ExtArgs>
   hourlyStats?: boolean | Prisma.EndPoint$hourlyStatsArgs<ExtArgs>
   dailyStats?: boolean | Prisma.EndPoint$dailyStatsArgs<ExtArgs>
@@ -1133,14 +1221,16 @@ export type EndPointSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   updatedAt?: boolean
   serviceId?: boolean
   name?: boolean
+  type?: boolean
   url?: boolean
   method?: boolean
   headers?: boolean
-  intervalTime?: boolean
-  enabled?: boolean
   timeout?: boolean
   bodyContentType?: boolean
   bodyContent?: boolean
+  codeContent?: boolean
+  intervalTime?: boolean
+  enabled?: boolean
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["endPoint"]>
 
@@ -1150,14 +1240,16 @@ export type EndPointSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   updatedAt?: boolean
   serviceId?: boolean
   name?: boolean
+  type?: boolean
   url?: boolean
   method?: boolean
   headers?: boolean
-  intervalTime?: boolean
-  enabled?: boolean
   timeout?: boolean
   bodyContentType?: boolean
   bodyContent?: boolean
+  codeContent?: boolean
+  intervalTime?: boolean
+  enabled?: boolean
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["endPoint"]>
 
@@ -1167,17 +1259,19 @@ export type EndPointSelectScalar = {
   updatedAt?: boolean
   serviceId?: boolean
   name?: boolean
+  type?: boolean
   url?: boolean
   method?: boolean
   headers?: boolean
-  intervalTime?: boolean
-  enabled?: boolean
   timeout?: boolean
   bodyContentType?: boolean
   bodyContent?: boolean
+  codeContent?: boolean
+  intervalTime?: boolean
+  enabled?: boolean
 }
 
-export type EndPointOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "serviceId" | "name" | "url" | "method" | "headers" | "intervalTime" | "enabled" | "timeout" | "bodyContentType" | "bodyContent", ExtArgs["result"]["endPoint"]>
+export type EndPointOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "serviceId" | "name" | "type" | "url" | "method" | "headers" | "timeout" | "bodyContentType" | "bodyContent" | "codeContent" | "intervalTime" | "enabled", ExtArgs["result"]["endPoint"]>
 export type EndPointInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   results?: boolean | Prisma.EndPoint$resultsArgs<ExtArgs>
   hourlyStats?: boolean | Prisma.EndPoint$hourlyStatsArgs<ExtArgs>
@@ -1206,14 +1300,16 @@ export type $EndPointPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     updatedAt: Date
     serviceId: string
     name: string
+    type: $Enums.EndPointType
     url: string | null
     method: string | null
     headers: runtime.JsonValue | null
-    intervalTime: number | null
-    enabled: boolean
     timeout: number | null
     bodyContentType: string | null
     bodyContent: string | null
+    codeContent: string | null
+    intervalTime: number | null
+    enabled: boolean
   }, ExtArgs["result"]["endPoint"]>
   composites: {}
 }
@@ -1646,14 +1742,16 @@ export interface EndPointFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"EndPoint", 'DateTime'>
   readonly serviceId: Prisma.FieldRef<"EndPoint", 'String'>
   readonly name: Prisma.FieldRef<"EndPoint", 'String'>
+  readonly type: Prisma.FieldRef<"EndPoint", 'EndPointType'>
   readonly url: Prisma.FieldRef<"EndPoint", 'String'>
   readonly method: Prisma.FieldRef<"EndPoint", 'String'>
   readonly headers: Prisma.FieldRef<"EndPoint", 'Json'>
-  readonly intervalTime: Prisma.FieldRef<"EndPoint", 'Int'>
-  readonly enabled: Prisma.FieldRef<"EndPoint", 'Boolean'>
   readonly timeout: Prisma.FieldRef<"EndPoint", 'Int'>
   readonly bodyContentType: Prisma.FieldRef<"EndPoint", 'String'>
   readonly bodyContent: Prisma.FieldRef<"EndPoint", 'String'>
+  readonly codeContent: Prisma.FieldRef<"EndPoint", 'String'>
+  readonly intervalTime: Prisma.FieldRef<"EndPoint", 'Int'>
+  readonly enabled: Prisma.FieldRef<"EndPoint", 'Boolean'>
 }
     
 

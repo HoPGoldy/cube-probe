@@ -41,6 +41,11 @@ export const SchemaServiceDetail = Type.Object({
 export type SchemaServiceDetailType = Type.Static<typeof SchemaServiceDetail>;
 
 // EndPoint Schemas
+export const SchemaEndPointType = Type.Union(
+  [Type.Literal("CONFIG"), Type.Literal("CODE")],
+  { description: "端点类型：CONFIG(配置模式) 或 CODE(编码模式)" },
+);
+
 export const SchemaEndPointCreate = Type.Object({
   serviceId: Type.String({ description: "关联服务ID" }),
   name: Type.String({
@@ -48,6 +53,8 @@ export const SchemaEndPointCreate = Type.Object({
     minLength: 1,
     maxLength: 100,
   }),
+  type: Type.Optional(SchemaEndPointType),
+  // CONFIG 模式字段
   url: Type.Optional(Type.String({ description: "接口URL" })),
   method: Type.Optional(
     Type.String({
@@ -56,10 +63,6 @@ export const SchemaEndPointCreate = Type.Object({
     }),
   ),
   headers: Type.Optional(Type.Any({ description: "自定义请求头JSON" })),
-  intervalTime: Type.Optional(
-    Type.Integer({ description: "探测间隔时间(秒)", minimum: 1 }),
-  ),
-  enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
   timeout: Type.Optional(
     Type.Integer({
       description: "请求超时时间(秒)",
@@ -74,6 +77,13 @@ export const SchemaEndPointCreate = Type.Object({
     }),
   ),
   bodyContent: Type.Optional(Type.String({ description: "请求体内容" })),
+  // CODE 模式字段
+  codeContent: Type.Optional(Type.String({ description: "代码内容" })),
+  // 通用字段
+  intervalTime: Type.Optional(
+    Type.Integer({ description: "探测间隔时间(秒)", minimum: 1 }),
+  ),
+  enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
 });
 
 export type SchemaEndPointCreateType = Type.Static<typeof SchemaEndPointCreate>;
@@ -93,14 +103,19 @@ export const SchemaEndPointDetail = Type.Object({
   updatedAt: Type.String({ format: "date-time" }),
   serviceId: Type.String(),
   name: Type.String(),
+  type: SchemaEndPointType,
+  // CONFIG 模式字段
   url: Type.Union([Type.String(), Type.Null()]),
   method: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
-  intervalTime: Type.Union([Type.Integer(), Type.Null()]),
-  enabled: Type.Boolean(),
   timeout: Type.Union([Type.Integer(), Type.Null()]),
   bodyContentType: Type.Union([Type.String(), Type.Null()]),
   bodyContent: Type.Union([Type.String(), Type.Null()]),
+  // CODE 模式字段
+  codeContent: Type.Union([Type.String(), Type.Null()]),
+  // 通用字段
+  intervalTime: Type.Union([Type.Integer(), Type.Null()]),
+  enabled: Type.Boolean(),
 });
 
 export type SchemaEndPointDetailType = Type.Static<typeof SchemaEndPointDetail>;
@@ -165,14 +180,16 @@ export const createEndPointDetailVo = (
     updatedAt: data.updatedAt.toISOString(),
     serviceId: data.serviceId,
     name: data.name,
+    type: data.type,
     url: data.url,
     method: data.method,
     headers: data.headers,
-    intervalTime: data.intervalTime,
-    enabled: data.enabled,
     timeout: data.timeout,
     bodyContentType: data.bodyContentType,
     bodyContent: data.bodyContent,
+    codeContent: data.codeContent,
+    intervalTime: data.intervalTime,
+    enabled: data.enabled,
   };
 };
 

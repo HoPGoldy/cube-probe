@@ -61,9 +61,16 @@ export const registerService = async (instance: AppInstance) => {
     prisma,
   });
 
+  const codeExecutorService = new CodeExecutorService({
+    enableHttp: true, // 启用 HTTP 请求功能
+    httpTimeout: 10000, // HTTP 请求超时 10 秒
+    // allowedDomains: ['api.example.com', '*.github.com'], // 可选：限制允许的域名
+  });
+
   const intervalProbeService = new IntervalProbeService({
     prisma,
     resultService,
+    codeExecutorService,
   });
 
   const probeResultCleanupService = new ProbeResultCleanupService({
@@ -77,12 +84,6 @@ export const registerService = async (instance: AppInstance) => {
   const endPointService = new EndPointService({
     prisma,
     intervalProbeService,
-  });
-
-  const codeExecutorService = new CodeExecutorService({
-    enableHttp: true, // 启用 HTTP 请求功能
-    httpTimeout: 10000, // HTTP 请求超时 10 秒
-    // allowedDomains: ['api.example.com', '*.github.com'], // 可选：限制允许的域名
   });
 
   const appControllerPlugin = async (server: AppInstance) => {

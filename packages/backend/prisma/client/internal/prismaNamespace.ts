@@ -1277,14 +1277,16 @@ export const EndPointScalarFieldEnum = {
   updatedAt: 'updatedAt',
   serviceId: 'serviceId',
   name: 'name',
+  type: 'type',
   url: 'url',
   method: 'method',
   headers: 'headers',
-  intervalTime: 'intervalTime',
-  enabled: 'enabled',
   timeout: 'timeout',
   bodyContentType: 'bodyContentType',
-  bodyContent: 'bodyContent'
+  bodyContent: 'bodyContent',
+  codeContent: 'codeContent',
+  intervalTime: 'intervalTime',
+  enabled: 'enabled'
 } as const
 
 export type EndPointScalarFieldEnum = (typeof EndPointScalarFieldEnum)[keyof typeof EndPointScalarFieldEnum]
@@ -1423,6 +1425,13 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'EndPointType'
+ */
+export type EnumEndPointTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EndPointType'>
     
 
 

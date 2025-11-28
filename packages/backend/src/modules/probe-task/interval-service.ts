@@ -1,10 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { PrismaClient } from "@db/client";
 import { ResultService } from "@/modules/monitored-result/service";
+import { CodeExecutorService } from "@/modules/code-executor/service";
 
 interface ServiceOptions {
   prisma: PrismaClient;
   resultService: ResultService;
+  codeExecutorService: CodeExecutorService;
 }
 
 interface IntervalTask {
@@ -63,7 +65,6 @@ export class IntervalProbeService {
    * 执行探测请求
    */
   private executeProbe = async (endPointId: string) => {
-    let startTime = 0;
     try {
       // 获取 endpoint 详情
       const endPoint = await this.options.prisma.endPoint.findUnique({
@@ -89,6 +90,125 @@ export class IntervalProbeService {
         return;
       }
 
+      // 根据类型执行不同的探测逻辑
+      if (endPoint.type === "CODE") {
+        await this.executeCodeProbe(endPointId, endPoint.codeContent);
+      } else {
+        await this.executeConfigProbe(endPointId, endPoint, service);
+      }
+    } catch (error: any) {
+      console.log(
+        `[Interval] Unexpected error for endpoint ${endPointId}: ${error.message}`,
+      );
+    }
+  };
+
+  /**
+   * 执行 CODE 模式探测
+   */
+  private executeCodeProbe = async (
+    endPointId: string,
+    codeContent: string | null,
+  ) => {
+    const startTime = Date.now();
+
+    if (!codeContent) {
+      await this.options.resultService.createProbeResult({
+        endPointId,
+        status: undefined,
+        responseTime: 0,
+        success: false,
+        message: "Code content is empty",
+      });
+      return;
+    }
+
+    try {
+      const result = await this.options.codeExecutorService.execute({
+        code: codeContent,
+        timeout: 30000, // 代码执行最大 30 秒
+      });
+
+      const responseTime = Date.now() - startTime;
+
+      if (result.success) {
+        // 检查代码返回值是否符合预期格式
+        const probeResult = result.result as
+          | {
+              success?: boolean;
+              message?: string;
+              responseTime?: number;
+              status?: number;
+            }
+          | undefined;
+
+        const success = probeResult?.success ?? true;
+        const message = probeResult?.message ?? "Code executed successfully";
+        const finalResponseTime = probeResult?.responseTime ?? responseTime;
+        const status = probeResult?.status;
+
+        await this.options.resultService.createProbeResult({
+          endPointId,
+          status,
+          responseTime: finalResponseTime,
+          success,
+          message,
+        });
+
+        console.log(
+          `[Interval] Code probe completed for endpoint ${endPointId}: Success=${success}, Response time: ${finalResponseTime}ms`,
+        );
+      } else {
+        await this.options.resultService.createProbeResult({
+          endPointId,
+          status: undefined,
+          responseTime,
+          success: false,
+          message: result.error || "Code execution failed",
+        });
+
+        console.log(
+          `[Interval] Code probe failed for endpoint ${endPointId}: ${result.error}`,
+        );
+      }
+    } catch (error: any) {
+      const responseTime = Date.now() - startTime;
+
+      await this.options.resultService.createProbeResult({
+        endPointId,
+        status: undefined,
+        responseTime,
+        success: false,
+        message: error.message || "Code execution error",
+      });
+
+      console.log(
+        `[Interval] Code probe error for endpoint ${endPointId}: ${error.message}`,
+      );
+    }
+  };
+
+  /**
+   * 执行 CONFIG 模式探测（HTTP 请求）
+   */
+  private executeConfigProbe = async (
+    endPointId: string,
+    endPoint: {
+      url: string | null;
+      method: string | null;
+      headers: any;
+      timeout: number | null;
+      bodyContentType: string | null;
+      bodyContent: string | null;
+    },
+    service: {
+      url: string | null;
+      headers: any;
+    },
+  ) => {
+    let startTime = 0;
+
+    try {
       // 构建完整 URL
       const url = buildProbeUrl(endPoint.url, service.url);
       if (!url) {

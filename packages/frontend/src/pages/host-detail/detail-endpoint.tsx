@@ -9,13 +9,13 @@ import {
   Select,
   Skeleton,
   Switch,
+  Radio,
 } from "antd";
 import {
   useCreateEndpoint,
   useGetEndpointDetail,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import { useGetMonitoredHostList } from "@/services/monitored-host";
 
 export const DETAIL_TYPE_KEY = "ep-modal";
 
@@ -36,31 +36,26 @@ export const EndpointDetailModal: FC = () => {
     useUpdateEndpoint();
   const { data: endpointDetailResp, isLoading } =
     useGetEndpointDetail(detailId);
-  const { data: servicesResp } = useGetMonitoredHostList({});
 
   const endpointDetail = endpointDetailResp?.data;
-  const services = servicesResp?.data ?? [];
-
-  useEffect(() => {
-    const convert = async () => {
-      if (!endpointDetail) return;
-
-      const formValues = {
-        ...endpointDetail,
-        headers: endpointDetail.headers
-          ? JSON.stringify(endpointDetail.headers, null, 2)
-          : "",
-        // bodyContent 已经是字符串，直接使用
-        bodyContent: endpointDetail.bodyContent || "",
-      };
-
-      form.setFieldsValue(formValues);
-    };
-
-    convert();
-  }, [endpointDetail]);
 
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (!endpointDetail) return;
+
+    const formValues = {
+      ...endpointDetail,
+      headers: endpointDetail.headers
+        ? JSON.stringify(endpointDetail.headers, null, 2)
+        : "",
+      bodyContent: endpointDetail.bodyContent || "",
+      codeContent: endpointDetail.codeContent || "",
+    };
+
+    form.setFieldsValue(formValues);
+    console.log("formValues", formValues);
+  }, [endpointDetail, form]);
 
   const onCancel = () => {
     searchParams.delete(DETAIL_TYPE_KEY);
@@ -74,38 +69,52 @@ export const EndpointDetailModal: FC = () => {
 
     values.serviceId = hostId;
 
-    // Parse headers if provided
-    if (values.headers) {
-      try {
-        values.headers = JSON.parse(values.headers);
-      } catch {
-        Modal.error({
-          title: "格式错误",
-          content: "请求头必须是有效的JSON格式",
-        });
-        return false;
-      }
-    } else {
-      values.headers = null;
-    }
+    const currentType = values.type || "CONFIG";
 
-    // bodyContent 直接作为字符串保存，不需要解析
-    // 只在用户选择了 json 或 x-www-form-urlencoded 时验证 JSON 格式
-    if (values.bodyContent) {
-      const contentType = values.bodyContentType || "json";
-      if (contentType === "json" || contentType === "x-www-form-urlencoded") {
+    // CONFIG 模式：解析 headers
+    if (currentType === "CONFIG") {
+      if (values.headers) {
         try {
-          JSON.parse(values.bodyContent); // 验证格式但不保存解析结果
+          values.headers = JSON.parse(values.headers);
         } catch {
           Modal.error({
             title: "格式错误",
-            content: `请求体内容必须是有效的JSON格式（当前编码类型: ${contentType}）`,
+            content: "请求头必须是有效的JSON格式",
           });
           return false;
         }
+      } else {
+        values.headers = null;
       }
+
+      // bodyContent 验证
+      if (values.bodyContent) {
+        const contentType = values.bodyContentType || "json";
+        if (contentType === "json" || contentType === "x-www-form-urlencoded") {
+          try {
+            JSON.parse(values.bodyContent);
+          } catch {
+            Modal.error({
+              title: "格式错误",
+              content: `请求体内容必须是有效的JSON格式（当前编码类型: ${contentType}）`,
+            });
+            return false;
+          }
+        }
+      } else {
+        values.bodyContent = null;
+      }
+
+      // 清空 CODE 模式字段
+      delete values.codeContent;
     } else {
-      values.bodyContent = null;
+      // CODE 模式：清空 CONFIG 模式字段
+      delete values.url;
+      delete values.method;
+      delete values.headers;
+      delete values.timeout;
+      delete values.bodyContentType;
+      delete values.bodyContent;
     }
 
     if (isAdd) {
@@ -140,6 +149,7 @@ export const EndpointDetailModal: FC = () => {
           initialValues={{
             serviceId: hostId,
             enabled: true,
+            type: "CONFIG",
             method: "GET",
             timeout: 10,
             bodyContentType: "json",
@@ -161,68 +171,132 @@ export const EndpointDetailModal: FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="URL"
-              name="url"
-              tooltip="端点的URL，如果为空则继承服务的URL"
+              label="端点类型"
+              name="type"
+              tooltip="CONFIG: 通过配置URL等参数进行探测；CODE: 通过代码逻辑进行探测"
             >
-              <Input placeholder="例如: /api/health" />
+              <Radio.Group>
+                <Radio.Button value="CONFIG">配置模式</Radio.Button>
+                <Radio.Button value="CODE">编码模式</Radio.Button>
+              </Radio.Group>
             </Form.Item>
 
-            <Form.Item label="请求方法" name="method" tooltip="HTTP请求方法">
-              <Select
-                placeholder="请选择请求方法"
-                options={[
-                  { label: "GET", value: "GET" },
-                  { label: "POST", value: "POST" },
-                  { label: "PUT", value: "PUT" },
-                  { label: "DELETE", value: "DELETE" },
-                  { label: "PATCH", value: "PATCH" },
-                  { label: "HEAD", value: "HEAD" },
-                  { label: "OPTIONS", value: "OPTIONS" },
-                ]}
-              />
-            </Form.Item>
-
+            {/* CONFIG 模式字段 */}
             <Form.Item
-              label="请求头 (JSON)"
-              name="headers"
-              tooltip="自定义请求头，使用JSON格式，为空则继承服务的请求头"
+              noStyle
+              shouldUpdate={(prev, cur) => prev.type !== cur.type}
             >
-              <Input.TextArea
-                rows={4}
-                placeholder='例如: {"Authorization": "Bearer token"}'
-              />
+              {({ getFieldValue }) =>
+                getFieldValue("type") !== "CODE" && (
+                  <>
+                    <Form.Item
+                      label="URL"
+                      name="url"
+                      tooltip="端点的URL，如果为空则继承服务的URL"
+                    >
+                      <Input placeholder="例如: /api/health" />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="请求方法"
+                      name="method"
+                      tooltip="HTTP请求方法"
+                    >
+                      <Select
+                        placeholder="请选择请求方法"
+                        options={[
+                          { label: "GET", value: "GET" },
+                          { label: "POST", value: "POST" },
+                          { label: "PUT", value: "PUT" },
+                          { label: "DELETE", value: "DELETE" },
+                          { label: "PATCH", value: "PATCH" },
+                          { label: "HEAD", value: "HEAD" },
+                          { label: "OPTIONS", value: "OPTIONS" },
+                        ]}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="请求头 (JSON)"
+                      name="headers"
+                      tooltip="自定义请求头，使用JSON格式，为空则继承服务的请求头"
+                    >
+                      <Input.TextArea
+                        rows={4}
+                        placeholder='例如: {"Authorization": "Bearer token"}'
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="请求体编码"
+                      name="bodyContentType"
+                      tooltip="请求体的编码类型"
+                    >
+                      <Select
+                        placeholder="请选择请求体编码类型"
+                        options={[
+                          { label: "JSON", value: "json" },
+                          {
+                            label: "x-www-form-urlencoded",
+                            value: "x-www-form-urlencoded",
+                          },
+                          { label: "XML", value: "xml" },
+                        ]}
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="请求体内容"
+                      name="bodyContent"
+                      tooltip="请求体的内容。JSON/Form编码时输入JSON格式，XML编码时直接输入XML字符串"
+                    >
+                      <Input.TextArea
+                        rows={4}
+                        placeholder='JSON/Form: {"key": "value"}&#10;XML: <root>...</root>'
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="超时时间 (秒)"
+                      name="timeout"
+                      tooltip="请求超时时间，默认10秒"
+                    >
+                      <InputNumber
+                        style={{ width: "100%" }}
+                        min={1}
+                        max={300}
+                        placeholder="10"
+                      />
+                    </Form.Item>
+                  </>
+                )
+              }
             </Form.Item>
 
+            {/* CODE 模式字段 */}
             <Form.Item
-              label="请求体编码"
-              name="bodyContentType"
-              tooltip="请求体的编码类型"
+              noStyle
+              shouldUpdate={(prev, cur) => prev.type !== cur.type}
             >
-              <Select
-                placeholder="请选择请求体编码类型"
-                options={[
-                  { label: "JSON", value: "json" },
-                  {
-                    label: "x-www-form-urlencoded",
-                    value: "x-www-form-urlencoded",
-                  },
-                  { label: "XML", value: "xml" },
-                ]}
-              />
+              {({ getFieldValue }) =>
+                getFieldValue("type") === "CODE" && (
+                  <Form.Item
+                    label="代码内容"
+                    name="codeContent"
+                    tooltip="编写探测逻辑代码"
+                    rules={[{ required: true, message: "请输入代码内容" }]}
+                  >
+                    <Input.TextArea
+                      rows={12}
+                      placeholder="// 编写探测代码&#10;// 返回 { success: boolean, message?: string, responseTime?: number }"
+                      style={{ fontFamily: "monospace" }}
+                    />
+                  </Form.Item>
+                )
+              }
             </Form.Item>
 
-            <Form.Item
-              label="请求体内容"
-              name="bodyContent"
-              tooltip="请求体的内容。JSON/Form编码时输入JSON格式，XML编码时直接输入XML字符串"
-            >
-              <Input.TextArea
-                rows={4}
-                placeholder='JSON/Form: {"key": "value"}&#10;XML: <root>...</root>'
-              />
-            </Form.Item>
-
+            {/* 通用字段 */}
             <Form.Item
               label="探测间隔 (秒)"
               name="intervalTime"
@@ -232,19 +306,6 @@ export const EndpointDetailModal: FC = () => {
                 style={{ width: "100%" }}
                 min={1}
                 placeholder="例如: 60 (每60秒执行一次)"
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="超时时间 (秒)"
-              name="timeout"
-              tooltip="请求超时时间，默认10秒"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                min={1}
-                max={300}
-                placeholder="10"
               />
             </Form.Item>
 
