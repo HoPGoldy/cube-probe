@@ -56,4 +56,50 @@ export const registerController = async (options: ControllerOptions) => {
       return result;
     },
   );
+
+  // 获取 Host（Service）多时间范围统计
+  server.post(
+    "/probe-stats/host/multi-range",
+    {
+      schema: {
+        description: "获取 Host 多时间范围统计（聚合所有 Endpoint）",
+        body: Type.Object({
+          serviceId: Type.String({ description: "Service/Host ID" }),
+        }),
+        response: {
+          200: Type.Object({
+            serviceId: Type.String(),
+            endpointCount: Type.Number(),
+            current: Type.Object({
+              avgResponseTime: Type.Union([Type.Number(), Type.Null()]),
+              successRate: Type.Union([Type.Number(), Type.Null()]),
+              timestamp: Type.Union([Type.Any(), Type.Null()]),
+            }),
+            stats24h: Type.Object({
+              totalChecks: Type.Number(),
+              successCount: Type.Number(),
+              uptimePercentage: Type.Union([Type.Number(), Type.Null()]),
+              avgResponseTime: Type.Union([Type.Number(), Type.Null()]),
+            }),
+            stats30d: Type.Object({
+              totalChecks: Type.Number(),
+              successCount: Type.Number(),
+              uptimePercentage: Type.Union([Type.Number(), Type.Null()]),
+            }),
+            stats1y: Type.Object({
+              totalChecks: Type.Number(),
+              successCount: Type.Number(),
+              uptimePercentage: Type.Union([Type.Number(), Type.Null()]),
+            }),
+          }),
+        },
+      },
+    },
+    async (req) => {
+      const { serviceId } = req.body;
+      const result =
+        await probeStatsAggregationService.getHostMultiRangeStats(serviceId);
+      return result;
+    },
+  );
 };

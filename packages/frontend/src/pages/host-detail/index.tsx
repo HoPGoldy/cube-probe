@@ -10,7 +10,7 @@ import {
   useGetEndpointList,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import { Spin, Empty, Flex, Space, Button, Modal, Switch } from "antd";
+import { Spin, Empty, Flex, Space, Button, Modal, Switch, Card } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
@@ -27,6 +27,8 @@ import {
   HostDetailModal,
 } from "./detail-host";
 import { EndpointItem } from "./endpoint-item";
+import { useGetHostMultiRangeStats } from "@/services/probe-stats";
+import { StatCard, getUptimeColor } from "@/components/stat-card";
 
 const HostDetailPage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
@@ -41,6 +43,9 @@ const HostDetailPage: React.FC = () => {
     useGetEndpointList({
       serviceId: hostId,
     });
+
+  const { data: hostStatsData } = useGetHostMultiRangeStats(hostId || "");
+  const hostStats = hostStatsData?.data;
 
   const { mutateAsync: updateHost } = useUpdateMonitoredHost();
   const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
@@ -118,6 +123,64 @@ const HostDetailPage: React.FC = () => {
     );
   }
 
+  const renderHostStats = () => {
+    if (!hostStats || hostStats.stats24h.totalChecks === 0) {
+      return null;
+    }
+
+    return (
+      <Card>
+        <Flex gap={16} align="center" justify="space-around">
+          <StatCard
+            label="平均响应"
+            subLabel="当前"
+            value={hostStats.current.avgResponseTime}
+            unit=" ms"
+            colorClass="text-blue-500"
+          />
+          <StatCard
+            label="成功率"
+            subLabel="当前"
+            value={hostStats.current.successRate}
+            unit="%"
+            colorClass={getUptimeColor(hostStats.current.successRate)}
+          />
+          <StatCard
+            label="平均响应"
+            subLabel="24小时"
+            value={
+              hostStats.stats24h.avgResponseTime !== null
+                ? hostStats.stats24h.avgResponseTime.toFixed(0)
+                : null
+            }
+            unit=" ms"
+          />
+          <StatCard
+            label="在线时间"
+            subLabel="24小时"
+            value={hostStats.stats24h.uptimePercentage?.toFixed(2) ?? null}
+            unit="%"
+            colorClass={getUptimeColor(hostStats.stats24h.uptimePercentage)}
+          />
+          <StatCard
+            label="在线时间"
+            subLabel="30天"
+            value={hostStats.stats30d.uptimePercentage?.toFixed(2) ?? null}
+            unit="%"
+            colorClass={getUptimeColor(hostStats.stats30d.uptimePercentage)}
+          />
+          <StatCard
+            label="在线时间"
+            subLabel="1年"
+            value={hostStats.stats1y.uptimePercentage?.toFixed(2) ?? null}
+            unit="%"
+            colorClass={getUptimeColor(hostStats.stats1y.uptimePercentage)}
+          />
+        </Flex>
+      </Card>
+    );
+  };
+
   return (
     <>
       <Flex vertical gap={16} className="m-4">
@@ -148,6 +211,8 @@ const HostDetailPage: React.FC = () => {
             {utcdayjsFormat(hostDetail?.updatedAt)}
           </div>
         </div>
+
+        {renderHostStats()}
 
         {/* Endpoints 列表 */}
         <Flex vertical gap={16}>

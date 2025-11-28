@@ -89,6 +89,7 @@ Services are instantiated first in `register-service.ts`, then passed to control
 - `monitored-result/` - Probe result storage
 - `probe-task/` - **IntervalProbeService** - interval-based probe scheduler
 - `probe-result-cleanup/` - Automated cleanup of old probe results
+- `probe-stats-aggregation/` - Statistics aggregation service (hourly/daily stats, multi-range queries)
 - `app-config/` - Application configuration storage
 - `code-executor/` - Code execution sandbox
 
@@ -107,6 +108,8 @@ Services are instantiated first in `register-service.ts`, then passed to control
 - `Service` - Service definition (name, base URL, default headers, intervalTime)
 - `EndPoint` - Endpoint config (URL, method, headers, intervalTime, timeout, bodyContent)
 - `ProbeResult` - Probe execution results (status, responseTime, success, message)
+- `ProbeHourlyStat` - Hourly aggregated statistics (avgResponseTime, successCount, failureCount, uptimePercentage)
+- `ProbeDailyStat` - Daily aggregated statistics (same fields as hourly)
 
 **Other Models:**
 
@@ -121,6 +124,23 @@ The probe system uses **interval-based scheduling** (not cron):
 2. **EndPoint**: Individual probe targets inheriting from Service
 3. **IntervalProbeService**: Manages scheduled probes using `setInterval`
 4. **ProbeResultCleanupService**: Periodic cleanup of old results
+5. **ProbeStatsAggregationService**: Aggregates probe results into hourly/daily statistics
+
+**Statistics Aggregation:**
+
+The system aggregates raw probe results into hourly and daily statistics for efficient querying:
+
+- **ProbeHourlyStat**: Hourly aggregation (used for 24h queries)
+- **ProbeDailyStat**: Daily aggregation (used for 30d/1y queries)
+
+Multi-range stats API returns metrics for multiple time ranges in one call:
+
+- `current`: Latest probe result (responseTime)
+- `stats24h`: Last 24 hours (from hourly table)
+- `stats30d`: Last 30 days (from daily table)
+- `stats1y`: Last 1 year (from daily table)
+
+Each stat includes: `avgResponseTime`, `successCount`, `failureCount`, `uptimePercentage`
 
 **URL Resolution:**
 
