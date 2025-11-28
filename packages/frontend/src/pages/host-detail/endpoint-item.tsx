@@ -18,7 +18,7 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
   onSwitchEnabled,
   onDelete,
 }) => {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const { data: statsData } = useGetEndpointMultiRangeStats(endpoint.id);
   const stats = statsData?.data;
 
@@ -65,18 +65,7 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
               justify="space-around"
             >
               <StatCard
-                label="响应"
-                subLabel="当前"
-                value={stats.current.responseTime}
-                unit=" ms"
-                colorClass={
-                  stats.current.success === false
-                    ? "text-red-500"
-                    : "text-blue-500"
-                }
-              />
-              <StatCard
-                label="平均响应"
+                label="平均响应时间"
                 subLabel="24小时"
                 value={
                   stats.stats24h.avgResponseTime !== null

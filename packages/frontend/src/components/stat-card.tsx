@@ -1,3 +1,4 @@
+import { Card } from "antd";
 import React from "react";
 
 // 根据在线率返回颜色
@@ -24,11 +25,13 @@ export const StatCard: React.FC<StatCardProps> = ({
   unit = "",
   colorClass = "",
 }) => (
-  <div className="text-center min-w-[80px]">
-    <div className="text-xs text-gray-400">{label}</div>
-    {subLabel && <div className="text-xs text-gray-400">({subLabel})</div>}
-    <div className={`text-base font-semibold ${colorClass}`}>
-      {value !== null ? `${value}${unit}` : "-"}
+  <Card className="flex-grow" styles={{ body: { padding: 12 } }}>
+    <div className="text-center min-w-[80px]">
+      <div className="text-base text-gray-400">{label}</div>
+      {subLabel && <div className="text-xs text-gray-400">({subLabel})</div>}
+      <div className={`text-lg mt-2 font-semibold ${colorClass}`}>
+        {value !== null ? `${value}${unit}` : "-"}
+      </div>
     </div>
-  </div>
+  </Card>
 );

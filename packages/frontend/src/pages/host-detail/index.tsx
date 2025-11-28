@@ -129,55 +129,52 @@ const HostDetailPage: React.FC = () => {
     }
 
     return (
-      <Card>
-        <Flex gap={16} align="center" justify="space-around">
-          <StatCard
-            label="平均响应"
-            subLabel="当前"
-            value={hostStats.current.avgResponseTime}
-            unit=" ms"
-            colorClass="text-blue-500"
-          />
-          <StatCard
-            label="成功率"
-            subLabel="当前"
-            value={hostStats.current.successRate}
-            unit="%"
-            colorClass={getUptimeColor(hostStats.current.successRate)}
-          />
-          <StatCard
-            label="平均响应"
-            subLabel="24小时"
-            value={
-              hostStats.stats24h.avgResponseTime !== null
-                ? hostStats.stats24h.avgResponseTime.toFixed(0)
-                : null
-            }
-            unit=" ms"
-          />
-          <StatCard
-            label="在线时间"
-            subLabel="24小时"
-            value={hostStats.stats24h.uptimePercentage?.toFixed(2) ?? null}
-            unit="%"
-            colorClass={getUptimeColor(hostStats.stats24h.uptimePercentage)}
-          />
-          <StatCard
-            label="在线时间"
-            subLabel="30天"
-            value={hostStats.stats30d.uptimePercentage?.toFixed(2) ?? null}
-            unit="%"
-            colorClass={getUptimeColor(hostStats.stats30d.uptimePercentage)}
-          />
-          <StatCard
-            label="在线时间"
-            subLabel="1年"
-            value={hostStats.stats1y.uptimePercentage?.toFixed(2) ?? null}
-            unit="%"
-            colorClass={getUptimeColor(hostStats.stats1y.uptimePercentage)}
-          />
-        </Flex>
-      </Card>
+      <Flex gap={16} align="center" justify="space-around">
+        <StatCard
+          label="平均响应"
+          subLabel="当前"
+          value={hostStats.current.avgResponseTime}
+          unit=" ms"
+        />
+        <StatCard
+          label="平均响应"
+          subLabel="24小时"
+          value={
+            hostStats.stats24h.avgResponseTime !== null
+              ? hostStats.stats24h.avgResponseTime.toFixed(0)
+              : null
+          }
+          unit=" ms"
+        />
+        <StatCard
+          label="成功率"
+          subLabel="当前"
+          value={hostStats.current.successRate}
+          unit="%"
+          colorClass={getUptimeColor(hostStats.current.successRate)}
+        />
+        <StatCard
+          label="在线时间"
+          subLabel="24小时"
+          value={hostStats.stats24h.uptimePercentage?.toFixed(2) ?? null}
+          unit="%"
+          colorClass={getUptimeColor(hostStats.stats24h.uptimePercentage)}
+        />
+        <StatCard
+          label="在线时间"
+          subLabel="30天"
+          value={hostStats.stats30d.uptimePercentage?.toFixed(2) ?? null}
+          unit="%"
+          colorClass={getUptimeColor(hostStats.stats30d.uptimePercentage)}
+        />
+        <StatCard
+          label="在线时间"
+          subLabel="1年"
+          value={hostStats.stats1y.uptimePercentage?.toFixed(2) ?? null}
+          unit="%"
+          colorClass={getUptimeColor(hostStats.stats1y.uptimePercentage)}
+        />
+      </Flex>
     );
   };
 
