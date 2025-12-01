@@ -23,3 +23,12 @@ export const EndPointType = {
 } as const
 
 export type EndPointType = (typeof EndPointType)[keyof typeof EndPointType]
+
+
+export const NotificationScopeType = {
+  ALL: 'ALL',
+  HOST: 'HOST',
+  ENDPOINT: 'ENDPOINT'
+} as const
+
+export type NotificationScopeType = (typeof NotificationScopeType)[keyof typeof NotificationScopeType]

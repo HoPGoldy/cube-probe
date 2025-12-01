@@ -5,6 +5,7 @@ describe("IntervalProbeService", () => {
   let service: IntervalProbeService;
   let mockPrisma: any;
   let mockResultService: any;
+  let mockCodeExecutorService: any;
 
   beforeEach(() => {
     // Mock Prisma Client
@@ -23,9 +24,15 @@ describe("IntervalProbeService", () => {
       createProbeResult: vi.fn(),
     };
 
+    // Mock Code Executor Service
+    mockCodeExecutorService = {
+      executeCode: vi.fn(),
+    };
+
     service = new IntervalProbeService({
       prisma: mockPrisma as any,
       resultService: mockResultService,
+      codeExecutorService: mockCodeExecutorService,
     });
   });
 

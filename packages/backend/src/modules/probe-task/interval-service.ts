@@ -2,11 +2,13 @@ import axios, { AxiosRequestConfig } from "axios";
 import { PrismaClient } from "@db/client";
 import { ResultService } from "@/modules/monitored-result/service";
 import { CodeExecutorService } from "@/modules/code-executor/service";
+import { NotificationService } from "@/modules/notification/service";
 
 interface ServiceOptions {
   prisma: PrismaClient;
   resultService: ResultService;
   codeExecutorService: CodeExecutorService;
+  notificationService?: NotificationService;
 }
 
 interface IntervalTask {
@@ -62,6 +64,43 @@ export class IntervalProbeService {
   constructor(private options: ServiceOptions) {}
 
   /**
+   * 保存探测结果并触发通知处理
+   */
+  private async saveProbeResultAndNotify(data: {
+    endPointId: string;
+    status?: number;
+    responseTime?: number;
+    success: boolean;
+    message?: string;
+  }) {
+    // 保存结果
+    await this.options.resultService.createProbeResult({
+      endPointId: data.endPointId,
+      status: data.status,
+      responseTime: data.responseTime,
+      success: data.success,
+      message: data.message,
+    });
+
+    // 异步处理通知，不阻塞探测
+    if (this.options.notificationService) {
+      this.options.notificationService
+        .processProbeResult({
+          endPointId: data.endPointId,
+          success: data.success,
+          status: data.status,
+          responseTime: data.responseTime,
+          message: data.message,
+        })
+        .catch((err) => {
+          console.error(
+            `[Notification] Failed to process probe result: ${err.message}`,
+          );
+        });
+    }
+  }
+
+  /**
    * 执行探测请求
    */
   private executeProbe = async (endPointId: string) => {
@@ -113,7 +152,7 @@ export class IntervalProbeService {
     const startTime = Date.now();
 
     if (!codeContent) {
-      await this.options.resultService.createProbeResult({
+      await this.saveProbeResultAndNotify({
         endPointId,
         status: undefined,
         responseTime: 0,
@@ -147,7 +186,7 @@ export class IntervalProbeService {
         const finalResponseTime = probeResult?.responseTime ?? responseTime;
         const status = probeResult?.status;
 
-        await this.options.resultService.createProbeResult({
+        await this.saveProbeResultAndNotify({
           endPointId,
           status,
           responseTime: finalResponseTime,
@@ -159,7 +198,7 @@ export class IntervalProbeService {
           `[Interval] Code probe completed for endpoint ${endPointId}: Success=${success}, Response time: ${finalResponseTime}ms`,
         );
       } else {
-        await this.options.resultService.createProbeResult({
+        await this.saveProbeResultAndNotify({
           endPointId,
           status: undefined,
           responseTime,
@@ -174,7 +213,7 @@ export class IntervalProbeService {
     } catch (error: any) {
       const responseTime = Date.now() - startTime;
 
-      await this.options.resultService.createProbeResult({
+      await this.saveProbeResultAndNotify({
         endPointId,
         status: undefined,
         responseTime,
@@ -219,7 +258,7 @@ export class IntervalProbeService {
         console.log(`[Interval] ${message} for endpoint ${endPointId}`);
 
         // 记录失败结果到数据库
-        await this.options.resultService.createProbeResult({
+        await this.saveProbeResultAndNotify({
           endPointId,
           status: undefined,
           responseTime: 0,
@@ -306,7 +345,7 @@ export class IntervalProbeService {
       const responseTime = Date.now() - startTime;
 
       // 在数据库中创建探测结果
-      await this.options.resultService.createProbeResult({
+      await this.saveProbeResultAndNotify({
         endPointId,
         status: response.status,
         responseTime,
@@ -335,9 +374,8 @@ export class IntervalProbeService {
       }
 
       const responseTime = startTime === 0 ? 0 : Date.now() - startTime;
-
       // 在数据库中创建失败的探测结果
-      await this.options.resultService.createProbeResult({
+      await this.saveProbeResultAndNotify({
         endPointId,
         status: status ?? undefined,
         responseTime,

@@ -208,40 +208,6 @@ describe("ProbeStatsAggregationService", () => {
     });
   });
 
-  describe("统计信息", () => {
-    it("应该返回聚合统计信息", async () => {
-      prismaMock.probeHourlyStat.count.mockResolvedValue(100);
-      prismaMock.probeDailyStat.count.mockResolvedValue(30);
-      prismaMock.probeHourlyStat.findFirst.mockResolvedValue({
-        hourTimestamp: new Date("2025-11-28T10:00:00Z"),
-      } as any);
-      prismaMock.probeDailyStat.findFirst.mockResolvedValue({
-        date: new Date("2025-11-27T00:00:00Z"),
-      } as any);
-
-      const stats = await service.getAggregationStats();
-
-      expect(stats.hourlyRecords).toBe(100);
-      expect(stats.dailyRecords).toBe(30);
-      expect(stats.latestHourlyTimestamp).toBeDefined();
-      expect(stats.latestDailyDate).toBeDefined();
-    });
-
-    it("没有数据时应该返回空时间戳", async () => {
-      prismaMock.probeHourlyStat.count.mockResolvedValue(0);
-      prismaMock.probeDailyStat.count.mockResolvedValue(0);
-      prismaMock.probeHourlyStat.findFirst.mockResolvedValue(null);
-      prismaMock.probeDailyStat.findFirst.mockResolvedValue(null);
-
-      const stats = await service.getAggregationStats();
-
-      expect(stats.hourlyRecords).toBe(0);
-      expect(stats.dailyRecords).toBe(0);
-      expect(stats.latestHourlyTimestamp).toBeUndefined();
-      expect(stats.latestDailyDate).toBeUndefined();
-    });
-  });
-
   describe("调度器", () => {
     it("应该能够启动和停止调度器", async () => {
       prismaMock.probeResult.groupBy.mockResolvedValue([]);

@@ -84,9 +84,4 @@ docker run -p 3001:3499 cube-auth:local
 ## 相关文档
 
 - [团队合作时如何更新数据架构](https://www.prisma.io/docs/guides/implementing-schema-changes)
-
-docker run -p 3001:3499 -v .\test-storage:/app/packages/backend/storage hopgoldy/cube-auth:0.1.0
-
-docker run -p 3001:3499 hopgoldy/cube-auth:0.1.0
-
--v /root/data/cube-auth-storage:/app/packages/backend/storage \
+- [在线 webhook 测试工具](https://webhook.site/)

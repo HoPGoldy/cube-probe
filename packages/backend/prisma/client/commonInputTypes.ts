@@ -275,6 +275,23 @@ export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
 }
 
+export type EnumNotificationScopeTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationScopeType | Prisma.EnumNotificationScopeTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationScopeType[]
+  notIn?: $Enums.NotificationScopeType[]
+  not?: Prisma.NestedEnumNotificationScopeTypeFilter<$PrismaModel> | $Enums.NotificationScopeType
+}
+
+export type EnumNotificationScopeTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationScopeType | Prisma.EnumNotificationScopeTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationScopeType[]
+  notIn?: $Enums.NotificationScopeType[]
+  not?: Prisma.NestedEnumNotificationScopeTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationScopeType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNotificationScopeTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNotificationScopeTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[]
@@ -518,6 +535,23 @@ export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _min?: Prisma.NestedFloatNullableFilter<$PrismaModel>
   _max?: Prisma.NestedFloatNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumNotificationScopeTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationScopeType | Prisma.EnumNotificationScopeTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationScopeType[]
+  notIn?: $Enums.NotificationScopeType[]
+  not?: Prisma.NestedEnumNotificationScopeTypeFilter<$PrismaModel> | $Enums.NotificationScopeType
+}
+
+export type NestedEnumNotificationScopeTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.NotificationScopeType | Prisma.EnumNotificationScopeTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.NotificationScopeType[]
+  notIn?: $Enums.NotificationScopeType[]
+  not?: Prisma.NestedEnumNotificationScopeTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationScopeType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumNotificationScopeTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumNotificationScopeTypeFilter<$PrismaModel>
 }
 
 

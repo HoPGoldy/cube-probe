@@ -60,7 +60,10 @@ export const ModelName = {
   EndPoint: 'EndPoint',
   ProbeResult: 'ProbeResult',
   ProbeHourlyStat: 'ProbeHourlyStat',
-  ProbeDailyStat: 'ProbeDailyStat'
+  ProbeDailyStat: 'ProbeDailyStat',
+  NotificationChannel: 'NotificationChannel',
+  NotificationRule: 'NotificationRule',
+  NotificationLog: 'NotificationLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -217,6 +220,53 @@ export const ProbeDailyStatScalarFieldEnum = {
 } as const
 
 export type ProbeDailyStatScalarFieldEnum = (typeof ProbeDailyStatScalarFieldEnum)[keyof typeof ProbeDailyStatScalarFieldEnum]
+
+
+export const NotificationChannelScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  webhookUrl: 'webhookUrl',
+  headers: 'headers',
+  bodyTemplate: 'bodyTemplate',
+  enabled: 'enabled'
+} as const
+
+export type NotificationChannelScalarFieldEnum = (typeof NotificationChannelScalarFieldEnum)[keyof typeof NotificationChannelScalarFieldEnum]
+
+
+export const NotificationRuleScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  name: 'name',
+  enabled: 'enabled',
+  scopeType: 'scopeType',
+  hostId: 'hostId',
+  endpointId: 'endpointId',
+  consecutiveFailures: 'consecutiveFailures',
+  cooldownMinutes: 'cooldownMinutes',
+  notifyOnRecovery: 'notifyOnRecovery',
+  channelId: 'channelId'
+} as const
+
+export type NotificationRuleScalarFieldEnum = (typeof NotificationRuleScalarFieldEnum)[keyof typeof NotificationRuleScalarFieldEnum]
+
+
+export const NotificationLogScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  ruleId: 'ruleId',
+  endpointId: 'endpointId',
+  eventType: 'eventType',
+  title: 'title',
+  content: 'content',
+  success: 'success',
+  errorMsg: 'errorMsg'
+} as const
+
+export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
 
 
 export const SortOrder = {

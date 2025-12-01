@@ -98,6 +98,8 @@ describe("PrismaMock", () => {
         timeout: null,
         bodyContent: null,
         bodyContentType: null,
+        type: "CONFIG" as const,
+        codeContent: null,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

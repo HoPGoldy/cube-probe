@@ -54,6 +54,18 @@ export const Sidebar: FC = () => {
         path: "/probe-result",
         name: "探测结果",
       },
+      {
+        path: "/notification-channel",
+        name: "通知渠道",
+      },
+      {
+        path: "/notification-rule",
+        name: "通知规则",
+      },
+      {
+        path: "/notification-log",
+        name: "通知记录",
+      },
     );
   }
 

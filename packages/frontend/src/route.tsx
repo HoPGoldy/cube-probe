@@ -60,6 +60,21 @@ export const routes = createBrowserRouter(
           path: "/probe-result",
           element: lazyLoad(() => import("./pages/probe-result")),
         },
+        // 通知渠道管理
+        {
+          path: "/notification-channel",
+          element: lazyLoad(() => import("./pages/notification-channel")),
+        },
+        // 通知规则管理
+        {
+          path: "/notification-rule",
+          element: lazyLoad(() => import("./pages/notification-rule")),
+        },
+        // 通知记录
+        {
+          path: "/notification-log",
+          element: lazyLoad(() => import("./pages/notification-log")),
+        },
         // 个人资料
         {
           path: "/user-profile",

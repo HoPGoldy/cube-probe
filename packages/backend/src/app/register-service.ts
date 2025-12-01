@@ -10,6 +10,7 @@ import { registerController as registerEndPointController } from "@/modules/moni
 import { registerController as registerResultController } from "@/modules/monitored-result/controller";
 import { registerController as registerCodeExecutorController } from "@/modules/code-executor/controller";
 import { registerController as registerProbeStatsController } from "@/modules/probe-stats-aggregation/controller";
+import { registerController as registerNotificationController } from "@/modules/notification/controller";
 import { UserService } from "@/modules/user/service";
 import { AttachmentService } from "@/modules/attachment/service";
 import { ApplicationService } from "@/modules/application/service";
@@ -22,6 +23,7 @@ import { CodeExecutorService } from "@/modules/code-executor/service";
 import { IntervalProbeService } from "@/modules/probe-task/interval-service";
 import { ProbeResultCleanupService } from "@/modules/probe-result-cleanup/service";
 import { ProbeStatsAggregationService } from "@/modules/probe-stats-aggregation/service";
+import { NotificationService } from "@/modules/notification/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 
@@ -67,10 +69,15 @@ export const registerService = async (instance: AppInstance) => {
     // allowedDomains: ['api.example.com', '*.github.com'], // 可选：限制允许的域名
   });
 
+  const notificationService = new NotificationService({
+    prisma,
+  });
+
   const intervalProbeService = new IntervalProbeService({
     prisma,
     resultService,
     codeExecutorService,
+    notificationService,
   });
 
   const probeResultCleanupService = new ProbeResultCleanupService({
@@ -142,6 +149,11 @@ export const registerService = async (instance: AppInstance) => {
 
     registerProbeStatsController({
       probeStatsAggregationService,
+      server,
+    });
+
+    registerNotificationController({
+      notificationService,
       server,
     });
 
