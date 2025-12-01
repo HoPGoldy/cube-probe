@@ -55,6 +55,11 @@ export const routes = createBrowserRouter(
           path: "/notification-log",
           element: lazyLoad(() => import("./pages/notification-log")),
         },
+        // 通知状态监控
+        {
+          path: "/notification-status",
+          element: lazyLoad(() => import("./pages/notification-status")),
+        },
         // 个人资料
         {
           path: "/user-profile",

@@ -121,12 +121,15 @@ export const Sidebar: FC = () => {
           </Button>
         )}
         {userInfo.role === UserRole.ADMIN && (
+          <Link to="/notification-status">
+            <Button className={`${s.toolBtn} keep-antd-style`} block>
+              通知状态
+            </Button>
+          </Link>
+        )}
+        {userInfo.role === UserRole.ADMIN && (
           <Link to="/home">
-            <Button
-              className={`${s.toolBtn} keep-antd-style`}
-              block
-              onClick={handleCreateHost}
-            >
+            <Button className={`${s.toolBtn} keep-antd-style`} block>
               主面板
             </Button>
           </Link>

@@ -419,4 +419,72 @@ export class NotificationService {
   getHostStatus(serviceId: string): HostStatus | undefined {
     return this.hostStatus.get(serviceId);
   }
+
+  /**
+   * 获取所有 Host 的通知状态
+   */
+  async getAllHostStatus(): Promise<
+    Array<{
+      serviceId: string;
+      serviceName: string;
+      currentStatus: "UP" | "DOWN";
+      lastNotifiedAt: Date | null;
+      failedEndpoints: Array<{
+        endpointId: string;
+        endpointName: string;
+        consecutiveFailures: number;
+      }>;
+    }>
+  > {
+    const result: Array<{
+      serviceId: string;
+      serviceName: string;
+      currentStatus: "UP" | "DOWN";
+      lastNotifiedAt: Date | null;
+      failedEndpoints: Array<{
+        endpointId: string;
+        endpointName: string;
+        consecutiveFailures: number;
+      }>;
+    }> = [];
+
+    // 获取所有启用通知的服务
+    const services = await this.options.prisma.service.findMany({
+      where: { notifyEnabled: true },
+      include: { endpoints: true },
+    });
+
+    for (const service of services) {
+      const hostState = this.hostStatus.get(service.id);
+
+      // 构建失败端点列表
+      const failedEndpoints: Array<{
+        endpointId: string;
+        endpointName: string;
+        consecutiveFailures: number;
+      }> = [];
+
+      if (hostState) {
+        const entries = Array.from(hostState.failedEndpoints.entries());
+        for (const [endpointId, failures] of entries) {
+          const endpoint = service.endpoints.find((e) => e.id === endpointId);
+          failedEndpoints.push({
+            endpointId,
+            endpointName: endpoint?.name || "未知端点",
+            consecutiveFailures: failures,
+          });
+        }
+      }
+
+      result.push({
+        serviceId: service.id,
+        serviceName: service.name,
+        currentStatus: hostState?.currentStatus || "UP",
+        lastNotifiedAt: hostState?.lastNotifiedAt || null,
+        failedEndpoints,
+      });
+    }
+
+    return result;
+  }
 }

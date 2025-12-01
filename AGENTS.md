@@ -13,6 +13,7 @@ This file provides guidance to AI coding agents when working with code in this r
 3. **User Management**: Registration, roles (USER/ADMIN), banning/deletion
 4. **Application Management**: Third-party app integration with access tokens
 5. **File Attachments**: Upload/download with 512MB limit
+6. **Notification System**: Alert notifications via multiple channels (Email, Webhook, etc.) when endpoints fail
 
 ## Tech Stack
 
@@ -90,6 +91,7 @@ Services are instantiated first in `register-service.ts`, then passed to control
 - `probe-task/` - **IntervalProbeService** - interval-based probe scheduler
 - `probe-result-cleanup/` - Automated cleanup of old probe results
 - `probe-stats-aggregation/` - Statistics aggregation service (hourly/daily stats, multi-range queries)
+- `notification/` - **NotificationService** - alert notifications when probes fail
 - `app-config/` - Application configuration storage
 - `code-executor/` - Code execution sandbox
 
@@ -105,11 +107,16 @@ Services are instantiated first in `register-service.ts`, then passed to control
 
 **Probe Monitoring Models:**
 
-- `Service` - Service definition (name, base URL, default headers, intervalTime)
+- `Service` - Service definition (name, base URL, default headers, intervalTime, notification settings)
 - `EndPoint` - Endpoint config (URL, method, headers, intervalTime, timeout, bodyContent)
 - `ProbeResult` - Probe execution results (status, responseTime, success, message)
 - `ProbeHourlyStat` - Hourly aggregated statistics (avgResponseTime, successCount, failureCount, uptimePercentage)
 - `ProbeDailyStat` - Daily aggregated statistics (same fields as hourly)
+
+**Notification Models:**
+
+- `NotificationChannel` - Notification channels (name, type: EMAIL/WEBHOOK/TELEGRAM, config JSON)
+- `NotificationLog` - Notification history (serviceId, channelId, status, message)
 
 **Other Models:**
 
@@ -148,6 +155,59 @@ Each stat includes: `avgResponseTime`, `successCount`, `failureCount`, `uptimePe
 - If `EndPoint.url` is relative, concatenate with `Service.url`
 - If `EndPoint.url` is empty, use `Service.url`
 
+### Notification System Design
+
+The notification system monitors probe results and sends alerts when endpoints fail.
+
+**Architecture:**
+
+1. **NotificationChannel**: Configures delivery methods (Email, Webhook, Telegram, etc.)
+2. **Service-level Configuration**: Notification settings are stored directly on the Service model
+3. **NotificationService**: Core service managing host status and sending alerts
+4. **NotificationLog**: Records all sent notifications
+
+**Service Notification Fields:**
+
+- `notifyEnabled` - Whether notifications are enabled for this service
+- `notifyFailureCount` - Consecutive failures threshold before alerting (default: 3)
+- `notifyCooldownMin` - Cooldown period in minutes between notifications (default: 5)
+- `notifyChannelIds` - JSON array of channel IDs to notify
+
+**Host Status Management (In-Memory):**
+
+The `NotificationService` maintains an in-memory `hostStatus` Map tracking each service's health:
+
+```typescript
+interface HostStatus {
+  failedEndpoints: Map<string, { consecutiveFailures: number }>;
+  currentStatus: "UP" | "DOWN";
+  lastNotifiedAt: Date | null;
+}
+```
+
+**Status Determination:**
+
+- **DOWN**: Any endpoint under the service has consecutive failures >= `notifyFailureCount`
+- **UP**: All endpoints have consecutive failures < threshold
+- Status transitions trigger notifications (UP→DOWN sends failure alert, DOWN→UP sends recovery alert)
+
+**Notification Flow:**
+
+1. `IntervalProbeService` executes probe and saves result
+2. Calls `NotificationService.processProbeResult(endpointId, success)`
+3. Service updates `failedEndpoints` map for the endpoint
+4. If status changes (UP↔DOWN), sends notification to configured channels
+5. Respects cooldown period to prevent notification spam
+
+**API Endpoints:**
+
+- `GET /api/notification/channel/list` - List all channels
+- `POST /api/notification/channel/add` - Create channel
+- `POST /api/notification/channel/update` - Update channel
+- `POST /api/notification/channel/delete` - Delete channel
+- `GET /api/notification/log/list` - Query notification history
+- `GET /api/notification/status/list` - Get all hosts' current status (from memory)
+
 ### Frontend Architecture
 
 **Page Structure (`src/pages/`):**
@@ -157,7 +217,10 @@ Each stat includes: `avgResponseTime`, `successCount`, `failureCount`, `uptimePe
 - `probe-result/` - View probe results
 - `probe-dashboard/` - Monitoring overview
 - `monitored-host/` - Host monitoring
-- `host-detail/` - Host details
+- `host-detail/` - Host details with notification settings
+- `notification-channel/` - Notification channel management
+- `notification-log/` - Notification history
+- `notification-status/` - Real-time host status monitoring
 - `setting-user/` - User management (admin)
 - `setting-application/` - App management
 - `user-profile/` - Personal profile

@@ -200,4 +200,45 @@ export const registerController = async (options: ControllerOptions) => {
       return result.map(createLogDetailVo);
     },
   );
+
+  // ==================== Status APIs ====================
+
+  server.post(
+    "/notification/status/list",
+    {
+      schema: {
+        description: "获取所有 Host 的通知状态",
+        response: {
+          200: Type.Array(
+            Type.Object({
+              serviceId: Type.String(),
+              serviceName: Type.String(),
+              currentStatus: Type.Union([
+                Type.Literal("UP"),
+                Type.Literal("DOWN"),
+              ]),
+              lastNotifiedAt: Type.Union([
+                Type.String({ format: "date-time" }),
+                Type.Null(),
+              ]),
+              failedEndpoints: Type.Array(
+                Type.Object({
+                  endpointId: Type.String(),
+                  endpointName: Type.String(),
+                  consecutiveFailures: Type.Integer(),
+                }),
+              ),
+            }),
+          ),
+        },
+      },
+    },
+    async () => {
+      const result = await notificationService.getAllHostStatus();
+      return result.map((item) => ({
+        ...item,
+        lastNotifiedAt: item.lastNotifiedAt?.toISOString() || null,
+      }));
+    },
+  );
 };

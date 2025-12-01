@@ -139,3 +139,30 @@ export const useGetLogList = (query?: LogListQueryDto) => {
       requestPost<NotificationLog[]>("notification/log/list", query || {}),
   });
 };
+
+// ==================== Status Types ====================
+
+export interface FailedEndpoint {
+  endpointId: string;
+  endpointName: string;
+  consecutiveFailures: number;
+}
+
+export interface HostNotificationStatus {
+  serviceId: string;
+  serviceName: string;
+  currentStatus: "UP" | "DOWN";
+  lastNotifiedAt: string | null;
+  failedEndpoints: FailedEndpoint[];
+}
+
+// ==================== Status Hooks ====================
+
+export const useGetNotificationStatusList = () => {
+  return useQuery({
+    queryKey: ["notification/status/list"],
+    queryFn: () =>
+      requestPost<HostNotificationStatus[]>("notification/status/list", {}),
+    refetchInterval: 10000, // 每 10 秒自动刷新
+  });
+};
