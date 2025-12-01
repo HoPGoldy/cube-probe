@@ -135,8 +135,8 @@ const ProbeEnvPage: React.FC = () => {
   ];
 
   return (
-    <>
-      <Flex justify="space-between" className="mb-4">
+    <Flex vertical gap={16} className="p-4">
+      <Flex justify="space-between">
         <Input
           placeholder="搜索变量名或描述"
           prefix={<SearchOutlined />}
@@ -146,16 +146,15 @@ const ProbeEnvPage: React.FC = () => {
           allowClear
         />
         <Flex gap={8}>
-          <Button icon={<RedoOutlined />} onClick={() => reloadList()}>
-            刷新
-          </Button>
           <Button type="primary" onClick={onAdd}>
-            添加变量
+            新增
           </Button>
+          <Button onClick={() => reloadList()} icon={<RedoOutlined />}></Button>
         </Flex>
       </Flex>
 
       <Table<ProbeEnvItem>
+        bordered
         dataSource={tableDataSource}
         columns={columns}
         rowKey="id"
@@ -165,7 +164,7 @@ const ProbeEnvPage: React.FC = () => {
       />
 
       <DetailModal />
-    </>
+    </Flex>
   );
 };
 

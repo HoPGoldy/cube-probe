@@ -10,7 +10,7 @@ import {
   useGetEndpointList,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import { Spin, Empty, Flex, Space, Button, Modal, Switch, Card } from "antd";
+import { Spin, Empty, Flex, Space, Button, Modal, Switch } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";

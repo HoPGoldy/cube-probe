@@ -16,6 +16,7 @@ import {
   useGetEndpointDetail,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
+import { CodeEditor } from "@/components/code-editor";
 
 export const DETAIL_TYPE_KEY = "ep-modal";
 
@@ -284,14 +285,10 @@ export const EndpointDetailModal: FC = () => {
                   <Form.Item
                     label="代码内容"
                     name="codeContent"
-                    tooltip="编写探测逻辑代码"
+                    tooltip="编写探测逻辑代码，可使用 http 和 env 全局对象"
                     rules={[{ required: true, message: "请输入代码内容" }]}
                   >
-                    <Input.TextArea
-                      rows={12}
-                      placeholder="// 编写探测代码&#10;// 返回 { success: boolean, message?: string, responseTime?: number }"
-                      style={{ fontFamily: "monospace" }}
-                    />
+                    <CodeEditor height={300} language="javascript" />
                   </Form.Item>
                 )
               }
