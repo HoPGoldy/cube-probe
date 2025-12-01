@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { Card, Flex, Space, Button, Switch } from "antd";
-import { CloseOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Card, Flex, Space, Button, Switch, message } from "antd";
+import {
+  CloseOutlined,
+  DownOutlined,
+  UpOutlined,
+  CopyOutlined,
+} from "@ant-design/icons";
 import { EndpointChart } from "./endpoint-chart";
 import { useGetEndpointMultiRangeStats } from "@/services/probe-stats";
 import { StatCard, getUptimeColor } from "@/components/stat-card";
+import { useCopyEndpoint } from "@/services/monitored-endpoint";
 
 interface EndpointItemProps {
   endpoint: any;
@@ -22,9 +28,20 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
   const { data: statsData } = useGetEndpointMultiRangeStats(endpoint.id);
   const stats = statsData?.data;
 
+  const { mutateAsync: copyEndpoint, isPending: copying } = useCopyEndpoint();
+
   const hasData =
     stats &&
     (stats.current.responseTime !== null || stats.stats24h.totalChecks > 0);
+
+  const handleCopy = async () => {
+    try {
+      await copyEndpoint(endpoint.id);
+      message.success("复制成功，新端点已创建（默认禁用）");
+    } catch {
+      message.error("复制失败");
+    }
+  };
 
   return (
     <Card styles={{ body: { padding: 16 } }}>
@@ -42,7 +59,13 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
                 onChange={() => onSwitchEnabled(endpoint)}
               />
               <Button onClick={() => onEdit(endpoint.id)}>配置</Button>
-              <Button>复制</Button>
+              <Button
+                icon={<CopyOutlined />}
+                loading={copying}
+                onClick={handleCopy}
+              >
+                复制
+              </Button>
               <Button
                 danger
                 icon={<CloseOutlined />}

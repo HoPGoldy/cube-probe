@@ -101,4 +101,39 @@ export class EndPointService {
       where: { id },
     });
   }
+
+  /**
+   * 复制一个 EndPoint
+   * 复制所有配置，但名称添加 "(副本)" 后缀，默认禁用
+   */
+  async copyEndPoint(id: string) {
+    // 获取原始端点
+    const original = await this.options.prisma.endPoint.findUnique({
+      where: { id },
+    });
+
+    if (!original) {
+      throw new Error("Endpoint not found");
+    }
+
+    // 创建新端点
+    const newEndPoint = await this.options.prisma.endPoint.create({
+      data: {
+        serviceId: original.serviceId,
+        name: `${original.name} (副本)`,
+        type: original.type,
+        url: original.url,
+        method: original.method,
+        headers: original.headers ?? undefined,
+        timeout: original.timeout,
+        bodyContentType: original.bodyContentType,
+        bodyContent: original.bodyContent,
+        codeContent: original.codeContent,
+        intervalTime: original.intervalTime,
+        enabled: false, // 默认禁用，避免立即开始探测
+      },
+    });
+
+    return newEndPoint;
+  }
 }

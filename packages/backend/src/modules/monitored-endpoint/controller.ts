@@ -131,4 +131,24 @@ export const registerController = async (options: ControllerOptions) => {
       return { success: true };
     },
   );
+
+  server.post(
+    "/endpoint/copy",
+    {
+      schema: {
+        description: "Copy an endpoint",
+        body: Type.Object({
+          id: Type.String({ description: "要复制的端点ID" }),
+        }),
+        response: {
+          200: SchemaEndPointDetail,
+        },
+      },
+    },
+    async (req) => {
+      const { id } = req.body;
+      const result = await endPointService.copyEndPoint(id);
+      return createEndPointDetailVo(result);
+    },
+  );
 };

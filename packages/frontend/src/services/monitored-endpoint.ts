@@ -84,3 +84,15 @@ export const useDeleteEndpoint = () => {
     },
   });
 };
+
+export const useCopyEndpoint = () => {
+  return useMutation({
+    mutationFn: (id: string) => requestPost("endpoint/copy", { id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["endpoint/list"] });
+      queryClient.invalidateQueries({
+        queryKey: ["endpoint/list-by-service"],
+      });
+    },
+  });
+};
