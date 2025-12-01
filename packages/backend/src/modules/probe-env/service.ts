@@ -114,4 +114,69 @@ export class ProbeEnvService {
 
     this.clearCache();
   }
+
+  /**
+   * 从探针执行结果中更新环境变量
+   * 只更新已存在的 key，忽略不存在的 key
+   * @param updates - 要更新的 key-value 对象
+   * @returns 更新结果统计
+   */
+  async updateFromProbe(
+    updates: Record<string, string>,
+  ): Promise<{ updated: string[]; skipped: string[]; errors: string[] }> {
+    const MAX_VALUE_LENGTH = 10000;
+    const result = {
+      updated: [] as string[],
+      skipped: [] as string[],
+      errors: [] as string[],
+    };
+
+    if (!updates || typeof updates !== "object") {
+      return result;
+    }
+
+    for (const [key, value] of Object.entries(updates)) {
+      // 跳过非字符串值
+      if (typeof value !== "string") {
+        result.errors.push(`${key}: value must be string`);
+        continue;
+      }
+
+      // 检查长度限制
+      if (value.length > MAX_VALUE_LENGTH) {
+        result.errors.push(
+          `${key}: value exceeds max length (${MAX_VALUE_LENGTH})`,
+        );
+        continue;
+      }
+
+      try {
+        // 只更新已存在的 key
+        const existing = await this.options.prisma.probeEnv.findUnique({
+          where: { key },
+        });
+
+        if (!existing) {
+          result.skipped.push(key);
+          continue;
+        }
+
+        await this.options.prisma.probeEnv.update({
+          where: { key },
+          data: { value },
+        });
+
+        result.updated.push(key);
+      } catch (error: any) {
+        result.errors.push(`${key}: ${error.message}`);
+      }
+    }
+
+    // 有更新时清除缓存
+    if (result.updated.length > 0) {
+      this.clearCache();
+    }
+
+    return result;
+  }
 }

@@ -92,6 +92,13 @@ export class ProbeEnvService {
 
   // 删除环境变量
   async delete(id: string): Promise<void>;
+
+  // 从探针执行结果中更新环境变量（只更新已存在的 key）
+  async updateFromProbe(updates: Record<string, string>): Promise<{
+    updated: string[]; // 成功更新的 key
+    skipped: string[]; // 跳过的 key（不存在）
+    errors: string[]; // 错误信息
+  }>;
 }
 ```
 
@@ -216,11 +223,40 @@ const response = await http.get(`${baseUrl}/health`, {
 });
 
 return {
-  success: response.status === 200,
-  message: `Status: ${response.status}`,
-  responseTime: response.data.latency,
+  result: {
+    success: response.status === 200,
+    message: `Status: ${response.status}`,
+    responseTime: response.data.latency,
+  },
 };
 ```
+
+### 探针执行后更新环境变量
+
+探针可以在执行完成后更新已存在的环境变量：
+
+```javascript
+// 同时返回探针结果和环境变量更新
+return {
+  // 探针结果
+  result: {
+    success: true,
+    message: "Token refreshed",
+    status: 200,
+  },
+  // 环境变量更新（可选，只能更新已存在的 key）
+  env: {
+    ACCESS_TOKEN: newToken,
+    TOKEN_EXPIRES_AT: expiresAt.toString(),
+  },
+};
+```
+
+**约束条件：**
+
+- 只能更新已存在的环境变量，不能创建新的
+- 值必须是字符串类型
+- 单个值最大长度 10,000 字符
 
 ## 前端页面设计
 

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Select } from 'antd';
-import type { SelectProps } from 'antd';
+import React, { useState, useEffect } from "react";
+import { Select } from "antd";
+import type { SelectProps } from "antd";
 
 interface CommaSeparatedTagsInputProps {
   value?: string;
@@ -8,15 +8,20 @@ interface CommaSeparatedTagsInputProps {
   placeholder?: string;
 }
 
-export const CommaSeparatedTagsInput: React.FC<CommaSeparatedTagsInputProps> = ({
-  value = '',
+export const CommaSeparatedTagsInput: React.FC<
+  CommaSeparatedTagsInputProps
+> = ({
+  value = "",
   onChange,
-  placeholder = '请输入标签，可直接输入或从下拉选择'
+  placeholder = "请输入标签，可直接输入或从下拉选择",
 }) => {
   // 将逗号分隔的字符串转换为数组
   const getDefaultTags = () => {
     if (!value) return [];
-    return value.split(',').map(tag => tag.trim()).filter(tag => tag);
+    return value
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag);
   };
 
   const [tags, setTags] = useState<string[]>(getDefaultTags());
@@ -29,17 +34,17 @@ export const CommaSeparatedTagsInput: React.FC<CommaSeparatedTagsInputProps> = (
   const handleChange = (newTags: string[]) => {
     setTags(newTags);
     // 将数组转换为逗号分隔的字符串
-    onChange?.(newTags.join(', '));
+    onChange?.(newTags.join(", "));
   };
 
   return (
     <Select
       mode="tags"
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       placeholder={placeholder}
       value={tags}
       onChange={handleChange}
-      tokenSeparators={[',']}
+      tokenSeparators={[","]}
     />
   );
 };

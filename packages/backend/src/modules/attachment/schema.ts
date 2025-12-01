@@ -28,7 +28,6 @@ export const SchemaAccessTokenResponse = Type.Object({
 export const createFileInfoVo = (
   data: Attachment,
 ): SchemaAttachmentInfoType => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { path, userId, ...rest } = data;
   return {
     ...rest,

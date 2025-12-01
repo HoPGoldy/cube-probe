@@ -439,9 +439,11 @@ const response = await http.get(`${baseUrl}/health`, {
 });
 
 return {
-  success: response.status === 200,
-  message: `Status: ${response.status}`,
-  responseTime: response.data.latency,
+  result: {
+    success: response.status === 200,
+    message: `Status: ${response.status}`,
+    responseTime: response.data.latency,
+  },
 };
 ```
 
@@ -464,8 +466,10 @@ const response = await http.post(`${env.MONITOR_API}/check`, {
 });
 
 return {
-  success: response.data.connected,
-  message: response.data.message,
+  result: {
+    success: response.data.connected,
+    message: response.data.message,
+  },
 };
 ```
 
@@ -474,3 +478,78 @@ return {
 - 使用大写字母 + 下划线命名，如 `API_KEY`、`DB_PASSWORD`
 - 敏感信息（如密码、Token）建议标记为「敏感」
 - 敏感变量在管理页面不会显示实际值
+
+### 探针执行后更新环境变量
+
+探针可以在执行完成后更新已存在的环境变量，适用于以下场景：
+
+- **Token 自动刷新** - 检测到 Token 过期后获取新 Token 并保存
+- **状态传递** - 在探针之间传递状态信息
+- **缓存远程配置** - 从远程获取配置并缓存到环境变量
+
+使用返回格式：
+
+```javascript
+// 同时返回探针结果和环境变量更新
+return {
+  // 探针结果
+  result: {
+    success: true,
+    message: "Token refreshed",
+    status: 200,
+  },
+  // 环境变量更新（可选）
+  // 注意：只能更新已存在的环境变量，不能创建新的
+  env: {
+    ACCESS_TOKEN: newToken,
+    TOKEN_EXPIRES_AT: expiresAt.toString(),
+  },
+};
+```
+
+#### Token 自动刷新示例
+
+```javascript
+// 检查 Token 是否即将过期
+const expiresAt = parseInt(env.TOKEN_EXPIRES_AT || "0");
+const now = Date.now();
+const needRefresh = expiresAt - now < 5 * 60 * 1000; // 5分钟内过期
+
+if (needRefresh) {
+  // 刷新 Token
+  const response = await http.post(`${env.AUTH_URL}/refresh`, {
+    refresh_token: env.REFRESH_TOKEN,
+  });
+
+  if (response.status === 200) {
+    return {
+      result: {
+        success: true,
+        message: "Token refreshed successfully",
+      },
+      env: {
+        ACCESS_TOKEN: response.data.access_token,
+        TOKEN_EXPIRES_AT: (now + response.data.expires_in * 1000).toString(),
+      },
+    };
+  }
+}
+
+// Token 有效，正常检查
+const healthResponse = await http.get(`${env.API_URL}/health`, {
+  headers: { Authorization: `Bearer ${env.ACCESS_TOKEN}` },
+});
+
+return {
+  result: {
+    success: healthResponse.status === 200,
+    message: `Health check: ${healthResponse.status}`,
+  },
+};
+```
+
+#### 注意事项
+
+- **只能更新已存在的环境变量**，不存在的 key 会被跳过
+- **值必须是字符串**，非字符串会被忽略
+- **单个值最大长度 10,000 字符**，超出会报错

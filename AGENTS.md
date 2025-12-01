@@ -238,8 +238,10 @@ const response = await http.get(`${baseUrl}/health`, {
 });
 
 return {
-  success: response.status === 200,
-  message: `Status: ${response.status}`,
+  result: {
+    success: response.status === 200,
+    message: `Status: ${response.status}`,
+  },
 };
 ```
 
@@ -248,6 +250,23 @@ return {
 - Variables with `isSecret=true` are hidden in the UI (displayed as `******`)
 - Cached for 5 minutes to reduce database queries
 - Naming convention: uppercase letters + underscores (e.g., `API_KEY`, `DB_PASSWORD`)
+- Probes can update existing env vars by returning `{ result: {...}, env: {...} }`
+
+**Updating Env from Probes:**
+
+CODE probes can update existing environment variables by using the return format:
+
+```javascript
+return {
+  result: { success: true, message: "Token refreshed" },
+  env: { ACCESS_TOKEN: newToken }, // Only updates existing keys
+};
+```
+
+Constraints:
+
+- Can only update existing keys (new keys are skipped)
+- Values must be strings, max 10,000 characters
 
 ### Frontend Architecture
 
