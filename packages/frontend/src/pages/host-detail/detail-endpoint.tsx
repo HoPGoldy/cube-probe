@@ -138,6 +138,7 @@ export const EndpointDetailModal: FC = () => {
         width={600}
         loading={isLoading || adding || updating}
         onCancel={onCancel}
+        destroyOnClose
         afterClose={() => {
           form.resetFields();
         }}

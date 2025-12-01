@@ -272,6 +272,7 @@ Constraints:
 
 **Page Structure (`src/pages/`):**
 
+- `home/` - Main dashboard with notification status summary
 - `probe-services/` - Service management
 - `probe-endpoints/` - Endpoint management
 - `probe-result/` - View probe results
@@ -280,7 +281,6 @@ Constraints:
 - `host-detail/` - Host details with notification settings
 - `notification-channel/` - Notification channel management
 - `notification-log/` - Notification history
-- `notification-status/` - Real-time host status monitoring
 - `probe-env/` - Environment variables management
 - `setting-user/` - User management (admin)
 - `setting-application/` - App management

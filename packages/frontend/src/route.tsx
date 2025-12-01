@@ -55,11 +55,6 @@ export const routes = createBrowserRouter(
           path: "/notification-log",
           element: lazyLoad(() => import("./pages/notification-log")),
         },
-        // 通知状态监控
-        {
-          path: "/notification-status",
-          element: lazyLoad(() => import("./pages/notification-status")),
-        },
         // 探针环境变量
         {
           path: "/probe-env",

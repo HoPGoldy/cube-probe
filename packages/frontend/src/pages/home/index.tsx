@@ -16,6 +16,7 @@ import {
   HostDetailModal,
 } from "@/pages/host-detail/detail-host";
 import { DetailPageType } from "@/utils/use-detail-type";
+import { NotificationStatusSummary } from "./notification-status-summary";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -132,6 +133,9 @@ const HomePage: React.FC = () => {
             管理和监控您的所有服务健康状态
           </div>
         </div>
+
+        {/* 通知状态摘要 */}
+        <NotificationStatusSummary />
 
         {/* Hosts 列表 */}
         <Flex vertical gap={16}>

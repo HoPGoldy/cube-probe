@@ -114,14 +114,9 @@ export const HostDetailModal: FC = () => {
         width={600}
         loading={isLoading || adding || updating}
         onCancel={onCancel}
+        destroyOnClose
         afterClose={() => {
           form.resetFields();
-        }}
-        styles={{
-          body: {
-            maxHeight: "70vh",
-            overflowY: "auto",
-          },
         }}
       >
         <Form
