@@ -6,9 +6,6 @@ import {
   NotificationChannel,
 } from "@/services/notification";
 import { Button, Flex, Modal, Table, Tag, App } from "antd";
-import { useSearchParams } from "react-router-dom";
-import { DetailPageType } from "@/utils/use-detail-type";
-import { DetailModal } from "./detail";
 import { ColumnType } from "antd/es/table";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import {
@@ -17,6 +14,7 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import { usePageTitle } from "@/store/global";
+import { useNotificationChannelDetailAction } from "../notification-channel-detail/use-detail-action";
 
 const NotificationChannelPage: React.FC = () => {
   usePageTitle("通知渠道");
@@ -34,18 +32,7 @@ const NotificationChannelPage: React.FC = () => {
 
   const tableDataSource = (listData?.data as NotificationChannel[]) ?? [];
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const onAdd = () => {
-    searchParams.set("modal", DetailPageType.Add);
-    setSearchParams(searchParams, { replace: true });
-  };
-
-  const onEdit = (id: string) => {
-    searchParams.set("modal", DetailPageType.Edit);
-    searchParams.set("id", id);
-    setSearchParams(searchParams, { replace: true });
-  };
+  const detailActions = useNotificationChannelDetailAction();
 
   const onDeleteConfirm = async (item: NotificationChannel) => {
     Modal.confirm({
@@ -112,7 +99,11 @@ const NotificationChannelPage: React.FC = () => {
           >
             测试
           </Button>
-          <Button type="link" size="small" onClick={() => onEdit(record.id)}>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => detailActions.onEdit(record.id)}
+          >
             编辑
           </Button>
           <Button
@@ -132,7 +123,7 @@ const NotificationChannelPage: React.FC = () => {
     <Flex vertical gap={16} className="p-4">
       <Flex justify="flex-end" align="center">
         <Flex gap={8}>
-          <Button type="primary" onClick={onAdd}>
+          <Button type="primary" onClick={detailActions.onAdd}>
             新增渠道
           </Button>
           <Button onClick={() => reloadList()} icon={<RedoOutlined />}></Button>
@@ -147,8 +138,6 @@ const NotificationChannelPage: React.FC = () => {
         rowKey="id"
         pagination={false}
       />
-
-      <DetailModal />
     </Flex>
   );
 };

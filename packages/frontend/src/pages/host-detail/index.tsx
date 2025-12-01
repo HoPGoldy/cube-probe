@@ -1,294 +1,222 @@
-import React from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { useDetailType } from "@/utils/use-detail-type";
+import { FC, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
-  useDeleteMonitoredHost,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Skeleton,
+  Switch,
+  Select,
+  Divider,
+} from "antd";
+import {
+  useCreateMonitoredHost,
   useGetMonitoredHostDetail,
   useUpdateMonitoredHost,
-  useCopyMonitoredHost,
 } from "@/services/monitored-host";
-import {
-  useDeleteEndpoint,
-  useGetEndpointList,
-  useUpdateEndpoint,
-} from "@/services/monitored-endpoint";
-import {
-  Spin,
-  Empty,
-  Flex,
-  Space,
-  Button,
-  Modal,
-  message,
-  Dropdown,
-} from "antd";
-import { usePageTitle } from "@/store/global";
-import { utcdayjsFormat } from "@/utils/dayjs";
-import { EmptyTip } from "@/components/empty-tip";
-import {
-  DETAIL_TYPE_KEY as EP_DETAIL_TYPE_KEY,
-  DETAIL_ID_KEY as EP_DETAIL_ID_KEY,
-  EndpointDetailModal,
-} from "./detail-endpoint";
-import { DetailPageType } from "@/utils/use-detail-type";
-import {
-  CloseOutlined,
-  CopyOutlined,
-  MoreOutlined,
-  PauseCircleOutlined,
-  PlayCircleOutlined,
-} from "@ant-design/icons";
-import {
-  DETAIL_TYPE_KEY as HOST_DETAIL_TYPE_KEY,
-  DETAIL_ID_KEY as HOST_DETAIL_ID_KEY,
-  HostDetailModal,
-} from "./detail-host";
-import { EndpointItem } from "./endpoint-item";
-import { useGetHostMultiRangeStats } from "@/services/probe-stats";
-import { StatCard, getUptimeColor } from "@/components/stat-card";
+import { useGetChannelList } from "@/services/notification";
+import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
 
-const HostDetailPage: React.FC = () => {
-  const { hostId } = useParams<{ hostId: string }>();
-  const navigate = useNavigate();
-  const [modal, contextHolder] = Modal.useModal();
+export const HostDetailModal: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const detailType = searchParams.get(DETAIL_TYPE_KEY);
+  const detailId = searchParams.get(DETAIL_ID_KEY);
 
-  const { hostDetail, isLoading: loadingHost } = useGetMonitoredHostDetail(
-    hostId || "",
-  );
+  const isOpen = !!detailType;
+  const { isAdd, isEdit, isReadonly } = useDetailType(detailType);
 
-  const { data: endpointsData, isLoading: loadingEndpoints } =
-    useGetEndpointList({
-      serviceId: hostId,
-    });
+  const { mutateAsync: runAddHost, isPending: adding } =
+    useCreateMonitoredHost();
+  const { mutateAsync: runEditHost, isPending: updating } =
+    useUpdateMonitoredHost();
+  const { data: hostDetailResp, isLoading } =
+    useGetMonitoredHostDetail(detailId);
+  const { data: channelsResp } = useGetChannelList();
 
-  const { data: hostStatsData } = useGetHostMultiRangeStats(hostId || "");
-  const hostStats = hostStatsData?.data;
+  const hostDetail = hostDetailResp?.data;
+  const channels = channelsResp?.data ?? [];
 
-  const { mutateAsync: updateHost } = useUpdateMonitoredHost();
-  const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
-  const { mutateAsync: copyHost, isPending: copyingHost } =
-    useCopyMonitoredHost();
-  const { mutateAsync: updateEndpoint } = useUpdateEndpoint();
-  const { mutateAsync: deleteEndpoint } = useDeleteEndpoint();
+  useEffect(() => {
+    const convert = async () => {
+      if (!hostDetail) return;
 
-  const endpoints = endpointsData?.data ?? [];
+      const formValues = {
+        ...hostDetail,
+        headers: hostDetail.headers
+          ? JSON.stringify(hostDetail.headers, null, 2)
+          : "",
+      };
 
-  usePageTitle(hostDetail ? `${hostDetail?.name} - 监控详情` : "监控详情");
+      form.setFieldsValue(formValues);
+    };
 
-  const onAddEndpoint = () => {
-    searchParams.set(EP_DETAIL_TYPE_KEY, DetailPageType.Add);
+    convert();
+  }, [hostDetail]);
+
+  const [form] = Form.useForm();
+
+  const onCancel = () => {
+    searchParams.delete(DETAIL_TYPE_KEY);
+    searchParams.delete(DETAIL_ID_KEY);
     setSearchParams(searchParams, { replace: true });
   };
 
-  const onEditEndpoint = (id: string) => {
-    searchParams.set(EP_DETAIL_TYPE_KEY, DetailPageType.Edit);
-    searchParams.set(EP_DETAIL_ID_KEY, id);
-    setSearchParams(searchParams, { replace: true });
-  };
+  const onSave = async () => {
+    await form.validateFields();
+    const values = form.getFieldsValue();
 
-  const onSwitchEndpointEnabled = async (item: any) => {
-    await updateEndpoint({
-      id: item.id,
-      enabled: !item.enabled,
-    });
-  };
-
-  const onEndpointDeleteConfirm = async (item: any) => {
-    modal.confirm({
-      title: `确认删除端点"${item.name}"？`,
-      content: "删除后该端点的所有探测记录也将被删除",
-      onOk: async () => {
-        await deleteEndpoint(item.id);
-      },
-    });
-  };
-
-  const onEditHost = (id: string) => {
-    searchParams.set(HOST_DETAIL_TYPE_KEY, DetailPageType.Edit);
-    searchParams.set(HOST_DETAIL_ID_KEY, id);
-    setSearchParams(searchParams, { replace: true });
-  };
-
-  const onSwitchEnabled = async (item: any) => {
-    await updateHost({
-      id: item.id,
-      enabled: !item.enabled,
-    });
-  };
-
-  const onHostDeleteConfirm = async (item: any) => {
-    modal.confirm({
-      title: `确认删除服务"${item.name}"？`,
-      content: "删除后该服务下的所有监控端点也将被删除",
-      onOk: async () => {
-        await deleteHost(item.id);
-        navigate("/");
-      },
-    });
-  };
-
-  const handleCopyHost = async () => {
-    try {
-      await copyHost(hostId!);
-      message.success("复制成功，新服务已创建（默认禁用）");
-    } catch {
-      message.error("复制失败");
-    }
-  };
-
-  if (loadingHost || loadingEndpoints) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Spin size="large" />
-      </div>
-    );
-  }
-
-  if (!hostDetail) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <Empty description="未找到该监控服务" />
-      </div>
-    );
-  }
-
-  const renderHostStats = () => {
-    if (!hostStats || hostStats.stats24h.totalChecks === 0) {
-      return null;
+    // Parse headers if provided
+    if (values.headers) {
+      try {
+        values.headers = JSON.parse(values.headers);
+      } catch {
+        Modal.error({
+          title: "格式错误",
+          content: "请求头必须是有效的JSON格式",
+        });
+        return false;
+      }
+    } else {
+      values.headers = null;
     }
 
-    return (
-      <Flex gap={16} align="center" justify="space-around">
-        <StatCard
-          label="平均响应"
-          subLabel="当前"
-          value={hostStats.current.avgResponseTime}
-          unit=" ms"
-        />
-        <StatCard
-          label="平均响应"
-          subLabel="24小时"
-          value={
-            hostStats.stats24h.avgResponseTime !== null
-              ? hostStats.stats24h.avgResponseTime.toFixed(0)
-              : null
-          }
-          unit=" ms"
-        />
-        <StatCard
-          label="成功率"
-          subLabel="当前"
-          value={hostStats.current.successRate}
-          unit="%"
-          colorClass={getUptimeColor(hostStats.current.successRate)}
-        />
-        <StatCard
-          label="在线时间"
-          subLabel="24小时"
-          value={hostStats.stats24h.uptimePercentage?.toFixed(2) ?? null}
-          unit="%"
-          colorClass={getUptimeColor(hostStats.stats24h.uptimePercentage)}
-        />
-        <StatCard
-          label="在线时间"
-          subLabel="30天"
-          value={hostStats.stats30d.uptimePercentage?.toFixed(2) ?? null}
-          unit="%"
-          colorClass={getUptimeColor(hostStats.stats30d.uptimePercentage)}
-        />
-        <StatCard
-          label="在线时间"
-          subLabel="1年"
-          value={hostStats.stats1y.uptimePercentage?.toFixed(2) ?? null}
-          unit="%"
-          colorClass={getUptimeColor(hostStats.stats1y.uptimePercentage)}
-        />
-      </Flex>
-    );
+    if (!values.url) {
+      delete values.url;
+    }
+
+    if (!values.intervalTime) {
+      delete values.intervalTime;
+    }
+
+    if (isAdd) {
+      const resp = await runAddHost(values);
+      if (resp?.code !== 200) return false;
+    } else if (isEdit) {
+      const resp = await runEditHost({ id: detailId, ...values });
+      if (resp?.code !== 200) return false;
+    }
+
+    onCancel();
+    return true;
   };
 
   return (
     <>
-      <Flex vertical gap={16} className="m-4">
-        <div>
-          <Flex gap={16} justify="space-between" align="center">
-            <div className="text-4xl font-bold">{hostDetail?.name}</div>
-            <Space>
-              <Button type="primary" onClick={onAddEndpoint}>
-                创建接口
-              </Button>
-              <Button onClick={() => onEditHost(hostDetail.id)}>编辑</Button>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "toggle",
-                      icon: hostDetail.enabled ? (
-                        <PauseCircleOutlined />
-                      ) : (
-                        <PlayCircleOutlined />
-                      ),
-                      label: hostDetail.enabled ? "禁用" : "启用",
-                      onClick: () => onSwitchEnabled(hostDetail),
-                    },
-                    {
-                      key: "copy",
-                      icon: <CopyOutlined />,
-                      label: copyingHost ? "复制中..." : "复制",
-                      disabled: copyingHost,
-                      onClick: handleCopyHost,
-                    },
-                    { type: "divider" },
-                    {
-                      key: "delete",
-                      icon: <CloseOutlined />,
-                      label: "删除",
-                      danger: true,
-                      onClick: () => onHostDeleteConfirm(hostDetail),
-                    },
-                  ],
-                }}
-                trigger={["click"]}
-              >
-                <Button icon={<MoreOutlined />} />
-              </Dropdown>
-            </Space>
-          </Flex>
-          <div className="mt-2 text-gray-500">
-            创建时间: {utcdayjsFormat(hostDetail?.createdAt)} | 更新时间:{" "}
-            {utcdayjsFormat(hostDetail?.updatedAt)}
-          </div>
-        </div>
+      <Modal
+        title={isAdd ? "新增监控服务" : "编辑监控服务"}
+        open={isOpen}
+        onOk={onSave}
+        width={600}
+        loading={isLoading || adding || updating}
+        onCancel={onCancel}
+        destroyOnClose
+        afterClose={() => {
+          form.resetFields();
+        }}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          disabled={isReadonly}
+          initialValues={{
+            enabled: true,
+            notifyEnabled: false,
+            notifyFailureCount: 3,
+            notifyCooldownMin: 30,
+            notifyChannelIds: [],
+          }}
+          style={{
+            marginTop: 16,
+          }}
+        >
+          <Skeleton active loading={isLoading}>
+            <Form.Item
+              label="服务名称"
+              name="name"
+              rules={[{ required: true, message: "请输入服务名称" }]}
+            >
+              <Input placeholder="请输入服务名称" />
+            </Form.Item>
 
-        {renderHostStats()}
+            <Form.Item
+              label="基础URL"
+              name="url"
+              tooltip="服务的基础URL，端点可以继承此URL"
+            >
+              <Input placeholder="例如: https://api.example.com" />
+            </Form.Item>
 
-        {/* Endpoints 列表 */}
-        <Flex vertical gap={16}>
-          {endpoints.length === 0 ? (
-            <EmptyTip
-              className="mt-8"
-              title="暂未配置监控接口"
-              subTitle={'点击右上角"创建接口"按钮继续'}
-            />
-          ) : (
-            endpoints.map((endpoint: any) => (
-              <EndpointItem
-                key={endpoint.id}
-                endpoint={endpoint}
-                onEdit={onEditEndpoint}
-                onSwitchEnabled={onSwitchEndpointEnabled}
-                onDelete={onEndpointDeleteConfirm}
+            <Form.Item
+              label="请求头 (JSON)"
+              name="headers"
+              tooltip="自定义请求头，使用JSON格式"
+            >
+              <Input.TextArea
+                rows={4}
+                placeholder='例如: {"Authorization": "Bearer token"}'
               />
-            ))
-          )}
-        </Flex>
-      </Flex>
+            </Form.Item>
 
-      <EndpointDetailModal />
-      <HostDetailModal />
-      {contextHolder}
+            <Form.Item label="启用状态" name="enabled" valuePropName="checked">
+              <Switch checkedChildren="启用" unCheckedChildren="禁用" />
+            </Form.Item>
+
+            <Divider>通知配置</Divider>
+
+            <Form.Item
+              label="启用通知"
+              name="notifyEnabled"
+              valuePropName="checked"
+              tooltip="开启后，当服务下的端点连续失败达到阈值时发送通知"
+            >
+              <Switch checkedChildren="开启" unCheckedChildren="关闭" />
+            </Form.Item>
+
+            <Form.Item
+              label="失败阈值"
+              name="notifyFailureCount"
+              tooltip="端点连续失败多少次后触发通知"
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                min={1}
+                max={100}
+                placeholder="默认: 3"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="冷却时间 (分钟)"
+              name="notifyCooldownMin"
+              tooltip="发送通知后的冷却时间，避免频繁通知"
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                max={1440}
+                placeholder="默认: 30"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="通知渠道"
+              name="notifyChannelIds"
+              tooltip="选择要发送通知的渠道"
+            >
+              <Select
+                mode="multiple"
+                placeholder="请选择通知渠道"
+                options={channels.map((c: any) => ({
+                  label: c.name,
+                  value: c.id,
+                }))}
+              />
+            </Form.Item>
+          </Skeleton>
+        </Form>
+      </Modal>
     </>
   );
 };
-
-export default HostDetailPage;

@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   useDeleteMonitoredHost,
   useGetMonitoredHostList,
@@ -10,23 +10,19 @@ import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
 import { CloseOutlined } from "@ant-design/icons";
-import {
-  DETAIL_TYPE_KEY as HOST_DETAIL_TYPE_KEY,
-  DETAIL_ID_KEY as HOST_DETAIL_ID_KEY,
-  HostDetailModal,
-} from "@/pages/host-detail/detail-host";
-import { DetailPageType } from "@/utils/use-detail-type";
 import { NotificationStatusSummary } from "./notification-status-summary";
+import { useHostDetailAction } from "../host-detail/use-detail-action";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [modal, contextHolder] = Modal.useModal();
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const { data: hostsData, isLoading } = useGetMonitoredHostList({});
   const { data: statusData } = useGetNotificationStatusList();
 
   const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
+
+  const hostDetailActions = useHostDetailAction();
 
   const hosts = hostsData?.data ?? [];
   const statusList = statusData?.data ?? [];
@@ -65,18 +61,6 @@ const HomePage: React.FC = () => {
   };
 
   usePageTitle("监控首页");
-
-  const onAddHost = () => {
-    searchParams.set(HOST_DETAIL_TYPE_KEY, DetailPageType.Add);
-    setSearchParams(searchParams, { replace: true });
-  };
-
-  const onEditHost = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    searchParams.set(HOST_DETAIL_TYPE_KEY, DetailPageType.Edit);
-    searchParams.set(HOST_DETAIL_ID_KEY, id);
-    setSearchParams(searchParams, { replace: true });
-  };
 
   const onHostDeleteConfirm = (item: any, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -121,7 +105,14 @@ const HomePage: React.FC = () => {
                 {host.name}
               </Flex>
               <Space onClick={(e) => e.stopPropagation()}>
-                <Button onClick={(e) => onEditHost(host.id, e)}>编辑</Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    hostDetailActions.onEdit(host.id);
+                  }}
+                >
+                  编辑
+                </Button>
                 <Button
                   danger
                   icon={<CloseOutlined />}
@@ -146,7 +137,7 @@ const HomePage: React.FC = () => {
           <Flex gap={16} justify="space-between" align="center">
             <div className="text-4xl font-bold">监控服务</div>
             <Space>
-              <Button type="primary" onClick={onAddHost}>
+              <Button type="primary" onClick={hostDetailActions.onAdd}>
                 创建服务
               </Button>
             </Space>
@@ -173,7 +164,6 @@ const HomePage: React.FC = () => {
         </Flex>
       </Flex>
 
-      <HostDetailModal />
       {contextHolder}
     </>
   );

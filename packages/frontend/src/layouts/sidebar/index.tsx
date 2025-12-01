@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import s from "./styles.module.css";
 import { useAtomValue } from "jotai";
 import { stateUserJwtData } from "@/store/user";
@@ -7,6 +7,7 @@ import { UserRole } from "@/services/user";
 import { useGetMonitoredHostList } from "@/services/monitored-host";
 import { Button, Flex } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useHostDetailAction } from "@/pages/host-detail/use-detail-action";
 
 interface MenuItem {
   path: string;
@@ -15,15 +16,12 @@ interface MenuItem {
 
 export const Sidebar: FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const userInfo = useAtomValue(stateUserJwtData);
 
   const { data: hostsData } = useGetMonitoredHostList({});
   const hosts = hostsData?.data ?? [];
 
-  const handleCreateHost = () => {
-    navigate("/monitored-host?modal=add");
-  };
+  const hostDetailActions = useHostDetailAction();
 
   const menuItems: MenuItem[] = [
     {
@@ -115,7 +113,7 @@ export const Sidebar: FC = () => {
             className={`${s.toolBtn} keep-antd-style`}
             icon={<PlusOutlined />}
             block
-            onClick={handleCreateHost}
+            onClick={hostDetailActions.onAdd}
           >
             创建监控服务
           </Button>

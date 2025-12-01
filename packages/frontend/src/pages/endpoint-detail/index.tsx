@@ -17,10 +17,7 @@ import {
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
 import { CodeEditor } from "@/components/code-editor";
-
-export const DETAIL_TYPE_KEY = "ep-modal";
-
-export const DETAIL_ID_KEY = "ep-id";
+import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
 
 export const EndpointDetailModal: FC = () => {
   const { hostId } = useParams();

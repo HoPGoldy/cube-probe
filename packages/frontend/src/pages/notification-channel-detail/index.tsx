@@ -9,16 +9,17 @@ import {
   useGetChannelTemplates,
   ChannelCreateDto,
 } from "@/services/notification";
+import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
 
 const { TextArea } = Input;
 
-export const DetailModal: React.FC = () => {
+export const NotificationChannelDetailModal: React.FC = () => {
   const [form] = Form.useForm();
   const { message } = App.useApp();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const detailType = searchParams.get("modal");
-  const itemId = searchParams.get("id") ?? "";
+  const detailType = searchParams.get(DETAIL_TYPE_KEY);
+  const itemId = searchParams.get(DETAIL_ID_KEY) ?? "";
   const isOpen = !!detailType;
   const { isAdd, isEdit } = useDetailType(detailType ?? undefined);
 
@@ -49,8 +50,8 @@ export const DetailModal: React.FC = () => {
   }, [isEdit, isAdd, detailRecord, form]);
 
   const onClose = () => {
-    searchParams.delete("modal");
-    searchParams.delete("id");
+    searchParams.delete(DETAIL_TYPE_KEY);
+    searchParams.delete(DETAIL_ID_KEY);
     setSearchParams(searchParams, { replace: true });
     form.resetFields();
   };

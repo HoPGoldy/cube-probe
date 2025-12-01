@@ -7,6 +7,9 @@ import { Error403 } from "./pages/e403";
 import AttachmentDemo from "./pages/attachment-demo";
 import Login from "./pages/login";
 import Logout from "./pages/logout";
+import { HostDetailModal } from "./pages/host-detail";
+import { EndpointDetailModal } from "./pages/endpoint-detail";
+import { NotificationChannelDetailModal } from "./pages/notification-channel-detail";
 
 const lazyLoad = (
   compLoader: () => Promise<{ default: ComponentType<any> }>,
@@ -42,8 +45,8 @@ export const routes = createBrowserRouter(
         },
         // 监控服务详情
         {
-          path: "/host-detail/:hostId",
-          element: lazyLoad(() => import("./pages/host-detail")),
+          path: "/host-home/:hostId",
+          element: lazyLoad(() => import("./pages/host-home")),
         },
         // 通知渠道管理
         {
@@ -69,6 +72,9 @@ export const routes = createBrowserRouter(
       element: (
         <LoginAuth>
           <AppContainer />
+          <HostDetailModal />
+          <EndpointDetailModal />
+          <NotificationChannelDetailModal />
         </LoginAuth>
       ),
     },
