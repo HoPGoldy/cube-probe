@@ -162,18 +162,6 @@ export const HostDetailModal: FC = () => {
               />
             </Form.Item>
 
-            <Form.Item
-              label="探测间隔 (秒)"
-              name="intervalTime"
-              tooltip="定时探测的间隔时间（秒），端点可以继承此配置"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                min={1}
-                placeholder="例如: 60 (每60秒执行一次)"
-              />
-            </Form.Item>
-
             <Form.Item label="启用状态" name="enabled" valuePropName="checked">
               <Switch checkedChildren="启用" unCheckedChildren="禁用" />
             </Form.Item>

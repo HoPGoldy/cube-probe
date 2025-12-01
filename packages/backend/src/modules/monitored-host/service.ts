@@ -52,7 +52,6 @@ export class MonitoredHostService {
         url: updateData.url,
         headers:
           updateData.headers !== undefined ? updateData.headers : undefined,
-        intervalTime: updateData.intervalTime,
         enabled: updateData.enabled,
         notifyEnabled: updateData.notifyEnabled,
         notifyFailureCount: updateData.notifyFailureCount,

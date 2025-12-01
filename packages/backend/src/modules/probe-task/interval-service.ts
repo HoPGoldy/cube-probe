@@ -449,9 +449,7 @@ export class IntervalProbeService {
 
     // 为每个 endpoint 调度任务
     for (const endpoint of endpoints) {
-      // 使用 endpoint 的 intervalTime，如果没有则使用 service 的 intervalTime
-      const intervalTime =
-        endpoint.intervalTime || endpoint.service.intervalTime;
+      const intervalTime = endpoint.intervalTime;
 
       if (intervalTime && intervalTime > 0) {
         await this.addEndpointToScheduler(endpoint.id, intervalTime);
@@ -494,9 +492,8 @@ export class IntervalProbeService {
       return;
     }
 
-    // 如果未提供间隔时间，从 endpoint 或 service 获取
-    const effectiveInterval =
-      intervalSeconds ?? endpoint.intervalTime ?? endpoint.service.intervalTime;
+    // 如果未提供间隔时间，从 endpoint 获取
+    const effectiveInterval = intervalSeconds ?? endpoint.intervalTime;
 
     // 验证间隔时间
     if (!effectiveInterval || effectiveInterval <= 0) {

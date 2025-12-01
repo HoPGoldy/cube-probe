@@ -84,15 +84,14 @@ enum EndPointType {
 }
 
 model Service {
-  id           String     @id @default(uuid())
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  name         String
-  url          String?
-  headers      Json?
-  intervalTime Int? // in seconds
-  enabled      Boolean    @default(true)
-  endpoints    EndPoint[]
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
+  url       String?
+  headers   Json?
+  enabled   Boolean    @default(true)
+  endpoints EndPoint[]
 
   // 通知配置
   notifyEnabled      Boolean @default(false) // 是否启用通知

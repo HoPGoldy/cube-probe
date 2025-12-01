@@ -10,9 +10,6 @@ export const SchemaServiceCreate = Type.Object({
   }),
   url: Type.Optional(Type.String({ description: "服务基础URL" })),
   headers: Type.Optional(Type.Any({ description: "自定义请求头JSON" })),
-  intervalTime: Type.Optional(
-    Type.Integer({ description: "默认探测间隔时间(秒)", minimum: 1 }),
-  ),
   enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
   // 通知配置
   notifyEnabled: Type.Optional(
@@ -57,7 +54,6 @@ export const SchemaServiceDetail = Type.Object({
   name: Type.String(),
   url: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
-  intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
   // 通知配置
   notifyEnabled: Type.Boolean(),
@@ -163,7 +159,6 @@ export const createServiceDetailVo = (
     name: data.name,
     url: data.url,
     headers: data.headers,
-    intervalTime: data.intervalTime,
     enabled: data.enabled,
     notifyEnabled: data.notifyEnabled,
     notifyFailureCount: data.notifyFailureCount,

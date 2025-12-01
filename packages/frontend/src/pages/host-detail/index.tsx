@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import {
   useDeleteMonitoredHost,
   useGetMonitoredHostDetail,
@@ -48,6 +48,7 @@ import { StatCard, getUptimeColor } from "@/components/stat-card";
 
 const HostDetailPage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
+  const navigate = useNavigate();
   const [modal, contextHolder] = Modal.useModal();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -121,6 +122,7 @@ const HostDetailPage: React.FC = () => {
       content: "删除后该服务下的所有监控端点也将被删除",
       onOk: async () => {
         await deleteHost(item.id);
+        navigate("/");
       },
     });
   };

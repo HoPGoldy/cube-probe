@@ -107,6 +107,7 @@ const HomePage: React.FC = () => {
     return (
       <Card
         key={host.id}
+        className="hover:ring-2 ring-gray-300 dark:ring-neutral-500 transition-all cursor-pointer"
         styles={{ body: { padding: 16 } }}
         onClick={() => onHostClick(host.id)}
       >
