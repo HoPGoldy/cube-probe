@@ -26,6 +26,11 @@ export interface MonitoredHostCreateDto {
   headers?: any;
   intervalTime?: number;
   enabled?: boolean;
+  // 通知配置
+  notifyEnabled?: boolean;
+  notifyFailureCount?: number;
+  notifyCooldownMin?: number;
+  notifyChannelIds?: string[];
 }
 
 export const useCreateMonitoredHost = () => {

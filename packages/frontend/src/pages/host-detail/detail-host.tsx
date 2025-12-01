@@ -1,12 +1,22 @@
 import { useDetailType } from "@/utils/use-detail-type";
 import { FC, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Form, Input, InputNumber, Modal, Skeleton, Switch } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Skeleton,
+  Switch,
+  Select,
+  Divider,
+} from "antd";
 import {
   useCreateMonitoredHost,
   useGetMonitoredHostDetail,
   useUpdateMonitoredHost,
 } from "@/services/monitored-host";
+import { useGetChannelList } from "@/services/notification";
 
 export const DETAIL_TYPE_KEY = "host-modal";
 
@@ -26,8 +36,10 @@ export const HostDetailModal: FC = () => {
     useUpdateMonitoredHost();
   const { data: hostDetailResp, isLoading } =
     useGetMonitoredHostDetail(detailId);
+  const { data: channelsResp } = useGetChannelList();
 
   const hostDetail = hostDetailResp?.data;
+  const channels = channelsResp?.data ?? [];
 
   useEffect(() => {
     const convert = async () => {
@@ -105,6 +117,12 @@ export const HostDetailModal: FC = () => {
         afterClose={() => {
           form.resetFields();
         }}
+        styles={{
+          body: {
+            maxHeight: "70vh",
+            overflowY: "auto",
+          },
+        }}
       >
         <Form
           form={form}
@@ -112,12 +130,13 @@ export const HostDetailModal: FC = () => {
           disabled={isReadonly}
           initialValues={{
             enabled: true,
+            notifyEnabled: false,
+            notifyFailureCount: 3,
+            notifyCooldownMin: 30,
+            notifyChannelIds: [],
           }}
           style={{
             marginTop: 16,
-            // maxHeight: "60vh",
-            // overflowY: "auto",
-            // overflowX: "hidden",
           }}
         >
           <Skeleton active loading={isLoading}>
@@ -162,6 +181,58 @@ export const HostDetailModal: FC = () => {
 
             <Form.Item label="启用状态" name="enabled" valuePropName="checked">
               <Switch checkedChildren="启用" unCheckedChildren="禁用" />
+            </Form.Item>
+
+            <Divider>通知配置</Divider>
+
+            <Form.Item
+              label="启用通知"
+              name="notifyEnabled"
+              valuePropName="checked"
+              tooltip="开启后，当服务下的端点连续失败达到阈值时发送通知"
+            >
+              <Switch checkedChildren="开启" unCheckedChildren="关闭" />
+            </Form.Item>
+
+            <Form.Item
+              label="失败阈值"
+              name="notifyFailureCount"
+              tooltip="端点连续失败多少次后触发通知"
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                min={1}
+                max={100}
+                placeholder="默认: 3"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="冷却时间 (分钟)"
+              name="notifyCooldownMin"
+              tooltip="发送通知后的冷却时间，避免频繁通知"
+            >
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                max={1440}
+                placeholder="默认: 30"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="通知渠道"
+              name="notifyChannelIds"
+              tooltip="选择要发送通知的渠道"
+            >
+              <Select
+                mode="multiple"
+                placeholder="请选择通知渠道"
+                options={channels.map((c: any) => ({
+                  label: c.name,
+                  value: c.id,
+                }))}
+              />
             </Form.Item>
           </Skeleton>
         </Form>

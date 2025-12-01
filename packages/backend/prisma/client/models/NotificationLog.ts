@@ -27,8 +27,9 @@ export type AggregateNotificationLog = {
 export type NotificationLogMinAggregateOutputType = {
   id: string | null
   createdAt: Date | null
-  ruleId: string | null
+  serviceId: string | null
   endpointId: string | null
+  channelId: string | null
   eventType: string | null
   title: string | null
   content: string | null
@@ -39,8 +40,9 @@ export type NotificationLogMinAggregateOutputType = {
 export type NotificationLogMaxAggregateOutputType = {
   id: string | null
   createdAt: Date | null
-  ruleId: string | null
+  serviceId: string | null
   endpointId: string | null
+  channelId: string | null
   eventType: string | null
   title: string | null
   content: string | null
@@ -51,8 +53,9 @@ export type NotificationLogMaxAggregateOutputType = {
 export type NotificationLogCountAggregateOutputType = {
   id: number
   createdAt: number
-  ruleId: number
+  serviceId: number
   endpointId: number
+  channelId: number
   eventType: number
   title: number
   content: number
@@ -65,8 +68,9 @@ export type NotificationLogCountAggregateOutputType = {
 export type NotificationLogMinAggregateInputType = {
   id?: true
   createdAt?: true
-  ruleId?: true
+  serviceId?: true
   endpointId?: true
+  channelId?: true
   eventType?: true
   title?: true
   content?: true
@@ -77,8 +81,9 @@ export type NotificationLogMinAggregateInputType = {
 export type NotificationLogMaxAggregateInputType = {
   id?: true
   createdAt?: true
-  ruleId?: true
+  serviceId?: true
   endpointId?: true
+  channelId?: true
   eventType?: true
   title?: true
   content?: true
@@ -89,8 +94,9 @@ export type NotificationLogMaxAggregateInputType = {
 export type NotificationLogCountAggregateInputType = {
   id?: true
   createdAt?: true
-  ruleId?: true
+  serviceId?: true
   endpointId?: true
+  channelId?: true
   eventType?: true
   title?: true
   content?: true
@@ -174,8 +180,9 @@ export type NotificationLogGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type NotificationLogGroupByOutputType = {
   id: string
   createdAt: Date
-  ruleId: string
+  serviceId: string
   endpointId: string
+  channelId: string
   eventType: string
   title: string
   content: string
@@ -207,8 +214,9 @@ export type NotificationLogWhereInput = {
   NOT?: Prisma.NotificationLogWhereInput | Prisma.NotificationLogWhereInput[]
   id?: Prisma.StringFilter<"NotificationLog"> | string
   createdAt?: Prisma.DateTimeFilter<"NotificationLog"> | Date | string
-  ruleId?: Prisma.StringFilter<"NotificationLog"> | string
+  serviceId?: Prisma.StringFilter<"NotificationLog"> | string
   endpointId?: Prisma.StringFilter<"NotificationLog"> | string
+  channelId?: Prisma.StringFilter<"NotificationLog"> | string
   eventType?: Prisma.StringFilter<"NotificationLog"> | string
   title?: Prisma.StringFilter<"NotificationLog"> | string
   content?: Prisma.StringFilter<"NotificationLog"> | string
@@ -219,8 +227,9 @@ export type NotificationLogWhereInput = {
 export type NotificationLogOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  ruleId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
   endpointId?: Prisma.SortOrder
+  channelId?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -234,8 +243,9 @@ export type NotificationLogWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.NotificationLogWhereInput[]
   NOT?: Prisma.NotificationLogWhereInput | Prisma.NotificationLogWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"NotificationLog"> | Date | string
-  ruleId?: Prisma.StringFilter<"NotificationLog"> | string
+  serviceId?: Prisma.StringFilter<"NotificationLog"> | string
   endpointId?: Prisma.StringFilter<"NotificationLog"> | string
+  channelId?: Prisma.StringFilter<"NotificationLog"> | string
   eventType?: Prisma.StringFilter<"NotificationLog"> | string
   title?: Prisma.StringFilter<"NotificationLog"> | string
   content?: Prisma.StringFilter<"NotificationLog"> | string
@@ -246,8 +256,9 @@ export type NotificationLogWhereUniqueInput = Prisma.AtLeast<{
 export type NotificationLogOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  ruleId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
   endpointId?: Prisma.SortOrder
+  channelId?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -264,8 +275,9 @@ export type NotificationLogScalarWhereWithAggregatesInput = {
   NOT?: Prisma.NotificationLogScalarWhereWithAggregatesInput | Prisma.NotificationLogScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"NotificationLog"> | Date | string
-  ruleId?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
+  serviceId?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
   endpointId?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
+  channelId?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
   eventType?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
   title?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
   content?: Prisma.StringWithAggregatesFilter<"NotificationLog"> | string
@@ -276,8 +288,9 @@ export type NotificationLogScalarWhereWithAggregatesInput = {
 export type NotificationLogCreateInput = {
   id?: string
   createdAt?: Date | string
-  ruleId: string
+  serviceId: string
   endpointId: string
+  channelId: string
   eventType: string
   title: string
   content: string
@@ -288,8 +301,9 @@ export type NotificationLogCreateInput = {
 export type NotificationLogUncheckedCreateInput = {
   id?: string
   createdAt?: Date | string
-  ruleId: string
+  serviceId: string
   endpointId: string
+  channelId: string
   eventType: string
   title: string
   content: string
@@ -300,8 +314,9 @@ export type NotificationLogUncheckedCreateInput = {
 export type NotificationLogUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ruleId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   endpointId?: Prisma.StringFieldUpdateOperationsInput | string
+  channelId?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -312,8 +327,9 @@ export type NotificationLogUpdateInput = {
 export type NotificationLogUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ruleId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   endpointId?: Prisma.StringFieldUpdateOperationsInput | string
+  channelId?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -324,8 +340,9 @@ export type NotificationLogUncheckedUpdateInput = {
 export type NotificationLogCreateManyInput = {
   id?: string
   createdAt?: Date | string
-  ruleId: string
+  serviceId: string
   endpointId: string
+  channelId: string
   eventType: string
   title: string
   content: string
@@ -336,8 +353,9 @@ export type NotificationLogCreateManyInput = {
 export type NotificationLogUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ruleId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   endpointId?: Prisma.StringFieldUpdateOperationsInput | string
+  channelId?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -348,8 +366,9 @@ export type NotificationLogUpdateManyMutationInput = {
 export type NotificationLogUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ruleId?: Prisma.StringFieldUpdateOperationsInput | string
+  serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   endpointId?: Prisma.StringFieldUpdateOperationsInput | string
+  channelId?: Prisma.StringFieldUpdateOperationsInput | string
   eventType?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -360,8 +379,9 @@ export type NotificationLogUncheckedUpdateManyInput = {
 export type NotificationLogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  ruleId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
   endpointId?: Prisma.SortOrder
+  channelId?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -372,8 +392,9 @@ export type NotificationLogCountOrderByAggregateInput = {
 export type NotificationLogMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  ruleId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
   endpointId?: Prisma.SortOrder
+  channelId?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -384,8 +405,9 @@ export type NotificationLogMaxOrderByAggregateInput = {
 export type NotificationLogMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  ruleId?: Prisma.SortOrder
+  serviceId?: Prisma.SortOrder
   endpointId?: Prisma.SortOrder
+  channelId?: Prisma.SortOrder
   eventType?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
@@ -398,8 +420,9 @@ export type NotificationLogMinOrderByAggregateInput = {
 export type NotificationLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   createdAt?: boolean
-  ruleId?: boolean
+  serviceId?: boolean
   endpointId?: boolean
+  channelId?: boolean
   eventType?: boolean
   title?: boolean
   content?: boolean
@@ -410,8 +433,9 @@ export type NotificationLogSelect<ExtArgs extends runtime.Types.Extensions.Inter
 export type NotificationLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   createdAt?: boolean
-  ruleId?: boolean
+  serviceId?: boolean
   endpointId?: boolean
+  channelId?: boolean
   eventType?: boolean
   title?: boolean
   content?: boolean
@@ -422,8 +446,9 @@ export type NotificationLogSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
 export type NotificationLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   createdAt?: boolean
-  ruleId?: boolean
+  serviceId?: boolean
   endpointId?: boolean
+  channelId?: boolean
   eventType?: boolean
   title?: boolean
   content?: boolean
@@ -434,8 +459,9 @@ export type NotificationLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
 export type NotificationLogSelectScalar = {
   id?: boolean
   createdAt?: boolean
-  ruleId?: boolean
+  serviceId?: boolean
   endpointId?: boolean
+  channelId?: boolean
   eventType?: boolean
   title?: boolean
   content?: boolean
@@ -443,7 +469,7 @@ export type NotificationLogSelectScalar = {
   errorMsg?: boolean
 }
 
-export type NotificationLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "ruleId" | "endpointId" | "eventType" | "title" | "content" | "success" | "errorMsg", ExtArgs["result"]["notificationLog"]>
+export type NotificationLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "serviceId" | "endpointId" | "channelId" | "eventType" | "title" | "content" | "success" | "errorMsg", ExtArgs["result"]["notificationLog"]>
 
 export type $NotificationLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NotificationLog"
@@ -451,8 +477,9 @@ export type $NotificationLogPayload<ExtArgs extends runtime.Types.Extensions.Int
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     createdAt: Date
-    ruleId: string
+    serviceId: string
     endpointId: string
+    channelId: string
     eventType: string
     title: string
     content: string
@@ -883,8 +910,9 @@ export interface Prisma__NotificationLogClient<T, Null = never, ExtArgs extends 
 export interface NotificationLogFieldRefs {
   readonly id: Prisma.FieldRef<"NotificationLog", 'String'>
   readonly createdAt: Prisma.FieldRef<"NotificationLog", 'DateTime'>
-  readonly ruleId: Prisma.FieldRef<"NotificationLog", 'String'>
+  readonly serviceId: Prisma.FieldRef<"NotificationLog", 'String'>
   readonly endpointId: Prisma.FieldRef<"NotificationLog", 'String'>
+  readonly channelId: Prisma.FieldRef<"NotificationLog", 'String'>
   readonly eventType: Prisma.FieldRef<"NotificationLog", 'String'>
   readonly title: Prisma.FieldRef<"NotificationLog", 'String'>
   readonly content: Prisma.FieldRef<"NotificationLog", 'String'>

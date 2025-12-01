@@ -59,10 +59,6 @@ export const Sidebar: FC = () => {
         name: "通知渠道",
       },
       {
-        path: "/notification-rule",
-        name: "通知规则",
-      },
-      {
         path: "/notification-log",
         name: "通知记录",
       },

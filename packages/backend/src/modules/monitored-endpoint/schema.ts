@@ -14,6 +14,29 @@ export const SchemaServiceCreate = Type.Object({
     Type.Integer({ description: "默认探测间隔时间(秒)", minimum: 1 }),
   ),
   enabled: Type.Optional(Type.Boolean({ description: "是否启用" })),
+  // 通知配置
+  notifyEnabled: Type.Optional(
+    Type.Boolean({ description: "是否启用通知", default: false }),
+  ),
+  notifyFailureCount: Type.Optional(
+    Type.Integer({
+      description: "连续失败N次触发通知",
+      minimum: 1,
+      maximum: 100,
+      default: 3,
+    }),
+  ),
+  notifyCooldownMin: Type.Optional(
+    Type.Integer({
+      description: "冷却时间(分钟)",
+      minimum: 0,
+      maximum: 1440,
+      default: 30,
+    }),
+  ),
+  notifyChannelIds: Type.Optional(
+    Type.Array(Type.String(), { description: "通知渠道ID数组" }),
+  ),
 });
 
 export type SchemaServiceCreateType = Type.Static<typeof SchemaServiceCreate>;
@@ -36,6 +59,11 @@ export const SchemaServiceDetail = Type.Object({
   headers: Type.Union([Type.Any(), Type.Null()]),
   intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
+  // 通知配置
+  notifyEnabled: Type.Boolean(),
+  notifyFailureCount: Type.Integer(),
+  notifyCooldownMin: Type.Integer(),
+  notifyChannelIds: Type.Array(Type.String()),
 });
 
 export type SchemaServiceDetailType = Type.Static<typeof SchemaServiceDetail>;
@@ -168,6 +196,10 @@ export const createServiceDetailVo = (
     headers: data.headers,
     intervalTime: data.intervalTime,
     enabled: data.enabled,
+    notifyEnabled: data.notifyEnabled,
+    notifyFailureCount: data.notifyFailureCount,
+    notifyCooldownMin: data.notifyCooldownMin,
+    notifyChannelIds: data.notifyChannelIds as string[],
   };
 };
 

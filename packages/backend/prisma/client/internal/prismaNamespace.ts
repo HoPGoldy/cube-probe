@@ -395,7 +395,6 @@ export const ModelName = {
   ProbeHourlyStat: 'ProbeHourlyStat',
   ProbeDailyStat: 'ProbeDailyStat',
   NotificationChannel: 'NotificationChannel',
-  NotificationRule: 'NotificationRule',
   NotificationLog: 'NotificationLog'
 } as const
 
@@ -412,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat" | "notificationChannel" | "notificationRule" | "notificationLog"
+    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat" | "notificationChannel" | "notificationLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1230,80 +1229,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    NotificationRule: {
-      payload: Prisma.$NotificationRulePayload<ExtArgs>
-      fields: Prisma.NotificationRuleFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.NotificationRuleFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.NotificationRuleFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>
-        }
-        findFirst: {
-          args: Prisma.NotificationRuleFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.NotificationRuleFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>
-        }
-        findMany: {
-          args: Prisma.NotificationRuleFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>[]
-        }
-        create: {
-          args: Prisma.NotificationRuleCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>
-        }
-        createMany: {
-          args: Prisma.NotificationRuleCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.NotificationRuleCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>[]
-        }
-        delete: {
-          args: Prisma.NotificationRuleDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>
-        }
-        update: {
-          args: Prisma.NotificationRuleUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>
-        }
-        deleteMany: {
-          args: Prisma.NotificationRuleDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.NotificationRuleUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.NotificationRuleUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>[]
-        }
-        upsert: {
-          args: Prisma.NotificationRuleUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationRulePayload>
-        }
-        aggregate: {
-          args: Prisma.NotificationRuleAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateNotificationRule>
-        }
-        groupBy: {
-          args: Prisma.NotificationRuleGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.NotificationRuleGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.NotificationRuleCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.NotificationRuleCountAggregateOutputType> | number
-        }
-      }
-    }
     NotificationLog: {
       payload: Prisma.$NotificationLogPayload<ExtArgs>
       fields: Prisma.NotificationLogFieldRefs
@@ -1490,7 +1415,11 @@ export const ServiceScalarFieldEnum = {
   url: 'url',
   headers: 'headers',
   intervalTime: 'intervalTime',
-  enabled: 'enabled'
+  enabled: 'enabled',
+  notifyEnabled: 'notifyEnabled',
+  notifyFailureCount: 'notifyFailureCount',
+  notifyCooldownMin: 'notifyCooldownMin',
+  notifyChannelIds: 'notifyChannelIds'
 } as const
 
 export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
@@ -1571,29 +1500,12 @@ export const NotificationChannelScalarFieldEnum = {
 export type NotificationChannelScalarFieldEnum = (typeof NotificationChannelScalarFieldEnum)[keyof typeof NotificationChannelScalarFieldEnum]
 
 
-export const NotificationRuleScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  name: 'name',
-  enabled: 'enabled',
-  scopeType: 'scopeType',
-  hostId: 'hostId',
-  endpointId: 'endpointId',
-  consecutiveFailures: 'consecutiveFailures',
-  cooldownMinutes: 'cooldownMinutes',
-  notifyOnRecovery: 'notifyOnRecovery',
-  channelId: 'channelId'
-} as const
-
-export type NotificationRuleScalarFieldEnum = (typeof NotificationRuleScalarFieldEnum)[keyof typeof NotificationRuleScalarFieldEnum]
-
-
 export const NotificationLogScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  ruleId: 'ruleId',
+  serviceId: 'serviceId',
   endpointId: 'endpointId',
+  channelId: 'channelId',
   eventType: 'eventType',
   title: 'title',
   content: 'content',
@@ -1618,6 +1530,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullsOrder = {
@@ -1713,13 +1632,6 @@ export type EnumEndPointTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
-
-/**
- * Reference to a field of type 'NotificationScopeType'
- */
-export type EnumNotificationScopeTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationScopeType'>
-    
-
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1810,7 +1722,6 @@ export type GlobalOmitConfig = {
   probeHourlyStat?: Prisma.ProbeHourlyStatOmit
   probeDailyStat?: Prisma.ProbeDailyStatOmit
   notificationChannel?: Prisma.NotificationChannelOmit
-  notificationRule?: Prisma.NotificationRuleOmit
   notificationLog?: Prisma.NotificationLogOmit
 }
 

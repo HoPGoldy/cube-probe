@@ -22,6 +22,10 @@ describe("PrismaMock", () => {
           headers: null,
           createdAt: new Date(),
           updatedAt: new Date(),
+          notifyEnabled: false,
+          notifyFailureCount: 3,
+          notifyCooldownMin: 30,
+          notifyChannelIds: [],
         },
       ]);
 
@@ -42,6 +46,10 @@ describe("PrismaMock", () => {
         headers: null,
         createdAt: new Date(),
         updatedAt: new Date(),
+        notifyEnabled: false,
+        notifyFailureCount: 3,
+        notifyCooldownMin: 30,
+        notifyChannelIds: [],
       };
 
       prismaMock.service.create.mockResolvedValue(mockService);
@@ -70,6 +78,10 @@ describe("PrismaMock", () => {
         headers: null,
         createdAt: new Date(),
         updatedAt: new Date(),
+        notifyEnabled: false,
+        notifyFailureCount: 3,
+        notifyCooldownMin: 30,
+        notifyChannelIds: [],
       });
 
       const found = await prismaMock.service.findUnique({
@@ -239,6 +251,10 @@ describe("PrismaMock", () => {
           headers: null,
           createdAt: new Date(),
           updatedAt: new Date(),
+          notifyEnabled: false,
+          notifyFailureCount: 3,
+          notifyCooldownMin: 30,
+          notifyChannelIds: [],
         },
       ]);
 
@@ -271,6 +287,10 @@ describe("PrismaMock", () => {
         headers: null,
         createdAt: new Date(),
         updatedAt: new Date(),
+        notifyEnabled: false,
+        notifyFailureCount: 3,
+        notifyCooldownMin: 30,
+        notifyChannelIds: [],
       });
 
       await prismaMock.service.create({ data: { name: "Test 1" } });

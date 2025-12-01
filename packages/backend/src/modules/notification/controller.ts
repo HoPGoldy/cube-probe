@@ -7,14 +7,9 @@ import {
   SchemaChannelDelete,
   SchemaChannelDetail,
   SchemaChannelTest,
-  SchemaRuleCreate,
-  SchemaRuleUpdate,
-  SchemaRuleDelete,
-  SchemaRuleDetail,
   SchemaLogList,
   SchemaLogDetail,
   createChannelDetailVo,
-  createRuleDetailVo,
   createLogDetailVo,
 } from "./schema";
 import {
@@ -184,99 +179,6 @@ export const registerController = async (options: ControllerOptions) => {
           template: GENERIC_WEBHOOK_TEMPLATE,
         },
       ];
-    },
-  );
-
-  // ==================== Rule APIs ====================
-
-  server.post(
-    "/notification/rule/create",
-    {
-      schema: {
-        description: "创建通知规则",
-        body: SchemaRuleCreate,
-        response: {
-          200: SchemaRuleDetail,
-        },
-      },
-    },
-    async (req) => {
-      const result = await notificationService.createRule(req.body);
-      return createRuleDetailVo(result);
-    },
-  );
-
-  server.post(
-    "/notification/rule/update",
-    {
-      schema: {
-        description: "更新通知规则",
-        body: SchemaRuleUpdate,
-        response: {
-          200: SchemaRuleDetail,
-        },
-      },
-    },
-    async (req) => {
-      const result = await notificationService.updateRule(req.body);
-      return createRuleDetailVo(result);
-    },
-  );
-
-  server.post(
-    "/notification/rule/delete",
-    {
-      schema: {
-        description: "删除通知规则",
-        body: SchemaRuleDelete,
-        response: {
-          200: Type.Object({
-            success: Type.Boolean(),
-          }),
-        },
-      },
-    },
-    async (req) => {
-      await notificationService.deleteRule(req.body.id);
-      return { success: true };
-    },
-  );
-
-  server.post(
-    "/notification/rule/list",
-    {
-      schema: {
-        description: "获取通知规则列表",
-        response: {
-          200: Type.Array(SchemaRuleDetail),
-        },
-      },
-    },
-    async () => {
-      const result = await notificationService.listRules();
-      return result.map(createRuleDetailVo);
-    },
-  );
-
-  server.post(
-    "/notification/rule/get",
-    {
-      schema: {
-        description: "获取通知规则详情",
-        body: Type.Object({
-          id: Type.String(),
-        }),
-        response: {
-          200: SchemaRuleDetail,
-        },
-      },
-    },
-    async (req) => {
-      const result = await notificationService.getRuleById(req.body.id);
-      if (!result) {
-        throw new Error("Rule not found");
-      }
-      return createRuleDetailVo(result);
     },
   );
 

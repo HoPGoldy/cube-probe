@@ -95,11 +95,6 @@ export type ProbeDailyStat = Prisma.ProbeDailyStatModel
  */
 export type NotificationChannel = Prisma.NotificationChannelModel
 /**
- * Model NotificationRule
- * 
- */
-export type NotificationRule = Prisma.NotificationRuleModel
-/**
  * Model NotificationLog
  * 
  */

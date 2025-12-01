@@ -202,7 +202,6 @@ export type NotificationChannelWhereInput = {
   headers?: Prisma.JsonNullableFilter<"NotificationChannel">
   bodyTemplate?: Prisma.StringFilter<"NotificationChannel"> | string
   enabled?: Prisma.BoolFilter<"NotificationChannel"> | boolean
-  rules?: Prisma.NotificationRuleListRelationFilter
 }
 
 export type NotificationChannelOrderByWithRelationInput = {
@@ -214,7 +213,6 @@ export type NotificationChannelOrderByWithRelationInput = {
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
   bodyTemplate?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
-  rules?: Prisma.NotificationRuleOrderByRelationAggregateInput
 }
 
 export type NotificationChannelWhereUniqueInput = Prisma.AtLeast<{
@@ -229,7 +227,6 @@ export type NotificationChannelWhereUniqueInput = Prisma.AtLeast<{
   headers?: Prisma.JsonNullableFilter<"NotificationChannel">
   bodyTemplate?: Prisma.StringFilter<"NotificationChannel"> | string
   enabled?: Prisma.BoolFilter<"NotificationChannel"> | boolean
-  rules?: Prisma.NotificationRuleListRelationFilter
 }, "id">
 
 export type NotificationChannelOrderByWithAggregationInput = {
@@ -269,7 +266,6 @@ export type NotificationChannelCreateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   bodyTemplate: string
   enabled?: boolean
-  rules?: Prisma.NotificationRuleCreateNestedManyWithoutChannelInput
 }
 
 export type NotificationChannelUncheckedCreateInput = {
@@ -281,7 +277,6 @@ export type NotificationChannelUncheckedCreateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   bodyTemplate: string
   enabled?: boolean
-  rules?: Prisma.NotificationRuleUncheckedCreateNestedManyWithoutChannelInput
 }
 
 export type NotificationChannelUpdateInput = {
@@ -293,7 +288,6 @@ export type NotificationChannelUpdateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   bodyTemplate?: Prisma.StringFieldUpdateOperationsInput | string
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rules?: Prisma.NotificationRuleUpdateManyWithoutChannelNestedInput
 }
 
 export type NotificationChannelUncheckedUpdateInput = {
@@ -305,7 +299,6 @@ export type NotificationChannelUncheckedUpdateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   bodyTemplate?: Prisma.StringFieldUpdateOperationsInput | string
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  rules?: Prisma.NotificationRuleUncheckedUpdateManyWithoutChannelNestedInput
 }
 
 export type NotificationChannelCreateManyInput = {
@@ -372,114 +365,6 @@ export type NotificationChannelMinOrderByAggregateInput = {
   enabled?: Prisma.SortOrder
 }
 
-export type NotificationChannelScalarRelationFilter = {
-  is?: Prisma.NotificationChannelWhereInput
-  isNot?: Prisma.NotificationChannelWhereInput
-}
-
-export type NotificationChannelCreateNestedOneWithoutRulesInput = {
-  create?: Prisma.XOR<Prisma.NotificationChannelCreateWithoutRulesInput, Prisma.NotificationChannelUncheckedCreateWithoutRulesInput>
-  connectOrCreate?: Prisma.NotificationChannelCreateOrConnectWithoutRulesInput
-  connect?: Prisma.NotificationChannelWhereUniqueInput
-}
-
-export type NotificationChannelUpdateOneRequiredWithoutRulesNestedInput = {
-  create?: Prisma.XOR<Prisma.NotificationChannelCreateWithoutRulesInput, Prisma.NotificationChannelUncheckedCreateWithoutRulesInput>
-  connectOrCreate?: Prisma.NotificationChannelCreateOrConnectWithoutRulesInput
-  upsert?: Prisma.NotificationChannelUpsertWithoutRulesInput
-  connect?: Prisma.NotificationChannelWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.NotificationChannelUpdateToOneWithWhereWithoutRulesInput, Prisma.NotificationChannelUpdateWithoutRulesInput>, Prisma.NotificationChannelUncheckedUpdateWithoutRulesInput>
-}
-
-export type NotificationChannelCreateWithoutRulesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  name: string
-  webhookUrl: string
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  bodyTemplate: string
-  enabled?: boolean
-}
-
-export type NotificationChannelUncheckedCreateWithoutRulesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  name: string
-  webhookUrl: string
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  bodyTemplate: string
-  enabled?: boolean
-}
-
-export type NotificationChannelCreateOrConnectWithoutRulesInput = {
-  where: Prisma.NotificationChannelWhereUniqueInput
-  create: Prisma.XOR<Prisma.NotificationChannelCreateWithoutRulesInput, Prisma.NotificationChannelUncheckedCreateWithoutRulesInput>
-}
-
-export type NotificationChannelUpsertWithoutRulesInput = {
-  update: Prisma.XOR<Prisma.NotificationChannelUpdateWithoutRulesInput, Prisma.NotificationChannelUncheckedUpdateWithoutRulesInput>
-  create: Prisma.XOR<Prisma.NotificationChannelCreateWithoutRulesInput, Prisma.NotificationChannelUncheckedCreateWithoutRulesInput>
-  where?: Prisma.NotificationChannelWhereInput
-}
-
-export type NotificationChannelUpdateToOneWithWhereWithoutRulesInput = {
-  where?: Prisma.NotificationChannelWhereInput
-  data: Prisma.XOR<Prisma.NotificationChannelUpdateWithoutRulesInput, Prisma.NotificationChannelUncheckedUpdateWithoutRulesInput>
-}
-
-export type NotificationChannelUpdateWithoutRulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  webhookUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  bodyTemplate?: Prisma.StringFieldUpdateOperationsInput | string
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-}
-
-export type NotificationChannelUncheckedUpdateWithoutRulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  webhookUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  bodyTemplate?: Prisma.StringFieldUpdateOperationsInput | string
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-}
-
-
-/**
- * Count Type NotificationChannelCountOutputType
- */
-
-export type NotificationChannelCountOutputType = {
-  rules: number
-}
-
-export type NotificationChannelCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  rules?: boolean | NotificationChannelCountOutputTypeCountRulesArgs
-}
-
-/**
- * NotificationChannelCountOutputType without action
- */
-export type NotificationChannelCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the NotificationChannelCountOutputType
-   */
-  select?: Prisma.NotificationChannelCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * NotificationChannelCountOutputType without action
- */
-export type NotificationChannelCountOutputTypeCountRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationRuleWhereInput
-}
 
 
 export type NotificationChannelSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -491,8 +376,6 @@ export type NotificationChannelSelect<ExtArgs extends runtime.Types.Extensions.I
   headers?: boolean
   bodyTemplate?: boolean
   enabled?: boolean
-  rules?: boolean | Prisma.NotificationChannel$rulesArgs<ExtArgs>
-  _count?: boolean | Prisma.NotificationChannelCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["notificationChannel"]>
 
 export type NotificationChannelSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -529,18 +412,10 @@ export type NotificationChannelSelectScalar = {
 }
 
 export type NotificationChannelOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "webhookUrl" | "headers" | "bodyTemplate" | "enabled", ExtArgs["result"]["notificationChannel"]>
-export type NotificationChannelInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  rules?: boolean | Prisma.NotificationChannel$rulesArgs<ExtArgs>
-  _count?: boolean | Prisma.NotificationChannelCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type NotificationChannelIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type NotificationChannelIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $NotificationChannelPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "NotificationChannel"
-  objects: {
-    rules: Prisma.$NotificationRulePayload<ExtArgs>[]
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     createdAt: Date
@@ -944,7 +819,6 @@ readonly fields: NotificationChannelFieldRefs;
  */
 export interface Prisma__NotificationChannelClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  rules<T extends Prisma.NotificationChannel$rulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.NotificationChannel$rulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -999,10 +873,6 @@ export type NotificationChannelFindUniqueArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
-  /**
    * Filter, which NotificationChannel to fetch.
    */
   where: Prisma.NotificationChannelWhereUniqueInput
@@ -1021,10 +891,6 @@ export type NotificationChannelFindUniqueOrThrowArgs<ExtArgs extends runtime.Typ
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
-  /**
    * Filter, which NotificationChannel to fetch.
    */
   where: Prisma.NotificationChannelWhereUniqueInput
@@ -1042,10 +908,6 @@ export type NotificationChannelFindFirstArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the NotificationChannel
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
   /**
    * Filter, which NotificationChannel to fetch.
    */
@@ -1095,10 +957,6 @@ export type NotificationChannelFindFirstOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
-  /**
    * Filter, which NotificationChannel to fetch.
    */
   where?: Prisma.NotificationChannelWhereInput
@@ -1147,10 +1005,6 @@ export type NotificationChannelFindManyArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
-  /**
    * Filter, which NotificationChannels to fetch.
    */
   where?: Prisma.NotificationChannelWhereInput
@@ -1193,10 +1047,6 @@ export type NotificationChannelCreateArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the NotificationChannel
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
   /**
    * The data needed to create a NotificationChannel.
    */
@@ -1243,10 +1093,6 @@ export type NotificationChannelUpdateArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the NotificationChannel
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
   /**
    * The data needed to update a NotificationChannel.
    */
@@ -1314,10 +1160,6 @@ export type NotificationChannelUpsertArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
-  /**
    * The filter to search for the NotificationChannel to update in case it exists.
    */
   where: Prisma.NotificationChannelWhereUniqueInput
@@ -1344,10 +1186,6 @@ export type NotificationChannelDeleteArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
-  /**
    * Filter which NotificationChannel to delete.
    */
   where: Prisma.NotificationChannelWhereUniqueInput
@@ -1368,30 +1206,6 @@ export type NotificationChannelDeleteManyArgs<ExtArgs extends runtime.Types.Exte
 }
 
 /**
- * NotificationChannel.rules
- */
-export type NotificationChannel$rulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the NotificationRule
-   */
-  select?: Prisma.NotificationRuleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the NotificationRule
-   */
-  omit?: Prisma.NotificationRuleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationRuleInclude<ExtArgs> | null
-  where?: Prisma.NotificationRuleWhereInput
-  orderBy?: Prisma.NotificationRuleOrderByWithRelationInput | Prisma.NotificationRuleOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationRuleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.NotificationRuleScalarFieldEnum | Prisma.NotificationRuleScalarFieldEnum[]
-}
-
-/**
  * NotificationChannel without action
  */
 export type NotificationChannelDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1403,8 +1217,4 @@ export type NotificationChannelDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the NotificationChannel
    */
   omit?: Prisma.NotificationChannelOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationChannelInclude<ExtArgs> | null
 }

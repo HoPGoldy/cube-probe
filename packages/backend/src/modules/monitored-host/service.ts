@@ -15,6 +15,10 @@ export class MonitoredHostService {
         url: data.url,
         headers: data.headers || null,
         enabled: data.enabled ?? true,
+        notifyEnabled: data.notifyEnabled ?? false,
+        notifyFailureCount: data.notifyFailureCount ?? 3,
+        notifyCooldownMin: data.notifyCooldownMin ?? 30,
+        notifyChannelIds: data.notifyChannelIds ?? [],
       },
     });
   }
@@ -44,9 +48,16 @@ export class MonitoredHostService {
     return await this.options.prisma.service.update({
       where: { id },
       data: {
-        ...updateData,
+        name: updateData.name,
+        url: updateData.url,
         headers:
           updateData.headers !== undefined ? updateData.headers : undefined,
+        intervalTime: updateData.intervalTime,
+        enabled: updateData.enabled,
+        notifyEnabled: updateData.notifyEnabled,
+        notifyFailureCount: updateData.notifyFailureCount,
+        notifyCooldownMin: updateData.notifyCooldownMin,
+        notifyChannelIds: updateData.notifyChannelIds,
       },
     });
   }

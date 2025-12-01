@@ -40,35 +40,15 @@ export const routes = createBrowserRouter(
           path: "/setting-application",
           element: lazyLoad(() => import("./pages/setting-application")),
         },
-        // 监控服务管理
-        {
-          path: "/monitored-host",
-          element: lazyLoad(() => import("./pages/monitored-host")),
-        },
         // 监控服务详情
         {
           path: "/host-detail/:hostId",
           element: lazyLoad(() => import("./pages/host-detail")),
         },
-        // 监控端点管理
-        {
-          path: "/monitored-endpoint",
-          element: lazyLoad(() => import("./pages/monitored-endpoint")),
-        },
-        // 探测结果管理
-        {
-          path: "/probe-result",
-          element: lazyLoad(() => import("./pages/probe-result")),
-        },
         // 通知渠道管理
         {
           path: "/notification-channel",
           element: lazyLoad(() => import("./pages/notification-channel")),
-        },
-        // 通知规则管理
-        {
-          path: "/notification-rule",
-          element: lazyLoad(() => import("./pages/notification-rule")),
         },
         // 通知记录
         {

@@ -62,7 +62,6 @@ export const ModelName = {
   ProbeHourlyStat: 'ProbeHourlyStat',
   ProbeDailyStat: 'ProbeDailyStat',
   NotificationChannel: 'NotificationChannel',
-  NotificationRule: 'NotificationRule',
   NotificationLog: 'NotificationLog'
 } as const
 
@@ -155,7 +154,11 @@ export const ServiceScalarFieldEnum = {
   url: 'url',
   headers: 'headers',
   intervalTime: 'intervalTime',
-  enabled: 'enabled'
+  enabled: 'enabled',
+  notifyEnabled: 'notifyEnabled',
+  notifyFailureCount: 'notifyFailureCount',
+  notifyCooldownMin: 'notifyCooldownMin',
+  notifyChannelIds: 'notifyChannelIds'
 } as const
 
 export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
@@ -236,29 +239,12 @@ export const NotificationChannelScalarFieldEnum = {
 export type NotificationChannelScalarFieldEnum = (typeof NotificationChannelScalarFieldEnum)[keyof typeof NotificationChannelScalarFieldEnum]
 
 
-export const NotificationRuleScalarFieldEnum = {
-  id: 'id',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  name: 'name',
-  enabled: 'enabled',
-  scopeType: 'scopeType',
-  hostId: 'hostId',
-  endpointId: 'endpointId',
-  consecutiveFailures: 'consecutiveFailures',
-  cooldownMinutes: 'cooldownMinutes',
-  notifyOnRecovery: 'notifyOnRecovery',
-  channelId: 'channelId'
-} as const
-
-export type NotificationRuleScalarFieldEnum = (typeof NotificationRuleScalarFieldEnum)[keyof typeof NotificationRuleScalarFieldEnum]
-
-
 export const NotificationLogScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  ruleId: 'ruleId',
+  serviceId: 'serviceId',
   endpointId: 'endpointId',
+  channelId: 'channelId',
   eventType: 'eventType',
   title: 'title',
   content: 'content',
@@ -283,6 +269,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullsOrder = {

@@ -28,10 +28,14 @@ export type AggregateService = {
 
 export type ServiceAvgAggregateOutputType = {
   intervalTime: number | null
+  notifyFailureCount: number | null
+  notifyCooldownMin: number | null
 }
 
 export type ServiceSumAggregateOutputType = {
   intervalTime: number | null
+  notifyFailureCount: number | null
+  notifyCooldownMin: number | null
 }
 
 export type ServiceMinAggregateOutputType = {
@@ -42,6 +46,9 @@ export type ServiceMinAggregateOutputType = {
   url: string | null
   intervalTime: number | null
   enabled: boolean | null
+  notifyEnabled: boolean | null
+  notifyFailureCount: number | null
+  notifyCooldownMin: number | null
 }
 
 export type ServiceMaxAggregateOutputType = {
@@ -52,6 +59,9 @@ export type ServiceMaxAggregateOutputType = {
   url: string | null
   intervalTime: number | null
   enabled: boolean | null
+  notifyEnabled: boolean | null
+  notifyFailureCount: number | null
+  notifyCooldownMin: number | null
 }
 
 export type ServiceCountAggregateOutputType = {
@@ -63,16 +73,24 @@ export type ServiceCountAggregateOutputType = {
   headers: number
   intervalTime: number
   enabled: number
+  notifyEnabled: number
+  notifyFailureCount: number
+  notifyCooldownMin: number
+  notifyChannelIds: number
   _all: number
 }
 
 
 export type ServiceAvgAggregateInputType = {
   intervalTime?: true
+  notifyFailureCount?: true
+  notifyCooldownMin?: true
 }
 
 export type ServiceSumAggregateInputType = {
   intervalTime?: true
+  notifyFailureCount?: true
+  notifyCooldownMin?: true
 }
 
 export type ServiceMinAggregateInputType = {
@@ -83,6 +101,9 @@ export type ServiceMinAggregateInputType = {
   url?: true
   intervalTime?: true
   enabled?: true
+  notifyEnabled?: true
+  notifyFailureCount?: true
+  notifyCooldownMin?: true
 }
 
 export type ServiceMaxAggregateInputType = {
@@ -93,6 +114,9 @@ export type ServiceMaxAggregateInputType = {
   url?: true
   intervalTime?: true
   enabled?: true
+  notifyEnabled?: true
+  notifyFailureCount?: true
+  notifyCooldownMin?: true
 }
 
 export type ServiceCountAggregateInputType = {
@@ -104,6 +128,10 @@ export type ServiceCountAggregateInputType = {
   headers?: true
   intervalTime?: true
   enabled?: true
+  notifyEnabled?: true
+  notifyFailureCount?: true
+  notifyCooldownMin?: true
+  notifyChannelIds?: true
   _all?: true
 }
 
@@ -202,6 +230,10 @@ export type ServiceGroupByOutputType = {
   headers: runtime.JsonValue | null
   intervalTime: number | null
   enabled: boolean
+  notifyEnabled: boolean
+  notifyFailureCount: number
+  notifyCooldownMin: number
+  notifyChannelIds: runtime.JsonValue
   _count: ServiceCountAggregateOutputType | null
   _avg: ServiceAvgAggregateOutputType | null
   _sum: ServiceSumAggregateOutputType | null
@@ -236,8 +268,11 @@ export type ServiceWhereInput = {
   headers?: Prisma.JsonNullableFilter<"Service">
   intervalTime?: Prisma.IntNullableFilter<"Service"> | number | null
   enabled?: Prisma.BoolFilter<"Service"> | boolean
+  notifyEnabled?: Prisma.BoolFilter<"Service"> | boolean
+  notifyFailureCount?: Prisma.IntFilter<"Service"> | number
+  notifyCooldownMin?: Prisma.IntFilter<"Service"> | number
+  notifyChannelIds?: Prisma.JsonFilter<"Service">
   endpoints?: Prisma.EndPointListRelationFilter
-  notificationRules?: Prisma.NotificationRuleListRelationFilter
 }
 
 export type ServiceOrderByWithRelationInput = {
@@ -249,8 +284,11 @@ export type ServiceOrderByWithRelationInput = {
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
   intervalTime?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  notifyEnabled?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
+  notifyChannelIds?: Prisma.SortOrder
   endpoints?: Prisma.EndPointOrderByRelationAggregateInput
-  notificationRules?: Prisma.NotificationRuleOrderByRelationAggregateInput
 }
 
 export type ServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -265,8 +303,11 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   headers?: Prisma.JsonNullableFilter<"Service">
   intervalTime?: Prisma.IntNullableFilter<"Service"> | number | null
   enabled?: Prisma.BoolFilter<"Service"> | boolean
+  notifyEnabled?: Prisma.BoolFilter<"Service"> | boolean
+  notifyFailureCount?: Prisma.IntFilter<"Service"> | number
+  notifyCooldownMin?: Prisma.IntFilter<"Service"> | number
+  notifyChannelIds?: Prisma.JsonFilter<"Service">
   endpoints?: Prisma.EndPointListRelationFilter
-  notificationRules?: Prisma.NotificationRuleListRelationFilter
 }, "id">
 
 export type ServiceOrderByWithAggregationInput = {
@@ -278,6 +319,10 @@ export type ServiceOrderByWithAggregationInput = {
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
   intervalTime?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  notifyEnabled?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
+  notifyChannelIds?: Prisma.SortOrder
   _count?: Prisma.ServiceCountOrderByAggregateInput
   _avg?: Prisma.ServiceAvgOrderByAggregateInput
   _max?: Prisma.ServiceMaxOrderByAggregateInput
@@ -297,6 +342,10 @@ export type ServiceScalarWhereWithAggregatesInput = {
   headers?: Prisma.JsonNullableWithAggregatesFilter<"Service">
   intervalTime?: Prisma.IntNullableWithAggregatesFilter<"Service"> | number | null
   enabled?: Prisma.BoolWithAggregatesFilter<"Service"> | boolean
+  notifyEnabled?: Prisma.BoolWithAggregatesFilter<"Service"> | boolean
+  notifyFailureCount?: Prisma.IntWithAggregatesFilter<"Service"> | number
+  notifyCooldownMin?: Prisma.IntWithAggregatesFilter<"Service"> | number
+  notifyChannelIds?: Prisma.JsonWithAggregatesFilter<"Service">
 }
 
 export type ServiceCreateInput = {
@@ -308,8 +357,11 @@ export type ServiceCreateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: number | null
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: number
+  notifyCooldownMin?: number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   endpoints?: Prisma.EndPointCreateNestedManyWithoutServiceInput
-  notificationRules?: Prisma.NotificationRuleCreateNestedManyWithoutHostInput
 }
 
 export type ServiceUncheckedCreateInput = {
@@ -321,8 +373,11 @@ export type ServiceUncheckedCreateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: number | null
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: number
+  notifyCooldownMin?: number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   endpoints?: Prisma.EndPointUncheckedCreateNestedManyWithoutServiceInput
-  notificationRules?: Prisma.NotificationRuleUncheckedCreateNestedManyWithoutHostInput
 }
 
 export type ServiceUpdateInput = {
@@ -334,8 +389,11 @@ export type ServiceUpdateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFailureCount?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyCooldownMin?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   endpoints?: Prisma.EndPointUpdateManyWithoutServiceNestedInput
-  notificationRules?: Prisma.NotificationRuleUpdateManyWithoutHostNestedInput
 }
 
 export type ServiceUncheckedUpdateInput = {
@@ -347,8 +405,11 @@ export type ServiceUncheckedUpdateInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFailureCount?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyCooldownMin?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   endpoints?: Prisma.EndPointUncheckedUpdateManyWithoutServiceNestedInput
-  notificationRules?: Prisma.NotificationRuleUncheckedUpdateManyWithoutHostNestedInput
 }
 
 export type ServiceCreateManyInput = {
@@ -360,6 +421,10 @@ export type ServiceCreateManyInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: number | null
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: number
+  notifyCooldownMin?: number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ServiceUpdateManyMutationInput = {
@@ -371,6 +436,10 @@ export type ServiceUpdateManyMutationInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFailureCount?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyCooldownMin?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ServiceUncheckedUpdateManyInput = {
@@ -382,6 +451,10 @@ export type ServiceUncheckedUpdateManyInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFailureCount?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyCooldownMin?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ServiceCountOrderByAggregateInput = {
@@ -393,10 +466,16 @@ export type ServiceCountOrderByAggregateInput = {
   headers?: Prisma.SortOrder
   intervalTime?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  notifyEnabled?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
+  notifyChannelIds?: Prisma.SortOrder
 }
 
 export type ServiceAvgOrderByAggregateInput = {
   intervalTime?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
 }
 
 export type ServiceMaxOrderByAggregateInput = {
@@ -407,6 +486,9 @@ export type ServiceMaxOrderByAggregateInput = {
   url?: Prisma.SortOrder
   intervalTime?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  notifyEnabled?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
 }
 
 export type ServiceMinOrderByAggregateInput = {
@@ -417,20 +499,20 @@ export type ServiceMinOrderByAggregateInput = {
   url?: Prisma.SortOrder
   intervalTime?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
+  notifyEnabled?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
 }
 
 export type ServiceSumOrderByAggregateInput = {
   intervalTime?: Prisma.SortOrder
+  notifyFailureCount?: Prisma.SortOrder
+  notifyCooldownMin?: Prisma.SortOrder
 }
 
 export type ServiceScalarRelationFilter = {
   is?: Prisma.ServiceWhereInput
   isNot?: Prisma.ServiceWhereInput
-}
-
-export type ServiceNullableScalarRelationFilter = {
-  is?: Prisma.ServiceWhereInput | null
-  isNot?: Prisma.ServiceWhereInput | null
 }
 
 export type NullableIntFieldUpdateOperationsInput = {
@@ -455,22 +537,6 @@ export type ServiceUpdateOneRequiredWithoutEndpointsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutEndpointsInput, Prisma.ServiceUpdateWithoutEndpointsInput>, Prisma.ServiceUncheckedUpdateWithoutEndpointsInput>
 }
 
-export type ServiceCreateNestedOneWithoutNotificationRulesInput = {
-  create?: Prisma.XOR<Prisma.ServiceCreateWithoutNotificationRulesInput, Prisma.ServiceUncheckedCreateWithoutNotificationRulesInput>
-  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutNotificationRulesInput
-  connect?: Prisma.ServiceWhereUniqueInput
-}
-
-export type ServiceUpdateOneWithoutNotificationRulesNestedInput = {
-  create?: Prisma.XOR<Prisma.ServiceCreateWithoutNotificationRulesInput, Prisma.ServiceUncheckedCreateWithoutNotificationRulesInput>
-  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutNotificationRulesInput
-  upsert?: Prisma.ServiceUpsertWithoutNotificationRulesInput
-  disconnect?: Prisma.ServiceWhereInput | boolean
-  delete?: Prisma.ServiceWhereInput | boolean
-  connect?: Prisma.ServiceWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutNotificationRulesInput, Prisma.ServiceUpdateWithoutNotificationRulesInput>, Prisma.ServiceUncheckedUpdateWithoutNotificationRulesInput>
-}
-
 export type ServiceCreateWithoutEndpointsInput = {
   id?: string
   createdAt?: Date | string
@@ -480,7 +546,10 @@ export type ServiceCreateWithoutEndpointsInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: number | null
   enabled?: boolean
-  notificationRules?: Prisma.NotificationRuleCreateNestedManyWithoutHostInput
+  notifyEnabled?: boolean
+  notifyFailureCount?: number
+  notifyCooldownMin?: number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ServiceUncheckedCreateWithoutEndpointsInput = {
@@ -492,7 +561,10 @@ export type ServiceUncheckedCreateWithoutEndpointsInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: number | null
   enabled?: boolean
-  notificationRules?: Prisma.NotificationRuleUncheckedCreateNestedManyWithoutHostInput
+  notifyEnabled?: boolean
+  notifyFailureCount?: number
+  notifyCooldownMin?: number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ServiceCreateOrConnectWithoutEndpointsInput = {
@@ -520,7 +592,10 @@ export type ServiceUpdateWithoutEndpointsInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  notificationRules?: Prisma.NotificationRuleUpdateManyWithoutHostNestedInput
+  notifyEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFailureCount?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyCooldownMin?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ServiceUncheckedUpdateWithoutEndpointsInput = {
@@ -532,71 +607,10 @@ export type ServiceUncheckedUpdateWithoutEndpointsInput = {
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  notificationRules?: Prisma.NotificationRuleUncheckedUpdateManyWithoutHostNestedInput
-}
-
-export type ServiceCreateWithoutNotificationRulesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  name: string
-  url?: string | null
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
-  endpoints?: Prisma.EndPointCreateNestedManyWithoutServiceInput
-}
-
-export type ServiceUncheckedCreateWithoutNotificationRulesInput = {
-  id?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  name: string
-  url?: string | null
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: number | null
-  enabled?: boolean
-  endpoints?: Prisma.EndPointUncheckedCreateNestedManyWithoutServiceInput
-}
-
-export type ServiceCreateOrConnectWithoutNotificationRulesInput = {
-  where: Prisma.ServiceWhereUniqueInput
-  create: Prisma.XOR<Prisma.ServiceCreateWithoutNotificationRulesInput, Prisma.ServiceUncheckedCreateWithoutNotificationRulesInput>
-}
-
-export type ServiceUpsertWithoutNotificationRulesInput = {
-  update: Prisma.XOR<Prisma.ServiceUpdateWithoutNotificationRulesInput, Prisma.ServiceUncheckedUpdateWithoutNotificationRulesInput>
-  create: Prisma.XOR<Prisma.ServiceCreateWithoutNotificationRulesInput, Prisma.ServiceUncheckedCreateWithoutNotificationRulesInput>
-  where?: Prisma.ServiceWhereInput
-}
-
-export type ServiceUpdateToOneWithWhereWithoutNotificationRulesInput = {
-  where?: Prisma.ServiceWhereInput
-  data: Prisma.XOR<Prisma.ServiceUpdateWithoutNotificationRulesInput, Prisma.ServiceUncheckedUpdateWithoutNotificationRulesInput>
-}
-
-export type ServiceUpdateWithoutNotificationRulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  endpoints?: Prisma.EndPointUpdateManyWithoutServiceNestedInput
-}
-
-export type ServiceUncheckedUpdateWithoutNotificationRulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  intervalTime?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  endpoints?: Prisma.EndPointUncheckedUpdateManyWithoutServiceNestedInput
+  notifyEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyFailureCount?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyCooldownMin?: Prisma.IntFieldUpdateOperationsInput | number
+  notifyChannelIds?: Prisma.JsonNullValueInput | runtime.InputJsonValue
 }
 
 
@@ -606,12 +620,10 @@ export type ServiceUncheckedUpdateWithoutNotificationRulesInput = {
 
 export type ServiceCountOutputType = {
   endpoints: number
-  notificationRules: number
 }
 
 export type ServiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   endpoints?: boolean | ServiceCountOutputTypeCountEndpointsArgs
-  notificationRules?: boolean | ServiceCountOutputTypeCountNotificationRulesArgs
 }
 
 /**
@@ -631,13 +643,6 @@ export type ServiceCountOutputTypeCountEndpointsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.EndPointWhereInput
 }
 
-/**
- * ServiceCountOutputType without action
- */
-export type ServiceCountOutputTypeCountNotificationRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationRuleWhereInput
-}
-
 
 export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -648,8 +653,11 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   headers?: boolean
   intervalTime?: boolean
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: boolean
+  notifyCooldownMin?: boolean
+  notifyChannelIds?: boolean
   endpoints?: boolean | Prisma.Service$endpointsArgs<ExtArgs>
-  notificationRules?: boolean | Prisma.Service$notificationRulesArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["service"]>
 
@@ -662,6 +670,10 @@ export type ServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   headers?: boolean
   intervalTime?: boolean
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: boolean
+  notifyCooldownMin?: boolean
+  notifyChannelIds?: boolean
 }, ExtArgs["result"]["service"]>
 
 export type ServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -673,6 +685,10 @@ export type ServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   headers?: boolean
   intervalTime?: boolean
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: boolean
+  notifyCooldownMin?: boolean
+  notifyChannelIds?: boolean
 }, ExtArgs["result"]["service"]>
 
 export type ServiceSelectScalar = {
@@ -684,12 +700,15 @@ export type ServiceSelectScalar = {
   headers?: boolean
   intervalTime?: boolean
   enabled?: boolean
+  notifyEnabled?: boolean
+  notifyFailureCount?: boolean
+  notifyCooldownMin?: boolean
+  notifyChannelIds?: boolean
 }
 
-export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "url" | "headers" | "intervalTime" | "enabled", ExtArgs["result"]["service"]>
+export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "url" | "headers" | "intervalTime" | "enabled" | "notifyEnabled" | "notifyFailureCount" | "notifyCooldownMin" | "notifyChannelIds", ExtArgs["result"]["service"]>
 export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   endpoints?: boolean | Prisma.Service$endpointsArgs<ExtArgs>
-  notificationRules?: boolean | Prisma.Service$notificationRulesArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -699,7 +718,6 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Service"
   objects: {
     endpoints: Prisma.$EndPointPayload<ExtArgs>[]
-    notificationRules: Prisma.$NotificationRulePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -710,6 +728,10 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     headers: runtime.JsonValue | null
     intervalTime: number | null
     enabled: boolean
+    notifyEnabled: boolean
+    notifyFailureCount: number
+    notifyCooldownMin: number
+    notifyChannelIds: runtime.JsonValue
   }, ExtArgs["result"]["service"]>
   composites: {}
 }
@@ -1105,7 +1127,6 @@ readonly fields: ServiceFieldRefs;
 export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   endpoints<T extends Prisma.Service$endpointsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$endpointsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EndPointPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  notificationRules<T extends Prisma.Service$notificationRulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$notificationRulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationRulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1143,6 +1164,10 @@ export interface ServiceFieldRefs {
   readonly headers: Prisma.FieldRef<"Service", 'Json'>
   readonly intervalTime: Prisma.FieldRef<"Service", 'Int'>
   readonly enabled: Prisma.FieldRef<"Service", 'Boolean'>
+  readonly notifyEnabled: Prisma.FieldRef<"Service", 'Boolean'>
+  readonly notifyFailureCount: Prisma.FieldRef<"Service", 'Int'>
+  readonly notifyCooldownMin: Prisma.FieldRef<"Service", 'Int'>
+  readonly notifyChannelIds: Prisma.FieldRef<"Service", 'Json'>
 }
     
 
@@ -1550,30 +1575,6 @@ export type Service$endpointsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.EndPointScalarFieldEnum | Prisma.EndPointScalarFieldEnum[]
-}
-
-/**
- * Service.notificationRules
- */
-export type Service$notificationRulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the NotificationRule
-   */
-  select?: Prisma.NotificationRuleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the NotificationRule
-   */
-  omit?: Prisma.NotificationRuleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationRuleInclude<ExtArgs> | null
-  where?: Prisma.NotificationRuleWhereInput
-  orderBy?: Prisma.NotificationRuleOrderByWithRelationInput | Prisma.NotificationRuleOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationRuleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.NotificationRuleScalarFieldEnum | Prisma.NotificationRuleScalarFieldEnum[]
 }
 
 /**

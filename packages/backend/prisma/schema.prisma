@@ -94,7 +94,11 @@ model Service {
   enabled      Boolean    @default(true)
   endpoints    EndPoint[]
 
-  notificationRules NotificationRule[]
+  // 通知配置
+  notifyEnabled      Boolean @default(false) // 是否启用通知
+  notifyFailureCount Int     @default(3) // 连续失败N次触发
+  notifyCooldownMin  Int     @default(30) // 冷却时间(分钟)
+  notifyChannelIds   Json    @default("[]") // 通知渠道ID数组 ["id1", "id2"]
 }
 
 model EndPoint {
@@ -120,8 +124,7 @@ model EndPoint {
   hourlyStats     ProbeHourlyStat[]
   dailyStats      ProbeDailyStat[]
 
-  service           Service            @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  notificationRules NotificationRule[]
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 }
 
 model ProbeResult {
@@ -174,12 +177,6 @@ model ProbeDailyStat {
 
 // ==================== 通知模块 ====================
 
-enum NotificationScopeType {
-  ALL // 全局规则，所有端点
-  HOST // 指定 Host（Service）下所有端点
-  ENDPOINT // 指定单个端点
-}
-
 // 通知渠道 - 存储 Webhook 配置
 model NotificationChannel {
   id           String   @id @default(uuid())
@@ -190,52 +187,23 @@ model NotificationChannel {
   headers      Json? // 自定义请求头（如 Authorization）
   bodyTemplate String // 请求体模板（支持变量替换）
   enabled      Boolean  @default(true)
-
-  rules NotificationRule[]
-}
-
-// 通知规则 - 定义触发条件和作用范围
-model NotificationRule {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String // 规则名称
-  enabled   Boolean  @default(true)
-
-  // 作用范围
-  scopeType  NotificationScopeType @default(ALL)
-  hostId     String? // scopeType 为 HOST 时必填
-  endpointId String? // scopeType 为 ENDPOINT 时必填
-
-  // 触发条件
-  consecutiveFailures Int     @default(3) // 连续失败 N 次后触发
-  cooldownMinutes     Int     @default(30) // 冷却时间（分钟）
-  notifyOnRecovery    Boolean @default(true) // 恢复时是否通知
-
-  // 关联
-  channelId String
-  channel   NotificationChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
-  host      Service?            @relation(fields: [hostId], references: [id], onDelete: SetNull)
-  endpoint  EndPoint?           @relation(fields: [endpointId], references: [id], onDelete: SetNull)
-
-  @@index([hostId])
-  @@index([endpointId])
-  @@index([channelId])
 }
 
 // 通知记录 - 记录通知发送历史
 model NotificationLog {
   id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
-  ruleId     String
-  endpointId String
+  serviceId  String // Host ID
+  endpointId String // 触发通知的端点
+  channelId  String // 发送到的渠道
   eventType  String // FAILURE / RECOVERY
   title      String
   content    String
   success    Boolean
   errorMsg   String?
 
-  @@index([ruleId])
+  @@index([serviceId])
   @@index([endpointId])
+  @@index([channelId])
   @@index([createdAt])
 }
