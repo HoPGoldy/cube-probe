@@ -3,12 +3,14 @@ import { PrismaClient } from "@db/client";
 import { ResultService } from "@/modules/monitored-result/service";
 import { CodeExecutorService } from "@/modules/code-executor/service";
 import { NotificationService } from "@/modules/notification/service";
+import { ProbeEnvService } from "@/modules/probe-env/service";
 
 interface ServiceOptions {
   prisma: PrismaClient;
   resultService: ResultService;
   codeExecutorService: CodeExecutorService;
   notificationService?: NotificationService;
+  probeEnvService?: ProbeEnvService;
 }
 
 interface IntervalTask {
@@ -163,9 +165,15 @@ export class IntervalProbeService {
     }
 
     try {
+      // 获取环境变量用于注入
+      const env = this.options.probeEnvService
+        ? await this.options.probeEnvService.getAllForInjection()
+        : {};
+
       const result = await this.options.codeExecutorService.execute({
         code: codeContent,
         timeout: 30000, // 代码执行最大 30 秒
+        context: { env }, // 注入环境变量
       });
 
       const responseTime = Date.now() - startTime;

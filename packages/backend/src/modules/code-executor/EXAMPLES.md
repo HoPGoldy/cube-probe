@@ -419,3 +419,58 @@ POST /api/code-executor/validate
   }
 }
 ```
+
+## 探针环境变量
+
+在 CODE 模式的探针任务中，可以通过 `env` 对象访问预先配置的环境变量。
+这些变量可以在「环境变量」页面管理，支持敏感信息加密存储。
+
+### 使用环境变量访问 API
+
+```javascript
+// env 对象由系统自动注入，包含所有配置的环境变量
+const apiKey = env.API_KEY;
+const baseUrl = env.SERVICE_BASE_URL;
+
+const response = await http.get(`${baseUrl}/health`, {
+  headers: {
+    Authorization: `Bearer ${apiKey}`,
+  },
+});
+
+return {
+  success: response.status === 200,
+  message: `Status: ${response.status}`,
+  responseTime: response.data.latency,
+};
+```
+
+### 多个环境变量组合使用
+
+```javascript
+// 从环境变量获取数据库连接信息
+const dbHost = env.DB_HOST;
+const dbPort = env.DB_PORT;
+const dbUser = env.DB_USER;
+const dbPassword = env.DB_PASSWORD;
+
+// 使用环境变量构建请求
+const response = await http.post(`${env.MONITOR_API}/check`, {
+  target: `${dbHost}:${dbPort}`,
+  credentials: {
+    user: dbUser,
+    password: dbPassword,
+  },
+});
+
+return {
+  success: response.data.connected,
+  message: response.data.message,
+};
+```
+
+### 环境变量命名规范
+
+- 使用大写字母 + 下划线命名，如 `API_KEY`、`DB_PASSWORD`
+- 敏感信息（如密码、Token）建议标记为「敏感」
+- 敏感变量在管理页面不会显示实际值

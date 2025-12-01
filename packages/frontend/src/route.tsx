@@ -60,6 +60,11 @@ export const routes = createBrowserRouter(
           path: "/notification-status",
           element: lazyLoad(() => import("./pages/notification-status")),
         },
+        // 探针环境变量
+        {
+          path: "/probe-env",
+          element: lazyLoad(() => import("./pages/probe-env")),
+        },
         // 个人资料
         {
           path: "/user-profile",

@@ -207,3 +207,16 @@ model NotificationLog {
   @@index([channelId])
   @@index([createdAt])
 }
+
+// ==================== 探针环境变量 ====================
+
+// 探针环境变量 - 存储注入到 CODE 模式探针的全局变量
+model ProbeEnv {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  key       String   @unique // 变量名
+  value     String // 变量值
+  isSecret  Boolean  @default(false) // 是否为敏感信息
+  desc      String? // 变量描述
+}

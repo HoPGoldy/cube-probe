@@ -62,7 +62,8 @@ export const ModelName = {
   ProbeHourlyStat: 'ProbeHourlyStat',
   ProbeDailyStat: 'ProbeDailyStat',
   NotificationChannel: 'NotificationChannel',
-  NotificationLog: 'NotificationLog'
+  NotificationLog: 'NotificationLog',
+  ProbeEnv: 'ProbeEnv'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -253,6 +254,19 @@ export const NotificationLogScalarFieldEnum = {
 } as const
 
 export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
+
+
+export const ProbeEnvScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  value: 'value',
+  isSecret: 'isSecret',
+  desc: 'desc'
+} as const
+
+export type ProbeEnvScalarFieldEnum = (typeof ProbeEnvScalarFieldEnum)[keyof typeof ProbeEnvScalarFieldEnum]
 
 
 export const SortOrder = {

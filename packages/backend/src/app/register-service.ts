@@ -11,6 +11,7 @@ import { registerController as registerResultController } from "@/modules/monito
 import { registerController as registerCodeExecutorController } from "@/modules/code-executor/controller";
 import { registerController as registerProbeStatsController } from "@/modules/probe-stats-aggregation/controller";
 import { registerController as registerNotificationController } from "@/modules/notification/controller";
+import { registerController as registerProbeEnvController } from "@/modules/probe-env/controller";
 import { UserService } from "@/modules/user/service";
 import { AttachmentService } from "@/modules/attachment/service";
 import { ApplicationService } from "@/modules/application/service";
@@ -24,6 +25,7 @@ import { IntervalProbeService } from "@/modules/probe-task/interval-service";
 import { ProbeResultCleanupService } from "@/modules/probe-result-cleanup/service";
 import { ProbeStatsAggregationService } from "@/modules/probe-stats-aggregation/service";
 import { NotificationService } from "@/modules/notification/service";
+import { ProbeEnvService } from "@/modules/probe-env/service";
 import { registerUnifyResponse } from "@/lib/unify-response";
 import type { AppInstance } from "@/types";
 
@@ -73,11 +75,16 @@ export const registerService = async (instance: AppInstance) => {
     prisma,
   });
 
+  const probeEnvService = new ProbeEnvService({
+    prisma,
+  });
+
   const intervalProbeService = new IntervalProbeService({
     prisma,
     resultService,
     codeExecutorService,
     notificationService,
+    probeEnvService,
   });
 
   const probeResultCleanupService = new ProbeResultCleanupService({
@@ -154,6 +161,11 @@ export const registerService = async (instance: AppInstance) => {
 
     registerNotificationController({
       notificationService,
+      server,
+    });
+
+    registerProbeEnvController({
+      probeEnvService,
       server,
     });
 

@@ -99,3 +99,8 @@ export type NotificationChannel = Prisma.NotificationChannelModel
  * 
  */
 export type NotificationLog = Prisma.NotificationLogModel
+/**
+ * Model ProbeEnv
+ * 
+ */
+export type ProbeEnv = Prisma.ProbeEnvModel

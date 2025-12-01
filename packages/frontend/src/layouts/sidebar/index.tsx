@@ -128,6 +128,13 @@ export const Sidebar: FC = () => {
           </Link>
         )}
         {userInfo.role === UserRole.ADMIN && (
+          <Link to="/probe-env">
+            <Button className={`${s.toolBtn} keep-antd-style`} block>
+              环境变量
+            </Button>
+          </Link>
+        )}
+        {userInfo.role === UserRole.ADMIN && (
           <Link to="/home">
             <Button className={`${s.toolBtn} keep-antd-style`} block>
               主面板

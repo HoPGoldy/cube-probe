@@ -92,6 +92,7 @@ Services are instantiated first in `register-service.ts`, then passed to control
 - `probe-result-cleanup/` - Automated cleanup of old probe results
 - `probe-stats-aggregation/` - Statistics aggregation service (hourly/daily stats, multi-range queries)
 - `notification/` - **NotificationService** - alert notifications when probes fail
+- `probe-env/` - **ProbeEnvService** - environment variables for CODE mode probes
 - `app-config/` - Application configuration storage
 - `code-executor/` - Code execution sandbox
 
@@ -117,6 +118,10 @@ Services are instantiated first in `register-service.ts`, then passed to control
 
 - `NotificationChannel` - Notification channels (name, type: EMAIL/WEBHOOK/TELEGRAM, config JSON)
 - `NotificationLog` - Notification history (serviceId, channelId, status, message)
+
+**Probe Environment Models:**
+
+- `ProbeEnv` - Environment variables for CODE mode probes (key, value, isSecret, desc)
 
 **Other Models:**
 
@@ -208,6 +213,42 @@ interface HostStatus {
 - `GET /api/notification/log/list` - Query notification history
 - `GET /api/notification/status/list` - Get all hosts' current status (from memory)
 
+### Probe Environment Variables
+
+The probe environment module provides global key-value storage that gets injected into CODE mode probes.
+
+**API Endpoints:**
+
+- `GET /api/probe-env/list` - List all environment variables (secrets show as `******`)
+- `POST /api/probe-env/add` - Create environment variable
+- `POST /api/probe-env/update` - Update environment variable
+- `POST /api/probe-env/delete` - Delete environment variable
+
+**Usage in CODE Probes:**
+
+Environment variables are automatically injected as the `env` object:
+
+```javascript
+// Access environment variables in CODE mode probes
+const apiKey = env.API_KEY;
+const baseUrl = env.SERVICE_BASE_URL;
+
+const response = await http.get(`${baseUrl}/health`, {
+  headers: { Authorization: `Bearer ${apiKey}` },
+});
+
+return {
+  success: response.status === 200,
+  message: `Status: ${response.status}`,
+};
+```
+
+**Key Features:**
+
+- Variables with `isSecret=true` are hidden in the UI (displayed as `******`)
+- Cached for 5 minutes to reduce database queries
+- Naming convention: uppercase letters + underscores (e.g., `API_KEY`, `DB_PASSWORD`)
+
 ### Frontend Architecture
 
 **Page Structure (`src/pages/`):**
@@ -221,6 +262,7 @@ interface HostStatus {
 - `notification-channel/` - Notification channel management
 - `notification-log/` - Notification history
 - `notification-status/` - Real-time host status monitoring
+- `probe-env/` - Environment variables management
 - `setting-user/` - User management (admin)
 - `setting-application/` - App management
 - `user-profile/` - Personal profile

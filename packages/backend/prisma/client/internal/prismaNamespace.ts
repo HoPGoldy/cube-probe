@@ -395,7 +395,8 @@ export const ModelName = {
   ProbeHourlyStat: 'ProbeHourlyStat',
   ProbeDailyStat: 'ProbeDailyStat',
   NotificationChannel: 'NotificationChannel',
-  NotificationLog: 'NotificationLog'
+  NotificationLog: 'NotificationLog',
+  ProbeEnv: 'ProbeEnv'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat" | "notificationChannel" | "notificationLog"
+    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat" | "notificationChannel" | "notificationLog" | "probeEnv"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1304,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ProbeEnv: {
+      payload: Prisma.$ProbeEnvPayload<ExtArgs>
+      fields: Prisma.ProbeEnvFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProbeEnvFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProbeEnvFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>
+        }
+        findFirst: {
+          args: Prisma.ProbeEnvFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProbeEnvFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>
+        }
+        findMany: {
+          args: Prisma.ProbeEnvFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>[]
+        }
+        create: {
+          args: Prisma.ProbeEnvCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>
+        }
+        createMany: {
+          args: Prisma.ProbeEnvCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProbeEnvCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>[]
+        }
+        delete: {
+          args: Prisma.ProbeEnvDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>
+        }
+        update: {
+          args: Prisma.ProbeEnvUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProbeEnvDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProbeEnvUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProbeEnvUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProbeEnvUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProbeEnvPayload>
+        }
+        aggregate: {
+          args: Prisma.ProbeEnvAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProbeEnv>
+        }
+        groupBy: {
+          args: Prisma.ProbeEnvGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeEnvGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProbeEnvCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProbeEnvCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1516,6 +1591,19 @@ export const NotificationLogScalarFieldEnum = {
 export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
 
 
+export const ProbeEnvScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  key: 'key',
+  value: 'value',
+  isSecret: 'isSecret',
+  desc: 'desc'
+} as const
+
+export type ProbeEnvScalarFieldEnum = (typeof ProbeEnvScalarFieldEnum)[keyof typeof ProbeEnvScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1723,6 +1811,7 @@ export type GlobalOmitConfig = {
   probeDailyStat?: Prisma.ProbeDailyStatOmit
   notificationChannel?: Prisma.NotificationChannelOmit
   notificationLog?: Prisma.NotificationLogOmit
+  probeEnv?: Prisma.ProbeEnvOmit
 }
 
 /* Types for Logging */
