@@ -111,4 +111,27 @@ export const registerController = async (options: ControllerOptions) => {
       return { success: true };
     },
   );
+
+  server.post(
+    "/monitored-host/copy",
+    {
+      schema: {
+        description: "Copy a service with all its endpoints",
+        body: Type.Object({
+          id: Type.String({ description: "要复制的服务ID" }),
+        }),
+        response: {
+          200: SchemaServiceDetail,
+        },
+      },
+    },
+    async (req) => {
+      const { id } = req.body;
+      const result = await monitoredHostService.copyService(id);
+      if (!result) {
+        throw new Error("Copy failed");
+      }
+      return createServiceDetailVo(result);
+    },
+  );
 };

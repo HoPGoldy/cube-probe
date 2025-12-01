@@ -4,13 +4,14 @@ import {
   useDeleteMonitoredHost,
   useGetMonitoredHostDetail,
   useUpdateMonitoredHost,
+  useCopyMonitoredHost,
 } from "@/services/monitored-host";
 import {
   useDeleteEndpoint,
   useGetEndpointList,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import { Spin, Empty, Flex, Space, Button, Modal, Switch } from "antd";
+import { Spin, Empty, Flex, Space, Button, Modal, Switch, message } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
@@ -20,7 +21,7 @@ import {
   EndpointDetailModal,
 } from "./detail-endpoint";
 import { DetailPageType } from "@/utils/use-detail-type";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, CopyOutlined } from "@ant-design/icons";
 import {
   DETAIL_TYPE_KEY as HOST_DETAIL_TYPE_KEY,
   DETAIL_ID_KEY as HOST_DETAIL_ID_KEY,
@@ -49,6 +50,8 @@ const HostDetailPage: React.FC = () => {
 
   const { mutateAsync: updateHost } = useUpdateMonitoredHost();
   const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
+  const { mutateAsync: copyHost, isPending: copyingHost } =
+    useCopyMonitoredHost();
   const { mutateAsync: updateEndpoint } = useUpdateEndpoint();
   const { mutateAsync: deleteEndpoint } = useDeleteEndpoint();
 
@@ -105,6 +108,15 @@ const HostDetailPage: React.FC = () => {
         await deleteHost(item.id);
       },
     });
+  };
+
+  const handleCopyHost = async () => {
+    try {
+      await copyHost(hostId!);
+      message.success("复制成功，新服务已创建（默认禁用）");
+    } catch {
+      message.error("复制失败");
+    }
   };
 
   if (loadingHost || loadingEndpoints) {
@@ -195,7 +207,13 @@ const HostDetailPage: React.FC = () => {
                 创建接口
               </Button>
               <Button onClick={() => onEditHost(hostDetail.id)}>编辑</Button>
-              <Button>复制</Button>
+              <Button
+                icon={<CopyOutlined />}
+                loading={copyingHost}
+                onClick={handleCopyHost}
+              >
+                复制
+              </Button>
               <Button
                 danger
                 icon={<CloseOutlined />}

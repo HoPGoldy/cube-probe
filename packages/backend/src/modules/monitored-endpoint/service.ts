@@ -40,17 +40,9 @@ export class EndPointService {
     });
   }
 
-  async getEndPointsByServiceId(serviceId: string) {
+  async getAllEndPoints(serviceId?: string) {
     return await this.options.prisma.endPoint.findMany({
-      where: { serviceId },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }
-
-  async getAllEndPoints() {
-    return await this.options.prisma.endPoint.findMany({
+      where: serviceId ? { serviceId } : undefined,
       orderBy: {
         createdAt: "desc",
       },
@@ -116,20 +108,22 @@ export class EndPointService {
       throw new Error("Endpoint not found");
     }
 
+    // 解构排除不需要复制的字段（id, createdAt, updatedAt 由数据库自动生成）
+    const {
+      id: _id,
+      createdAt: _createdAt,
+      updatedAt: _updatedAt,
+      name,
+      headers,
+      ...rest
+    } = original;
+
     // 创建新端点
     const newEndPoint = await this.options.prisma.endPoint.create({
       data: {
-        serviceId: original.serviceId,
-        name: `${original.name} (副本)`,
-        type: original.type,
-        url: original.url,
-        method: original.method,
-        headers: original.headers ?? undefined,
-        timeout: original.timeout,
-        bodyContentType: original.bodyContentType,
-        bodyContent: original.bodyContent,
-        codeContent: original.codeContent,
-        intervalTime: original.intervalTime,
+        ...rest,
+        name: `${name} (副本)`,
+        headers: headers ?? undefined, // 处理 null 值
         enabled: false, // 默认禁用，避免立即开始探测
       },
     });

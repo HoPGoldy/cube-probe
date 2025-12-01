@@ -13,14 +13,6 @@ export const useGetEndpointList = (query?: EndpointListQueryDto) => {
   });
 };
 
-export const useGetEndpointListByService = (serviceId: string) => {
-  return useQuery({
-    queryKey: ["endpoint/list-by-service", serviceId],
-    enabled: !!serviceId,
-    queryFn: () => requestPost("endpoint/list-by-service", { serviceId }),
-  });
-};
-
 export const useGetEndpointDetail = (id: string) => {
   return useQuery({
     queryKey: ["endpoint/detail", id],
@@ -48,9 +40,6 @@ export const useCreateEndpoint = () => {
       requestPost("endpoint/create", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["endpoint/list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["endpoint/list-by-service"],
-      });
     },
   });
 };
@@ -65,9 +54,6 @@ export const useUpdateEndpoint = () => {
       requestPost("endpoint/update", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["endpoint/list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["endpoint/list-by-service"],
-      });
       queryClient.invalidateQueries({ queryKey: ["endpoint/detail"] });
     },
   });
@@ -78,9 +64,6 @@ export const useDeleteEndpoint = () => {
     mutationFn: (id: string) => requestPost("endpoint/delete", { id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["endpoint/list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["endpoint/list-by-service"],
-      });
     },
   });
 };
@@ -90,9 +73,6 @@ export const useCopyEndpoint = () => {
     mutationFn: (id: string) => requestPost("endpoint/copy", { id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["endpoint/list"] });
-      queryClient.invalidateQueries({
-        queryKey: ["endpoint/list-by-service"],
-      });
     },
   });
 };

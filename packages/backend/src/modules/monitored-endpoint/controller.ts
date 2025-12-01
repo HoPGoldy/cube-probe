@@ -60,12 +60,12 @@ export const registerController = async (options: ControllerOptions) => {
   );
 
   server.post(
-    "/endpoint/list-by-service",
+    "/endpoint/list",
     {
       schema: {
-        description: "Get all endpoints for a service",
+        description: "Get all endpoints, optionally filtered by serviceId",
         body: Type.Object({
-          serviceId: Type.String(),
+          serviceId: Type.Optional(Type.String({ description: "服务ID" })),
         }),
         response: {
           200: Type.Array(SchemaEndPointDetail),
@@ -74,23 +74,7 @@ export const registerController = async (options: ControllerOptions) => {
     },
     async (req) => {
       const { serviceId } = req.body;
-      const results = await endPointService.getEndPointsByServiceId(serviceId);
-      return results.map((endpoint) => createEndPointDetailVo(endpoint));
-    },
-  );
-
-  server.post(
-    "/endpoint/list",
-    {
-      schema: {
-        description: "Get all endpoints",
-        response: {
-          200: Type.Array(SchemaEndPointDetail),
-        },
-      },
-    },
-    async (req, reply) => {
-      const results = await endPointService.getAllEndPoints();
+      const results = await endPointService.getAllEndPoints(serviceId);
       return results.map(createEndPointDetailVo);
     },
   );

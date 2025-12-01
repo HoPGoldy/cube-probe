@@ -67,3 +67,12 @@ export const useDeleteMonitoredHost = () => {
     },
   });
 };
+
+export const useCopyMonitoredHost = () => {
+  return useMutation({
+    mutationFn: (id: string) => requestPost("monitored-host/copy", { id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["monitored-host/list"] });
+    },
+  });
+};
