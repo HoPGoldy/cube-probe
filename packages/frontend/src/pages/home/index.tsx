@@ -3,9 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   useDeleteMonitoredHost,
   useGetMonitoredHostList,
-  useUpdateMonitoredHost,
 } from "@/services/monitored-host";
-import { Card, Spin, Flex, Space, Button, Modal, Switch } from "antd";
+import { Card, Spin, Flex, Space, Button, Modal } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
@@ -25,7 +24,6 @@ const HomePage: React.FC = () => {
 
   const { data: hostsData, isLoading } = useGetMonitoredHostList({});
 
-  const { mutateAsync: updateHost } = useUpdateMonitoredHost();
   const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
 
   const hosts = hostsData?.data ?? [];
@@ -42,13 +40,6 @@ const HomePage: React.FC = () => {
     searchParams.set(HOST_DETAIL_TYPE_KEY, DetailPageType.Edit);
     searchParams.set(HOST_DETAIL_ID_KEY, id);
     setSearchParams(searchParams, { replace: true });
-  };
-
-  const onSwitchEnabled = async (item: any) => {
-    await updateHost({
-      id: item.id,
-      enabled: !item.enabled,
-    });
   };
 
   const onHostDeleteConfirm = (item: any, e: React.MouseEvent) => {
@@ -93,12 +84,6 @@ const HomePage: React.FC = () => {
                 {host.name}
               </Flex>
               <Space onClick={(e) => e.stopPropagation()}>
-                <Switch
-                  checkedChildren="已启用"
-                  unCheckedChildren="已禁用"
-                  checked={host.enabled}
-                  onChange={() => onSwitchEnabled(host)}
-                />
                 <Button onClick={(e) => onEditHost(host.id, e)}>编辑</Button>
                 <Button
                   danger

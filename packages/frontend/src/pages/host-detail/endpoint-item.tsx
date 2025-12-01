@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Card, Flex, Space, Button, Switch, message } from "antd";
+import { Card, Flex, Space, Button, message, Dropdown, Tag } from "antd";
 import {
   CloseOutlined,
   DownOutlined,
   UpOutlined,
   CopyOutlined,
+  MoreOutlined,
+  PauseCircleOutlined,
+  PlayCircleOutlined,
 } from "@ant-design/icons";
 import { EndpointChart } from "./endpoint-chart";
 import { useGetEndpointMultiRangeStats } from "@/services/probe-stats";
@@ -25,7 +28,9 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
   onDelete,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const { data: statsData } = useGetEndpointMultiRangeStats(endpoint.id);
+  const { data: statsData } = useGetEndpointMultiRangeStats(
+    expanded ? endpoint.id : undefined,
+  );
   const stats = statsData?.data;
 
   const { mutateAsync: copyEndpoint, isPending: copying } = useCopyEndpoint();
@@ -49,28 +54,47 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
         <div className="w-full">
           <Flex gap={16} justify="space-between" align="center">
             <Flex className="text-2xl font-bold" align="center" gap={8}>
-              {endpoint.name}
+              <span className={endpoint.enabled ? "" : "text-gray-400"}>
+                {endpoint.name}
+              </span>
+              {!endpoint.enabled && <Tag color="default">已禁用</Tag>}
             </Flex>
             <Space>
-              <Switch
-                checkedChildren="已启用"
-                unCheckedChildren="已禁用"
-                checked={endpoint.enabled}
-                onChange={() => onSwitchEnabled(endpoint)}
-              />
               <Button onClick={() => onEdit(endpoint.id)}>配置</Button>
-              <Button
-                icon={<CopyOutlined />}
-                loading={copying}
-                onClick={handleCopy}
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "toggle",
+                      icon: endpoint.enabled ? (
+                        <PauseCircleOutlined />
+                      ) : (
+                        <PlayCircleOutlined />
+                      ),
+                      label: endpoint.enabled ? "禁用" : "启用",
+                      onClick: () => onSwitchEnabled(endpoint),
+                    },
+                    {
+                      key: "copy",
+                      icon: <CopyOutlined />,
+                      label: copying ? "复制中..." : "复制",
+                      disabled: copying,
+                      onClick: handleCopy,
+                    },
+                    { type: "divider" },
+                    {
+                      key: "delete",
+                      icon: <CloseOutlined />,
+                      label: "删除",
+                      danger: true,
+                      onClick: () => onDelete(endpoint),
+                    },
+                  ],
+                }}
+                trigger={["click"]}
               >
-                复制
-              </Button>
-              <Button
-                danger
-                icon={<CloseOutlined />}
-                onClick={() => onDelete(endpoint)}
-              ></Button>
+                <Button icon={<MoreOutlined />} />
+              </Dropdown>
               <Button
                 icon={expanded ? <UpOutlined /> : <DownOutlined />}
                 onClick={() => setExpanded(!expanded)}
@@ -122,13 +146,15 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
           )}
         </div>
       </Flex>
-      {/* 探测结果图表 */}
-      <div className="mt-4 w-full h-[70px]">
-        <EndpointChart
-          endpointId={endpoint.id}
-          refetchInterval={endpoint.intervalTime * 1000}
-        />
-      </div>
+      {/* 探测结果图表 - 禁用时不显示 */}
+      {endpoint.enabled && (
+        <div className="mt-4 w-full h-[70px]">
+          <EndpointChart
+            endpointId={endpoint.id}
+            refetchInterval={endpoint.intervalTime * 1000}
+          />
+        </div>
+      )}
     </Card>
   );
 };

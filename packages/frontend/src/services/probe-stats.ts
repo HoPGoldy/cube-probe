@@ -27,7 +27,9 @@ export interface MultiRangeStatsResponse {
   };
 }
 
-export const useGetEndpointMultiRangeStats = (endpointId: string) => {
+export const useGetEndpointMultiRangeStats = (
+  endpointId: string | undefined,
+) => {
   return useQuery({
     queryKey: ["probe-stats/endpoint/multi-range", endpointId],
     enabled: !!endpointId,

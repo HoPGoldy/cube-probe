@@ -11,7 +11,16 @@ import {
   useGetEndpointList,
   useUpdateEndpoint,
 } from "@/services/monitored-endpoint";
-import { Spin, Empty, Flex, Space, Button, Modal, Switch, message } from "antd";
+import {
+  Spin,
+  Empty,
+  Flex,
+  Space,
+  Button,
+  Modal,
+  message,
+  Dropdown,
+} from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
@@ -21,7 +30,13 @@ import {
   EndpointDetailModal,
 } from "./detail-endpoint";
 import { DetailPageType } from "@/utils/use-detail-type";
-import { CloseOutlined, CopyOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  CopyOutlined,
+  MoreOutlined,
+  PauseCircleOutlined,
+  PlayCircleOutlined,
+} from "@ant-design/icons";
 import {
   DETAIL_TYPE_KEY as HOST_DETAIL_TYPE_KEY,
   DETAIL_ID_KEY as HOST_DETAIL_ID_KEY,
@@ -197,28 +212,44 @@ const HostDetailPage: React.FC = () => {
           <Flex gap={16} justify="space-between" align="center">
             <div className="text-4xl font-bold">{hostDetail?.name}</div>
             <Space>
-              <Switch
-                checkedChildren="已启用"
-                unCheckedChildren="已禁用"
-                checked={hostDetail.enabled}
-                onChange={() => onSwitchEnabled(hostDetail)}
-              />
               <Button type="primary" onClick={onAddEndpoint}>
                 创建接口
               </Button>
               <Button onClick={() => onEditHost(hostDetail.id)}>编辑</Button>
-              <Button
-                icon={<CopyOutlined />}
-                loading={copyingHost}
-                onClick={handleCopyHost}
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "toggle",
+                      icon: hostDetail.enabled ? (
+                        <PauseCircleOutlined />
+                      ) : (
+                        <PlayCircleOutlined />
+                      ),
+                      label: hostDetail.enabled ? "禁用" : "启用",
+                      onClick: () => onSwitchEnabled(hostDetail),
+                    },
+                    {
+                      key: "copy",
+                      icon: <CopyOutlined />,
+                      label: copyingHost ? "复制中..." : "复制",
+                      disabled: copyingHost,
+                      onClick: handleCopyHost,
+                    },
+                    { type: "divider" },
+                    {
+                      key: "delete",
+                      icon: <CloseOutlined />,
+                      label: "删除",
+                      danger: true,
+                      onClick: () => onHostDeleteConfirm(hostDetail),
+                    },
+                  ],
+                }}
+                trigger={["click"]}
               >
-                复制
-              </Button>
-              <Button
-                danger
-                icon={<CloseOutlined />}
-                onClick={() => onHostDeleteConfirm(hostDetail)}
-              ></Button>
+                <Button icon={<MoreOutlined />} />
+              </Dropdown>
             </Space>
           </Flex>
           <div className="mt-2 text-gray-500">

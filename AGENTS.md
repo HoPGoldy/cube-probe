@@ -138,6 +138,27 @@ The probe system uses **interval-based scheduling** (not cron):
 4. **ProbeResultCleanupService**: Periodic cleanup of old results
 5. **ProbeStatsAggregationService**: Aggregates probe results into hourly/daily statistics
 
+**Dual-Layer Enabled State Design:**
+
+The system uses a two-layer enable/disable mechanism:
+
+- `Service.enabled` - Service-level switch (master switch)
+- `EndPoint.enabled` - Endpoint-level switch (individual switch)
+
+**Only when both are enabled will the probe execute.**
+
+Design rationale:
+
+1. **Quick maintenance**: Disable an entire service with one click without touching individual endpoints
+2. **Clear semantics**: `Service.enabled = false` means "pause monitoring for the entire service"
+3. **Easy recovery**: When re-enabling a Service, each endpoint retains its original enabled state
+4. **Dashboard display**: Service status is a simple binary state, no need to derive from child endpoints
+
+Alternative considered (rejected):
+
+- Remove `Service.enabled`, use batch enable/disable endpoints instead
+- Rejected because: requires updating multiple records, introduces "partial enabled" state complexity, and loses the semantic clarity of "service-level pause"
+
 **Statistics Aggregation:**
 
 The system aggregates raw probe results into hourly and daily statistics for efficient querying:
