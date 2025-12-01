@@ -427,6 +427,7 @@ export class NotificationService {
     Array<{
       serviceId: string;
       serviceName: string;
+      serviceEnabled: boolean;
       currentStatus: "UP" | "DOWN";
       lastNotifiedAt: Date | null;
       failedEndpoints: Array<{
@@ -439,6 +440,7 @@ export class NotificationService {
     const result: Array<{
       serviceId: string;
       serviceName: string;
+      serviceEnabled: boolean;
       currentStatus: "UP" | "DOWN";
       lastNotifiedAt: Date | null;
       failedEndpoints: Array<{
@@ -479,6 +481,7 @@ export class NotificationService {
       result.push({
         serviceId: service.id,
         serviceName: service.name,
+        serviceEnabled: service.enabled,
         currentStatus: hostState?.currentStatus || "UP",
         lastNotifiedAt: hostState?.lastNotifiedAt || null,
         failedEndpoints,

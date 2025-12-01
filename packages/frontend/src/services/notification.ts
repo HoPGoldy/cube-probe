@@ -151,6 +151,7 @@ export interface FailedEndpoint {
 export interface HostNotificationStatus {
   serviceId: string;
   serviceName: string;
+  serviceEnabled: boolean;
   currentStatus: "UP" | "DOWN";
   lastNotifiedAt: string | null;
   failedEndpoints: FailedEndpoint[];

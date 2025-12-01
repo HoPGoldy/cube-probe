@@ -4,6 +4,7 @@ import {
   useDeleteMonitoredHost,
   useGetMonitoredHostList,
 } from "@/services/monitored-host";
+import { useGetNotificationStatusList } from "@/services/notification";
 import { Card, Spin, Flex, Space, Button, Modal } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
@@ -23,10 +24,45 @@ const HomePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { data: hostsData, isLoading } = useGetMonitoredHostList({});
+  const { data: statusData } = useGetNotificationStatusList();
 
   const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
 
   const hosts = hostsData?.data ?? [];
+  const statusList = statusData?.data ?? [];
+
+  // 根据通知状态获取 Host 的展示状态
+  const getHostDisplayStatus = (
+    hostId: string,
+  ): "UP" | "WARNING" | "DOWN" | "DISABLED" => {
+    const host = hosts.find((h: any) => h.id === hostId);
+    if (!host?.enabled) {
+      return "DISABLED";
+    }
+
+    const status = statusList.find((s: any) => s.serviceId === hostId);
+    if (!status) {
+      return "UP"; // 未启用通知的服务默认显示正常
+    }
+
+    if (status.currentStatus === "DOWN") {
+      return "DOWN";
+    }
+
+    if (status.currentStatus === "UP" && status.failedEndpoints.length > 0) {
+      return "WARNING";
+    }
+
+    return "UP";
+  };
+
+  // 状态对应的颜色
+  const statusColorMap = {
+    UP: "bg-green-500",
+    WARNING: "bg-yellow-500",
+    DOWN: "bg-red-500",
+    DISABLED: "bg-gray-400",
+  };
 
   usePageTitle("监控首页");
 
@@ -66,6 +102,8 @@ const HomePage: React.FC = () => {
   }
 
   const renderHostItem = (host: any) => {
+    const displayStatus = getHostDisplayStatus(host.id);
+
     return (
       <Card
         key={host.id}
@@ -77,9 +115,7 @@ const HomePage: React.FC = () => {
             <Flex gap={16} justify="space-between" align="center">
               <Flex className="text-2xl font-bold" align="center" gap={8}>
                 <span
-                  className={`inline-block w-3 h-3 rounded-full ${
-                    host.enabled ? "bg-green-500" : "bg-gray-400"
-                  }`}
+                  className={`inline-block w-3 h-3 rounded-full ${statusColorMap[displayStatus]}`}
                 />
                 {host.name}
               </Flex>
