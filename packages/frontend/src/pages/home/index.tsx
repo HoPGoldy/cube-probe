@@ -1,64 +1,25 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  useDeleteMonitoredHost,
-  useGetMonitoredHostList,
-} from "@/services/monitored-host";
-import { useGetNotificationStatusList } from "@/services/notification";
+import { Link, useNavigate } from "react-router-dom";
+import { useDeleteMonitoredHost } from "@/services/monitored-host";
 import { Card, Spin, Flex, Space, Button, Modal } from "antd";
 import { usePageTitle } from "@/store/global";
 import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { NotificationStatusSummary } from "./notification-status-summary";
 import { useHostDetailAction } from "../host-detail/use-detail-action";
+import { useHostStatus } from "@/utils/use-host-status";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [modal, contextHolder] = Modal.useModal();
 
-  const { data: hostsData, isLoading } = useGetMonitoredHostList({});
-  const { data: statusData } = useGetNotificationStatusList();
+  const { hosts, isLoading, getHostDisplayStatus, statusColorMap } =
+    useHostStatus();
 
   const { mutateAsync: deleteHost } = useDeleteMonitoredHost();
 
   const hostDetailActions = useHostDetailAction();
-
-  const hosts = hostsData?.data ?? [];
-  const statusList = statusData?.data ?? [];
-
-  // 根据通知状态获取 Host 的展示状态
-  const getHostDisplayStatus = (
-    hostId: string,
-  ): "UP" | "WARNING" | "DOWN" | "DISABLED" => {
-    const host = hosts.find((h: any) => h.id === hostId);
-    if (!host?.enabled) {
-      return "DISABLED";
-    }
-
-    const status = statusList.find((s: any) => s.serviceId === hostId);
-    if (!status) {
-      return "UP"; // 未启用通知的服务默认显示正常
-    }
-
-    if (status.currentStatus === "DOWN") {
-      return "DOWN";
-    }
-
-    if (status.currentStatus === "UP" && status.failedEndpoints.length > 0) {
-      return "WARNING";
-    }
-
-    return "UP";
-  };
-
-  // 状态对应的颜色
-  const statusColorMap = {
-    UP: "bg-green-500",
-    WARNING: "bg-yellow-500",
-    DOWN: "bg-red-500",
-    DISABLED: "bg-gray-400",
-  };
 
   usePageTitle("监控首页");
 
@@ -137,9 +98,19 @@ const HomePage: React.FC = () => {
           <Flex gap={16} justify="space-between" align="center">
             <div className="text-4xl font-bold">监控服务</div>
             <Space>
-              <Button type="primary" onClick={hostDetailActions.onAdd}>
-                创建服务
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={hostDetailActions.onAdd}
+              >
+                创建监控服务
               </Button>
+              <Link to="/probe-env">
+                <Button block>环境变量管理</Button>
+              </Link>
+              <Link to="/notification-channel">
+                <Button block>通知管理</Button>
+              </Link>
             </Space>
           </Flex>
           <div className="mt-2 text-gray-500">

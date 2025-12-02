@@ -8,6 +8,7 @@ export const useGetMonitoredHostList = (query: MonitoredHostListQueryDto) => {
   return useQuery({
     queryKey: ["monitored-host/list", query],
     queryFn: () => requestPost("monitored-host/list", query),
+    refetchInterval: 5 * 1000,
   });
 };
 

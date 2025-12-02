@@ -4,73 +4,49 @@ import s from "./styles.module.css";
 import { useAtomValue } from "jotai";
 import { stateUserJwtData } from "@/store/user";
 import { UserRole } from "@/services/user";
-import { useGetMonitoredHostList } from "@/services/monitored-host";
 import { Button, Flex } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useHostDetailAction } from "@/pages/host-detail/use-detail-action";
+import { useHostStatus } from "@/utils/use-host-status";
 
 interface MenuItem {
   path: string;
   name: string;
+  hostId?: string;
 }
 
 export const Sidebar: FC = () => {
   const location = useLocation();
   const userInfo = useAtomValue(stateUserJwtData);
 
-  const { data: hostsData } = useGetMonitoredHostList({});
-  const hosts = hostsData?.data ?? [];
+  const { hosts, getHostDisplayStatus, statusColorMap } = useHostStatus();
 
   const hostDetailActions = useHostDetailAction();
 
-  const menuItems: MenuItem[] = [
-    {
-      path: "/user-profile",
-      name: "个人资料",
-    },
-  ];
-
-  if (userInfo.role === UserRole.ADMIN) {
-    menuItems.push(
-      {
-        path: "/setting-application",
-        name: "应用管理",
-      },
-      {
-        path: "/setting-user",
-        name: "用户管理",
-      },
-      {
-        path: "/monitored-host",
-        name: "监控服务",
-      },
-      {
-        path: "/monitored-endpoint",
-        name: "监控端点",
-      },
-      {
-        path: "/probe-result",
-        name: "探测结果",
-      },
-      {
-        path: "/notification-channel",
-        name: "通知渠道",
-      },
-      {
-        path: "/notification-log",
-        name: "通知记录",
-      },
-    );
-  }
+  // 先添加监控服务列表
+  const menuItems: MenuItem[] = hosts.map((host: any) => ({
+    path: `/host-home/${host.id}`,
+    name: host.name,
+    hostId: host.id,
+  }));
 
   const renderMenuItem = (item: MenuItem) => {
     const className = [s.menuItem];
     if (item.path === location.pathname) className.push(s.menuItemActive);
 
+    const displayStatus = item.hostId
+      ? getHostDisplayStatus(item.hostId)
+      : null;
+
     return (
       <Link to={item.path} key={item.path}>
         <div className={className.join(" ")} title={item.name}>
           <span className="truncate">{item.name}</span>
+          {displayStatus && (
+            <span
+              className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${statusColorMap[displayStatus]}`}
+            />
+          )}
         </div>
       </Link>
     );
@@ -83,28 +59,7 @@ export const Sidebar: FC = () => {
       </div>
 
       <div className="flex-grow flex-shrink overflow-y-auto noscrollbar overflow-x-hidden my-3">
-        {/* {menuItems.map(renderMenuItem)} */}
-
-        {hosts.length > 0 && (
-          <>
-            {hosts.map((host: any) => {
-              const isActive = location.pathname === `/host-home/${host.id}`;
-              const className = [s.menuItem];
-              if (isActive) className.push(s.menuItemActive);
-
-              return (
-                <Link to={`/host-home/${host.id}`} key={host.id}>
-                  <div
-                    className={className.join(" ")}
-                    title={`${host.name} (${host.host}:${host.port})`}
-                  >
-                    <span className="truncate">{host.name}</span>
-                  </div>
-                </Link>
-              );
-            })}
-          </>
-        )}
+        {menuItems.map(renderMenuItem)}
       </div>
 
       <Flex vertical gap={8}>
@@ -117,13 +72,6 @@ export const Sidebar: FC = () => {
           >
             创建监控服务
           </Button>
-        )}
-        {userInfo.role === UserRole.ADMIN && (
-          <Link to="/probe-env">
-            <Button className={`${s.toolBtn} keep-antd-style`} block>
-              环境变量
-            </Button>
-          </Link>
         )}
         {userInfo.role === UserRole.ADMIN && (
           <Link to="/home">

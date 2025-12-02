@@ -10,6 +10,7 @@ import {
   Switch,
   Select,
   Divider,
+  Button,
 } from "antd";
 import {
   useCreateMonitoredHost,
@@ -18,6 +19,8 @@ import {
 } from "@/services/monitored-host";
 import { useGetChannelList } from "@/services/notification";
 import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
+import { useNotificationChannelDetailAction } from "../notification-channel-detail/use-detail-action";
+import { NotificationChannelDetailModal } from "../notification-channel-detail";
 
 export const HostDetailModal: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,6 +37,8 @@ export const HostDetailModal: FC = () => {
   const { data: hostDetailResp, isLoading } =
     useGetMonitoredHostDetail(detailId);
   const { data: channelsResp } = useGetChannelList();
+
+  const channelDetailActions = useNotificationChannelDetailAction();
 
   const hostDetail = hostDetailResp?.data;
   const channels = channelsResp?.data ?? [];
@@ -201,7 +206,18 @@ export const HostDetailModal: FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="通知渠道"
+              label={
+                <div>
+                  <span>通知渠道</span>
+                  <Button
+                    type="link"
+                    size="small"
+                    onClick={channelDetailActions.onAdd}
+                  >
+                    新建渠道
+                  </Button>
+                </div>
+              }
               name="notifyChannelIds"
               tooltip="选择要发送通知的渠道"
             >
@@ -217,6 +233,7 @@ export const HostDetailModal: FC = () => {
           </Skeleton>
         </Form>
       </Modal>
+      <NotificationChannelDetailModal />
     </>
   );
 };

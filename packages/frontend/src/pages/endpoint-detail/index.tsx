@@ -10,7 +10,10 @@ import {
   Skeleton,
   Switch,
   Radio,
+  Dropdown,
+  Button,
 } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 import {
   useCreateEndpoint,
   useGetEndpointDetail,
@@ -18,6 +21,7 @@ import {
 } from "@/services/monitored-endpoint";
 import { CodeEditor } from "@/components/code-editor";
 import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
+import { codeTemplates } from "./code-templates";
 
 export const EndpointDetailModal: FC = () => {
   const { hostId } = useParams();
@@ -133,7 +137,7 @@ export const EndpointDetailModal: FC = () => {
         title={isAdd ? "新增监控端点" : "编辑监控端点"}
         open={isOpen}
         onOk={onSave}
-        width={600}
+        width={700}
         loading={isLoading || adding || updating}
         onCancel={onCancel}
         destroyOnClose
@@ -285,7 +289,26 @@ export const EndpointDetailModal: FC = () => {
                     tooltip="编写探测逻辑代码，可使用 http 和 env 全局对象"
                     rules={[{ required: true, message: "请输入代码内容" }]}
                   >
-                    <CodeEditor height={300} language="javascript" />
+                    <CodeEditor
+                      height={300}
+                      language="javascript"
+                      toolbarExtra={
+                        <Dropdown
+                          menu={{
+                            items: codeTemplates.map((t, index) => ({
+                              key: index,
+                              label: `${t.name} - ${t.description}`,
+                              onClick: () =>
+                                form.setFieldValue("codeContent", t.code),
+                            })),
+                          }}
+                        >
+                          <Button type="text" size="small">
+                            选择示例代码 <DownOutlined />
+                          </Button>
+                        </Dropdown>
+                      }
+                    />
                   </Form.Item>
                 )
               }

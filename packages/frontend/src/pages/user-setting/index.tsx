@@ -1,8 +1,14 @@
 import { FC, Fragment } from "react";
-import { Button, Card, Col, Drawer, Flex, Row } from "antd";
+import { Button, Card, Col, Drawer, Flex, Row, Statistic } from "antd";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { ChangePasswordModal } from "../change-password";
-import { UserOutlined, RightOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  RightOutlined,
+  LogoutOutlined,
+  CloudServerOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import { Cell, SplitLine } from "@/components/cell";
 import { SettingLinkItem, useSettingMenu } from "./use-setting-menu";
 import { AboutModal } from "../about";
@@ -27,24 +33,24 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
 
   return (
     <div style={{ width: "16rem" }}>
-      {/* <div style={{ margin: "1rem 0rem" }}>
+      <div style={{ margin: "0 0 1rem 0" }}>
         <Row gutter={[16, 16]} justify="space-around">
           <Col>
             <Statistic
-              title="笔记数量"
-              value={123}
-              prefix={<SnippetsOutlined />}
+              title="启用服务"
+              value={settingHook.enabledCount}
+              prefix={<CloudServerOutlined />}
             />
           </Col>
           <Col>
             <Statistic
-              title="总字数"
-              value={321}
-              prefix={<HighlightOutlined />}
+              title="正常运行"
+              value={settingHook.upCount}
+              prefix={<CheckCircleOutlined />}
             />
           </Col>
         </Row>
-      </div> */}
+      </div>
       <Row gutter={[0, 8]} onClick={props.onClick}>
         {settingHook.settingConfig.map(renderConfigItem)}
 
@@ -121,24 +127,24 @@ export const MobileSetting: FC<MobileProps> = (props) => {
       <Flex vertical className="p-4" gap={16}>
         <h1 className="text-center">Cube Auth</h1>
         <Flex vertical gap={16} className="flex-grow">
-          {/* <Card size="small">
+          <Card size="small">
             <Row justify="space-around">
               <Col>
                 <Statistic
-                  title="笔记数量"
-                  value={123}
-                  prefix={<SnippetsOutlined />}
+                  title="启用服务"
+                  value={settingHook.enabledCount}
+                  prefix={<CloudServerOutlined />}
                 />
               </Col>
               <Col>
                 <Statistic
-                  title="总字数"
-                  value={321}
-                  prefix={<HighlightOutlined />}
+                  title="正常运行"
+                  value={settingHook.upCount}
+                  prefix={<CheckCircleOutlined />}
                 />
               </Col>
             </Row>
-          </Card> */}
+          </Card>
 
           <Card size="small">
             <Cell

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { Modal, Form, Input, Switch, Select, App } from "antd";
+import { Modal, Form, Input, Switch, App, Dropdown, Button } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 import { useSearchParams } from "react-router-dom";
 import { useDetailType } from "@/utils/use-detail-type";
 import {
@@ -10,6 +11,7 @@ import {
   ChannelCreateDto,
 } from "@/services/notification";
 import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
+import { CodeEditor } from "@/components/code-editor";
 
 const { TextArea } = Input;
 
@@ -137,33 +139,30 @@ export const NotificationChannelDetailModal: React.FC = () => {
           <TextArea rows={3} placeholder='{"Authorization": "Bearer xxx"}' />
         </Form.Item>
 
-        <Form.Item label="选择预置模板">
-          <Select
-            placeholder="选择模板快速填充"
-            allowClear
-            onChange={onTemplateSelect}
-            options={templates.map((t, index) => ({
-              label: `${t.name} - ${t.description}`,
-              value: index,
-            }))}
-          />
-        </Form.Item>
-
         <Form.Item
           name="bodyTemplate"
           label="请求体模板"
           rules={[{ required: true, message: "请输入请求体模板" }]}
           extra="支持变量: {{eventType}}, {{endpoint.name}}, {{service.name}}, {{details.status}}, {{details.message}}, {{timestamp}} 等"
         >
-          <TextArea
-            rows={10}
-            placeholder={`{
-  "msgtype": "markdown",
-  "markdown": {
-    "title": "{{eventType}} - {{endpoint.name}}",
-    "text": "### {{eventType}}\\n- **服务**: {{service.name}}\\n- **端点**: {{endpoint.name}}"
-  }
-}`}
+          <CodeEditor
+            language="json"
+            height="250px"
+            toolbarExtra={
+              <Dropdown
+                menu={{
+                  items: templates.map((t, index) => ({
+                    key: index,
+                    label: `${t.name} - ${t.description}`,
+                    onClick: () => onTemplateSelect(index),
+                  })),
+                }}
+              >
+                <Button type="text" size="small">
+                  选择预置模板 <DownOutlined />
+                </Button>
+              </Dropdown>
+            }
           />
         </Form.Item>
 

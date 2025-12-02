@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { logout, stateUserJwtData } from "@/store/user";
-import { LockOutlined, SmileOutlined } from "@ant-design/icons";
+import {
+  LockOutlined,
+  SmileOutlined,
+  SettingOutlined,
+  BellOutlined,
+} from "@ant-design/icons";
 import { useAtomValue } from "jotai";
+import { useNavigate } from "react-router-dom";
+import { useGetNotificationStatusList } from "@/services/notification";
 
 export interface SettingLinkItem {
   label: string;
@@ -11,12 +18,36 @@ export interface SettingLinkItem {
 
 export const useSettingMenu = () => {
   const userInfo = useAtomValue(stateUserJwtData);
+  const navigate = useNavigate();
   /** 是否显示修改密码弹窗 */
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   /** 是否展示关于弹窗 */
   const [aboutVisible, setAboutVisible] = useState(false);
 
+  const { data: statusData } = useGetNotificationStatusList();
+  const statusList = (statusData?.data as any[]) ?? [];
+  /** 启用的服务数量 */
+  const enabledCount = statusList.filter((s) => s.serviceEnabled).length;
+  /** 正常运行的服务数量 */
+  const upCount = statusList.filter(
+    (s) => s.serviceEnabled && s.currentStatus === "UP",
+  ).length;
+
   const settingConfig = [
+    {
+      label: "环境变量管理",
+      icon: <SettingOutlined />,
+      onClick: () => {
+        navigate("/probe-env");
+      },
+    },
+    {
+      label: "通知管理",
+      icon: <BellOutlined />,
+      onClick: () => {
+        navigate("/notification-channel");
+      },
+    },
     {
       label: "修改密码",
       icon: <LockOutlined />,
@@ -43,5 +74,7 @@ export const useSettingMenu = () => {
     aboutVisible,
     setAboutVisible,
     settingConfig,
+    enabledCount,
+    upCount,
   };
 };

@@ -23,6 +23,8 @@ export interface CodeEditorProps {
   minimap?: boolean;
   /** 是否显示工具栏，默认 true */
   showToolbar?: boolean;
+  /** 自定义工具栏额外内容 */
+  toolbarExtra?: React.ReactNode;
   /** 自定义编辑器选项 */
   options?: editor.IStandaloneEditorConstructionOptions;
   /** 编辑器挂载完成回调 */
@@ -45,6 +47,7 @@ export const CodeEditor: FC<CodeEditorProps> = ({
   lineNumbers = true,
   minimap = false,
   showToolbar = true,
+  toolbarExtra,
   options,
   onMount,
   className,
@@ -211,11 +214,14 @@ export const CodeEditor: FC<CodeEditorProps> = ({
           style={{
             display: "flex",
             justifyContent: "flex-end",
+            alignItems: "center",
+            gap: 8,
             padding: "4px 8px",
             borderBottom: "1px solid #f0f0f0",
             backgroundColor: "#fafafa",
           }}
         >
+          {toolbarExtra}
           <Tooltip title="格式化代码 (Shift+Alt+F)">
             <Button
               type="text"
