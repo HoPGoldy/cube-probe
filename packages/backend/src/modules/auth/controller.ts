@@ -5,6 +5,8 @@ import { signJwtToken } from "./utils";
 import { AppInstance } from "@/types";
 import { ErrorUnauthorized } from "@/types/error";
 import { ErrorAuthFailed, ErrorBanned } from "./error";
+import { hashPassword, shaWithSalt } from "@/lib/crypto";
+import { ENV_BACKEND_LOGIN_PASSWORD } from "@/config/env";
 
 declare module "fastify" {
   interface FastifyContextConfig {
@@ -73,11 +75,8 @@ export const registerController = (options: RegisterOptions) => {
         tags: ["auth"],
         body: {
           type: "object",
-          required: ["username", "password"],
+          required: ["password"],
           properties: {
-            username: {
-              type: "string",
-            },
             password: {
               type: "string",
             },
@@ -94,30 +93,23 @@ export const registerController = (options: RegisterOptions) => {
       },
     },
     async (request) => {
-      const { username, password } = request.body as {
-        username: string;
-        password: string;
-      };
-
-      // 查找用户
-      const user = await userService.findByUsername(username);
-      if (!user || user.isDeleted) {
-        throw new ErrorAuthFailed();
-      }
+      const { password } = request.body;
 
       // 验证密码
-      const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        hashPassword(shaWithSalt(ENV_BACKEND_LOGIN_PASSWORD, "admin")),
+      );
       if (!isPasswordValid) {
         throw new ErrorAuthFailed();
       }
 
-      // 检查用户是否被封禁
-      if (user.isBanned) {
-        throw new ErrorBanned();
-      }
-
       // 生成 JWT 令牌
-      const token = signJwtToken(server, user);
+      const token = signJwtToken(server, {
+        id: "admin",
+        username: "admin",
+        role: UserRole.ADMIN,
+      });
 
       return {
         token,

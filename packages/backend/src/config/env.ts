@@ -28,3 +28,19 @@ export const ENV_BACKEND_PORT = +getEnv("BACKEND_PORT", "3499");
 
 /** 前端部署到的基础路径 */
 export const ENV_FRONTEND_BASE_URL = getEnv("FRONTEND_BASE_URL", "/");
+
+/** 用户登录密码 */
+export const ENV_BACKEND_LOGIN_PASSWORD = (() => {
+  let pwd = getEnv("BACKEND_LOGIN_PASSWORD", "");
+  if (!pwd) {
+    pwd = nanoid(12);
+    console.warn(
+      `[password] A random login password has been generated: ${pwd}`,
+    );
+    console.warn(
+      "[password] This can be set using the BACKEND_LOGIN_PASSWORD environment variable.",
+    );
+  }
+
+  return pwd;
+})();

@@ -1,7 +1,6 @@
 import { FC, Fragment } from "react";
 import { Button, Card, Col, Drawer, Flex, Row, Statistic } from "antd";
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { ChangePasswordModal } from "../change-password";
 import {
   UserOutlined,
   RightOutlined,
@@ -65,10 +64,7 @@ export const DesktopSetting: FC<DesktopProps> = (props) => {
           </Button>
         </Col>
       </Row>
-      <ChangePasswordModal
-        open={settingHook.changePasswordVisible}
-        onClose={() => settingHook.setChangePasswordVisible(false)}
-      />
+
       <AboutModal
         open={settingHook.aboutVisible}
         onClose={() => settingHook.setAboutVisible(false)}
@@ -175,10 +171,6 @@ export const MobileSetting: FC<MobileProps> = (props) => {
         </Flex>
       </Flex>
 
-      <ChangePasswordModal
-        open={settingHook.changePasswordVisible}
-        onClose={() => settingHook.setChangePasswordVisible(false)}
-      />
       <AboutModal
         open={settingHook.aboutVisible}
         onClose={() => settingHook.setAboutVisible(false)}

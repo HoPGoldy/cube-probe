@@ -4,9 +4,7 @@ import Loading from "./layouts/loading";
 import { LoginAuth } from "./layouts/login-auth";
 import { AppContainer } from "./layouts/app-container";
 import { Error403 } from "./pages/e403";
-import AttachmentDemo from "./pages/attachment-demo";
 import Login from "./pages/login";
-import Logout from "./pages/logout";
 import { HostDetailModal } from "./pages/host-detail";
 import { EndpointDetailModal } from "./pages/endpoint-detail";
 import { NotificationChannelDetailModal } from "./pages/notification-channel-detail";
@@ -80,15 +78,10 @@ export const routes = createBrowserRouter(
     },
     // 登录
     {
-      path: "/login/:appId",
+      path: "/login",
       element: <Login />,
     },
-    {
-      path: "/logout/:appId",
-      element: <Logout />,
-    },
     { path: "/e403", element: <Error403 /> },
-    { path: "/file-demo", element: <AttachmentDemo /> },
   ],
   {
     basename: APP_CONFIG.PATH_BASENAME,

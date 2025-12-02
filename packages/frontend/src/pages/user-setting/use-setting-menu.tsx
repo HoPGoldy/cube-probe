@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { logout, stateUserJwtData } from "@/store/user";
 import {
-  LockOutlined,
   SmileOutlined,
   SettingOutlined,
   BellOutlined,
@@ -19,8 +18,6 @@ export interface SettingLinkItem {
 export const useSettingMenu = () => {
   const userInfo = useAtomValue(stateUserJwtData);
   const navigate = useNavigate();
-  /** 是否显示修改密码弹窗 */
-  const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   /** 是否展示关于弹窗 */
   const [aboutVisible, setAboutVisible] = useState(false);
 
@@ -50,11 +47,6 @@ export const useSettingMenu = () => {
       },
     },
     {
-      label: "修改密码",
-      icon: <LockOutlined />,
-      onClick: () => setChangePasswordVisible(true),
-    },
-    {
       label: "关于",
       icon: <SmileOutlined />,
       onClick: () => setAboutVisible(true),
@@ -70,8 +62,6 @@ export const useSettingMenu = () => {
   return {
     userName,
     onLogout,
-    changePasswordVisible,
-    setChangePasswordVisible,
     aboutVisible,
     setAboutVisible,
     settingConfig,

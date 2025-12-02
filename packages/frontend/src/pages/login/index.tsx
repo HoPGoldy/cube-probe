@@ -5,15 +5,13 @@ import { LoginPage } from "./page";
 import { PageLoading } from "@/components/page-loading";
 import { useRefreshToken } from "@/services/auth";
 import { useLoginSuccess } from "./use-login-success";
-import { useParams } from "react-router-dom";
 
 const Login = () => {
-  const { appId } = useParams();
   const [userToken, setUserToken] = useAtom(stateUserToken);
   const { mutateAsync: refreshToken, isPending: renewLoading } =
     useRefreshToken();
 
-  const { runLoginSuccess } = useLoginSuccess(appId);
+  const { runLoginSuccess } = useLoginSuccess();
 
   useEffect(() => {
     if (!userToken) return;
@@ -29,7 +27,7 @@ const Login = () => {
       }
 
       login(resp.data);
-      runLoginSuccess(resp.data.token);
+      runLoginSuccess();
     };
 
     runRenew();

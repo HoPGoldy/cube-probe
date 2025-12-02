@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { requestPost } from "./base";
 
 export interface LoginReqData {
-  username: string;
   password: string;
 }
 
