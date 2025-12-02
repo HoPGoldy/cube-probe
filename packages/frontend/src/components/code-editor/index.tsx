@@ -215,7 +215,6 @@ export const CodeEditor: FC<CodeEditorProps> = ({
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
-            gap: 8,
             padding: "4px 8px",
             borderBottom: "1px solid #f0f0f0",
             backgroundColor: "#fafafa",

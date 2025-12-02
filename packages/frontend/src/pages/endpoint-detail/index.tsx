@@ -1,5 +1,5 @@
 import { useDetailType } from "@/utils/use-detail-type";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
   Form,
@@ -12,8 +12,12 @@ import {
   Radio,
   Dropdown,
   Button,
+  Space,
+  Alert,
+  Spin,
+  Flex,
 } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import {
   useCreateEndpoint,
   useGetEndpointDetail,
@@ -22,6 +26,10 @@ import {
 import { CodeEditor } from "@/components/code-editor";
 import { DETAIL_ID_KEY, DETAIL_TYPE_KEY } from "./use-detail-action";
 import { codeTemplates } from "./code-templates";
+import {
+  executeCode,
+  type CodeExecuteResponse,
+} from "@/services/code-executor";
 
 export const EndpointDetailModal: FC = () => {
   const { hostId } = useParams();
@@ -42,6 +50,14 @@ export const EndpointDetailModal: FC = () => {
   const endpointDetail = endpointDetailResp?.data;
 
   const [form] = Form.useForm();
+  const endpointType = Form.useWatch("type", form);
+  console.log("endpointType", endpointType);
+
+  // 代码测试相关状态
+  const [testLoading, setTestLoading] = useState(false);
+  const [testResult, setTestResult] = useState<CodeExecuteResponse | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!endpointDetail) return;
@@ -131,6 +147,118 @@ export const EndpointDetailModal: FC = () => {
     return true;
   };
 
+  // 测试代码执行
+  const onTestCode = async () => {
+    const code = form.getFieldValue("codeContent");
+    if (!code?.trim()) {
+      Modal.warning({
+        title: "提示",
+        content: "请先输入代码内容",
+      });
+      return;
+    }
+
+    setTestLoading(true);
+    setTestResult(null);
+
+    try {
+      const resp = await executeCode({
+        code,
+        timeout: 10000,
+      });
+      if (resp.data) {
+        setTestResult(resp.data);
+      }
+    } catch (error: any) {
+      setTestResult({
+        success: false,
+        error: error?.message || "执行失败",
+        executionTime: 0,
+        logs: [],
+      });
+    } finally {
+      setTestLoading(false);
+    }
+  };
+
+  const renderExecutorTestResult = () => {
+    if (testLoading) {
+      return (
+        <div style={{ textAlign: "center", padding: "16px 0" }}>
+          <Spin tip="代码执行中..." />
+        </div>
+      );
+    }
+
+    if (testResult && !testLoading) {
+      return (
+        <Flex vertical gap={8} className="mb-4">
+          <Alert
+            type={testResult.success ? "success" : "error"}
+            message={
+              testResult.success
+                ? `执行成功 (${testResult.executionTime}ms)`
+                : `执行失败 (${testResult.executionTime}ms)`
+            }
+            showIcon
+            closable
+            onClose={() => setTestResult(null)}
+          />
+          <div
+            style={{
+              overflow: "auto",
+              fontSize: 12,
+            }}
+          >
+            {testResult.error && (
+              <div style={{ color: "#ff4d4f", marginBottom: 8 }}>
+                <strong>错误:</strong> {testResult.error}
+              </div>
+            )}
+
+            {testResult.logs.length > 0 && (
+              <div style={{ marginBottom: 8 }}>
+                <strong>日志输出:</strong>
+                <pre
+                  style={{
+                    background: "#f5f5f5",
+                    padding: 8,
+                    borderRadius: 4,
+                    margin: "4px 0 0 0",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-all",
+                  }}
+                >
+                  {testResult.logs.join("\n")}
+                </pre>
+              </div>
+            )}
+
+            {testResult.result !== undefined && (
+              <div>
+                <strong>返回结果:</strong>
+                <pre
+                  style={{
+                    background: "#f5f5f5",
+                    padding: 8,
+                    borderRadius: 4,
+                    margin: "4px 0 0 0",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-all",
+                  }}
+                >
+                  {typeof testResult.result === "object"
+                    ? JSON.stringify(testResult.result, null, 2)
+                    : String(testResult.result)}
+                </pre>
+              </div>
+            )}
+          </div>
+        </Flex>
+      );
+    }
+  };
+
   return (
     <>
       <Modal
@@ -143,6 +271,7 @@ export const EndpointDetailModal: FC = () => {
         destroyOnClose
         afterClose={() => {
           form.resetFields();
+          setTestResult(null);
         }}
       >
         <Form
@@ -194,99 +323,93 @@ export const EndpointDetailModal: FC = () => {
               </Radio.Group>
             </Form.Item>
 
-            {/* CONFIG 模式字段 */}
-            <Form.Item
-              noStyle
-              shouldUpdate={(prev, cur) => prev.type !== cur.type}
-            >
-              {({ getFieldValue }) =>
-                getFieldValue("type") !== "CODE" && (
-                  <>
-                    <Form.Item
-                      label="URL"
-                      name="url"
-                      tooltip="端点的具体请求路径"
-                    >
-                      <Input placeholder="例如: /api/health" />
-                    </Form.Item>
+            {endpointType === "CONFIG" && (
+              <>
+                <Form.Item label="URL" name="url" tooltip="端点的具体请求路径">
+                  <Input placeholder="例如: /api/health" />
+                </Form.Item>
 
-                    <Form.Item label="请求方法" name="method">
-                      <Select
-                        placeholder="请选择请求方法"
-                        options={[
-                          { label: "GET", value: "GET" },
-                          { label: "POST", value: "POST" },
-                          { label: "PUT", value: "PUT" },
-                          { label: "DELETE", value: "DELETE" },
-                          { label: "PATCH", value: "PATCH" },
-                          { label: "HEAD", value: "HEAD" },
-                          { label: "OPTIONS", value: "OPTIONS" },
-                        ]}
-                      />
-                    </Form.Item>
+                <Form.Item label="请求方法" name="method">
+                  <Select
+                    placeholder="请选择请求方法"
+                    options={[
+                      { label: "GET", value: "GET" },
+                      { label: "POST", value: "POST" },
+                      { label: "PUT", value: "PUT" },
+                      { label: "DELETE", value: "DELETE" },
+                      { label: "PATCH", value: "PATCH" },
+                      { label: "HEAD", value: "HEAD" },
+                      { label: "OPTIONS", value: "OPTIONS" },
+                    ]}
+                  />
+                </Form.Item>
 
-                    <Form.Item label="请求头 (JSON)" name="headers">
-                      <Input.TextArea
-                        rows={4}
-                        placeholder='例如: {"Authorization": "Bearer token"}'
-                      />
-                    </Form.Item>
+                <Form.Item label="请求头 (JSON)" name="headers">
+                  <Input.TextArea
+                    rows={4}
+                    placeholder='例如: {"Authorization": "Bearer token"}'
+                  />
+                </Form.Item>
 
-                    <Form.Item label="请求体编码" name="bodyContentType">
-                      <Select
-                        placeholder="请选择请求体编码类型"
-                        options={[
-                          { label: "JSON", value: "json" },
-                          {
-                            label: "x-www-form-urlencoded",
-                            value: "x-www-form-urlencoded",
-                          },
-                          { label: "XML", value: "xml" },
-                        ]}
-                      />
-                    </Form.Item>
+                <Form.Item label="请求体编码" name="bodyContentType">
+                  <Select
+                    placeholder="请选择请求体编码类型"
+                    options={[
+                      { label: "JSON", value: "json" },
+                      {
+                        label: "x-www-form-urlencoded",
+                        value: "x-www-form-urlencoded",
+                      },
+                      { label: "XML", value: "xml" },
+                    ]}
+                  />
+                </Form.Item>
 
-                    <Form.Item
-                      label="请求体内容"
-                      name="bodyContent"
-                      tooltip="请求体的内容。JSON/Form编码时输入JSON格式，XML编码时直接输入XML字符串"
-                    >
-                      <Input.TextArea
-                        rows={4}
-                        placeholder='JSON/Form: {"key": "value"}&#10;XML: <root>...</root>'
-                      />
-                    </Form.Item>
+                <Form.Item
+                  label="请求体内容"
+                  name="bodyContent"
+                  tooltip="请求体的内容。JSON/Form编码时输入JSON格式，XML编码时直接输入XML字符串"
+                >
+                  <Input.TextArea
+                    rows={4}
+                    placeholder='JSON/Form: {"key": "value"}&#10;XML: <root>...</root>'
+                  />
+                </Form.Item>
 
-                    <Form.Item label="超时时间 (秒)" name="timeout">
-                      <InputNumber
-                        style={{ width: "100%" }}
-                        min={1}
-                        max={300}
-                        placeholder="例如: 10"
-                      />
-                    </Form.Item>
-                  </>
-                )
-              }
-            </Form.Item>
+                <Form.Item label="超时时间 (秒)" name="timeout">
+                  <InputNumber
+                    style={{ width: "100%" }}
+                    min={1}
+                    max={300}
+                    placeholder="例如: 10"
+                  />
+                </Form.Item>
+              </>
+            )}
 
             {/* CODE 模式字段 */}
-            <Form.Item
-              noStyle
-              shouldUpdate={(prev, cur) => prev.type !== cur.type}
-            >
-              {({ getFieldValue }) =>
-                getFieldValue("type") === "CODE" && (
-                  <Form.Item
-                    label="代码内容"
-                    name="codeContent"
-                    tooltip="编写探测逻辑代码，可使用 http 和 env 全局对象"
-                    rules={[{ required: true, message: "请输入代码内容" }]}
-                  >
-                    <CodeEditor
-                      height={300}
-                      language="javascript"
-                      toolbarExtra={
+            {endpointType === "CODE" && (
+              <>
+                <Form.Item
+                  label="代码内容"
+                  name="codeContent"
+                  tooltip="编写探测逻辑代码，可使用 http 和 env 全局对象"
+                  rules={[{ required: true, message: "请输入代码内容" }]}
+                >
+                  <CodeEditor
+                    height={300}
+                    language="javascript"
+                    toolbarExtra={
+                      <Space size="small">
+                        <Button
+                          type="link"
+                          size="small"
+                          icon={<PlayCircleOutlined />}
+                          loading={testLoading}
+                          onClick={onTestCode}
+                        >
+                          测试运行
+                        </Button>
                         <Dropdown
                           menu={{
                             items: codeTemplates.map((t, index) => ({
@@ -301,12 +424,14 @@ export const EndpointDetailModal: FC = () => {
                             选择示例代码 <DownOutlined />
                           </Button>
                         </Dropdown>
-                      }
-                    />
-                  </Form.Item>
-                )
-              }
-            </Form.Item>
+                      </Space>
+                    }
+                  />
+                </Form.Item>
+
+                {renderExecutorTestResult()}
+              </>
+            )}
 
             {/* 通用字段 */}
             <Form.Item
