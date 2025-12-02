@@ -6,6 +6,9 @@ const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommen
 
 module.exports = tseslint.config(
   {
+    ignores: ["**/prisma/client/**"],
+  },
+  {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {

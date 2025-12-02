@@ -40,7 +40,7 @@ describe("PrismaMock", () => {
       const mockService = {
         id: "test-service-1",
         name: "Test Service",
-          desc: null,
+        desc: null,
         url: "https://example.com",
         enabled: true,
         headers: null,
@@ -125,7 +125,7 @@ describe("PrismaMock", () => {
           id: "test-endpoint-1",
           hostId: "service-1",
           name: "Test EndPoint",
-        desc: null,
+          desc: null,
           url: "/api/health",
           method: "GET",
         },
@@ -284,7 +284,7 @@ describe("PrismaMock", () => {
       prismaMock.monitoredHost.create.mockResolvedValue({
         id: "1",
         name: "Test",
-          desc: null,
+        desc: null,
         url: null,
         enabled: true,
         headers: null,
