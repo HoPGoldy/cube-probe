@@ -25,7 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   unit = "",
   colorClass = "",
 }) => (
-  <Card className="flex-grow" styles={{ body: { padding: 12 } }}>
+  <Card className="flex-grow flex-shrink-0" styles={{ body: { padding: 12 } }}>
     <div className="text-center min-w-[80px]">
       <div className="text-base text-gray-400">{label}</div>
       {subLabel && <div className="text-xs text-gray-400">({subLabel})</div>}

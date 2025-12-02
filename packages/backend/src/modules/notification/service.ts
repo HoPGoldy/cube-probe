@@ -20,6 +20,21 @@ interface ProbeResultData {
   message?: string | null;
 }
 
+export interface FailedEndpointDetail {
+  endpointId: string;
+  endpointName: string;
+  consecutiveFailures: number;
+}
+
+export interface HostStatusDetail {
+  hostId: string;
+  hostName: string;
+  hostEnabled: boolean;
+  currentStatus: "UP" | "DOWN";
+  lastNotifiedAt: Date | null;
+  failedEndpoints: Array<FailedEndpointDetail>;
+}
+
 export class NotificationService {
   /** 内存状态：存储每个 Host 的状态 */
   private hostStatus: Map<string, HostStatus> = new Map();
@@ -423,36 +438,12 @@ export class NotificationService {
   /**
    * 获取所有 Host 的通知状态
    */
-  async getAllHostStatus(): Promise<
-    Array<{
-      hostId: string;
-      hostName: string;
-      hostEnabled: boolean;
-      currentStatus: "UP" | "DOWN";
-      lastNotifiedAt: Date | null;
-      failedEndpoints: Array<{
-        endpointId: string;
-        endpointName: string;
-        consecutiveFailures: number;
-      }>;
-    }>
-  > {
-    const result: Array<{
-      hostId: string;
-      hostName: string;
-      hostEnabled: boolean;
-      currentStatus: "UP" | "DOWN";
-      lastNotifiedAt: Date | null;
-      failedEndpoints: Array<{
-        endpointId: string;
-        endpointName: string;
-        consecutiveFailures: number;
-      }>;
-    }> = [];
+  async getAllHostStatus(): Promise<Array<HostStatusDetail>> {
+    const result: Array<HostStatusDetail> = [];
 
-    // 获取所有启用通知的服务
+    // 获取所有启用的服务
     const services = await this.options.prisma.monitoredHost.findMany({
-      where: { notifyEnabled: true },
+      where: { enabled: true },
       include: { endpoints: true },
     });
 
@@ -460,11 +451,7 @@ export class NotificationService {
       const hostState = this.hostStatus.get(service.id);
 
       // 构建失败端点列表
-      const failedEndpoints: Array<{
-        endpointId: string;
-        endpointName: string;
-        consecutiveFailures: number;
-      }> = [];
+      const failedEndpoints: Array<FailedEndpointDetail> = [];
 
       if (hostState) {
         const entries = Array.from(hostState.failedEndpoints.entries());

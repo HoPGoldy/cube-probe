@@ -125,7 +125,7 @@ export const MobileSetting: FC<MobileProps> = (props) => {
       }
     >
       <Flex vertical className="p-4" gap={16}>
-        <h1 className="text-center">Cube Auth</h1>
+        <h1 className="text-center">Cube Probe</h1>
         <Flex vertical gap={16} className="flex-grow">
           <Card size="small">
             <Row justify="space-around">

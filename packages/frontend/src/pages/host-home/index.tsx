@@ -35,6 +35,12 @@ import { useGetHostMultiRangeStats } from "@/services/probe-stats";
 import { StatCard, getUptimeColor } from "@/components/stat-card";
 import { useEndpointDetailAction } from "../endpoint-detail/use-detail-action";
 import { useHostDetailAction } from "../host-detail/use-detail-action";
+import { DesktopArea } from "@/layouts/responsive";
+import {
+  ActionButton,
+  PageAction,
+  PageContent,
+} from "@/layouts/page-with-action";
 
 const HostDetailPage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
@@ -132,7 +138,12 @@ const HostDetailPage: React.FC = () => {
     }
 
     return (
-      <Flex gap={16} align="center" justify="space-around">
+      <Flex
+        gap={16}
+        align="center"
+        justify="space-around"
+        className="w-full overflow-x-auto"
+      >
         <StatCard
           label="平均响应"
           subLabel="当前"
@@ -183,87 +194,96 @@ const HostDetailPage: React.FC = () => {
 
   return (
     <>
-      <Flex vertical gap={16} className="m-4">
-        <div>
-          <Flex gap={16} justify="space-between" align="center">
-            <div className="text-4xl font-bold">{hostDetail?.name}</div>
-            <Space>
-              <Button type="primary" onClick={endpointDetailActions.onAdd}>
-                创建接口
-              </Button>
-              <Button onClick={() => hostDetailActions.onEdit(hostDetail.id)}>
-                编辑
-              </Button>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "toggle",
-                      icon: hostDetail.enabled ? (
-                        <PauseCircleOutlined />
-                      ) : (
-                        <PlayCircleOutlined />
-                      ),
-                      label: hostDetail.enabled ? "禁用" : "启用",
-                      onClick: () => onSwitchEnabled(hostDetail),
-                    },
-                    {
-                      key: "copy",
-                      icon: <CopyOutlined />,
-                      label: copyingHost ? "复制中..." : "复制",
-                      disabled: copyingHost,
-                      onClick: handleCopyHost,
-                    },
-                    { type: "divider" },
-                    {
-                      key: "delete",
-                      icon: <CloseOutlined />,
-                      label: "删除",
-                      danger: true,
-                      onClick: () => onHostDeleteConfirm(hostDetail),
-                    },
-                  ],
-                }}
-                trigger={["click"]}
-              >
-                <Button icon={<MoreOutlined />} />
-              </Dropdown>
-            </Space>
-          </Flex>
-          <div className="mt-2 text-gray-500">
-            {hostDetail.desc}
-            {hostDetail.desc && hostDetail.url && (
-              <span className="mx-2">·</span>
-            )}
-            {hostDetail.url}
+      <PageContent>
+        <Flex vertical gap={16} className="m-4">
+          <div>
+            <Flex gap={16} justify="space-between" align="center">
+              <div className="text-4xl font-bold">{hostDetail?.name}</div>
+              <DesktopArea>
+                <Space>
+                  <Button type="primary" onClick={endpointDetailActions.onAdd}>
+                    创建接口
+                  </Button>
+                  <Button
+                    onClick={() => hostDetailActions.onEdit(hostDetail.id)}
+                  >
+                    编辑
+                  </Button>
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "toggle",
+                          icon: hostDetail.enabled ? (
+                            <PauseCircleOutlined />
+                          ) : (
+                            <PlayCircleOutlined />
+                          ),
+                          label: hostDetail.enabled ? "禁用" : "启用",
+                          onClick: () => onSwitchEnabled(hostDetail),
+                        },
+                        {
+                          key: "copy",
+                          icon: <CopyOutlined />,
+                          label: copyingHost ? "复制中..." : "复制",
+                          disabled: copyingHost,
+                          onClick: handleCopyHost,
+                        },
+                        { type: "divider" },
+                        {
+                          key: "delete",
+                          icon: <CloseOutlined />,
+                          label: "删除",
+                          danger: true,
+                          onClick: () => onHostDeleteConfirm(hostDetail),
+                        },
+                      ],
+                    }}
+                    trigger={["click"]}
+                  >
+                    <Button icon={<MoreOutlined />} />
+                  </Dropdown>
+                </Space>
+              </DesktopArea>
+            </Flex>
+            <div className="mt-2 text-gray-500 truncate">
+              {hostDetail.desc}
+              {hostDetail.desc && hostDetail.url && (
+                <span className="mx-2">·</span>
+              )}
+              {hostDetail.url}
+            </div>
           </div>
-        </div>
 
-        {renderHostStats()}
+          {renderHostStats()}
 
-        {/* Endpoints 列表 */}
-        <Flex vertical gap={16}>
-          {endpoints.length === 0 ? (
-            <EmptyTip
-              className="mt-8"
-              title="暂未配置监控接口"
-              subTitle={'点击右上角"创建接口"按钮继续'}
-            />
-          ) : (
-            endpoints.map((endpoint: any) => (
-              <EndpointItem
-                key={endpoint.id}
-                endpoint={endpoint}
-                onEdit={() => endpointDetailActions.onEdit(endpoint.id)}
-                onSwitchEnabled={onSwitchEndpointEnabled}
-                onDelete={onEndpointDeleteConfirm}
+          {/* Endpoints 列表 */}
+          <Flex vertical gap={16}>
+            {endpoints.length === 0 ? (
+              <EmptyTip
+                className="mt-8"
+                title="暂未配置监控接口"
+                subTitle={'点击右上角"创建接口"按钮继续'}
               />
-            ))
-          )}
+            ) : (
+              endpoints.map((endpoint: any) => (
+                <EndpointItem
+                  key={endpoint.id}
+                  endpoint={endpoint}
+                  onEdit={() => endpointDetailActions.onEdit(endpoint.id)}
+                  onSwitchEnabled={onSwitchEndpointEnabled}
+                  onDelete={onEndpointDeleteConfirm}
+                />
+              ))
+            )}
+          </Flex>
         </Flex>
-      </Flex>
 
-      {contextHolder}
+        {contextHolder}
+      </PageContent>
+      <PageAction>
+        <ActionButton onClick={() => navigate("/")}>返回主面板</ActionButton>
+      </PageAction>
     </>
   );
 };

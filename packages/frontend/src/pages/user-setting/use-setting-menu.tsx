@@ -25,6 +25,7 @@ export const useSettingMenu = () => {
   const [aboutVisible, setAboutVisible] = useState(false);
 
   const { data: statusData } = useGetNotificationStatusList();
+  console.log("statusData", statusData);
   const statusList = (statusData?.data as any[]) ?? [];
   /** 启用的服务数量 */
   const enabledCount = statusList.filter((s) => s.hostEnabled).length;

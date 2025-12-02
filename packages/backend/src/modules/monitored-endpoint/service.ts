@@ -24,11 +24,9 @@ export class EndPointService {
       },
     });
 
-    // 如果端点启用，添加到定时任务调度器
+    // 如果端点启用，添加到定时任务调度器（不等待探测完成）
     if (endPoint.enabled) {
-      await this.options.intervalProbeService.addEndpointToScheduler(
-        endPoint.id,
-      );
+      this.options.intervalProbeService.addEndpointToScheduler(endPoint.id);
     }
 
     return endPoint;
@@ -74,11 +72,11 @@ export class EndPointService {
       // 从启用变为禁用：移除任务
       this.options.intervalProbeService.removeEndpointFromScheduler(id);
     } else if (!wasEnabled && isEnabled) {
-      // 从禁用变为启用：添加任务
-      await this.options.intervalProbeService.addEndpointToScheduler(id);
+      // 从禁用变为启用：添加任务（不等待探测完成）
+      this.options.intervalProbeService.addEndpointToScheduler(id);
     } else if (isEnabled) {
-      // 保持启用状态但配置可能变化：更新任务
-      await this.options.intervalProbeService.updateEndpointInScheduler(id);
+      // 保持启用状态但配置可能变化：更新任务（不等待探测完成）
+      this.options.intervalProbeService.updateEndpointInScheduler(id);
     }
 
     return endPoint;

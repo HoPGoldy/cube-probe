@@ -13,6 +13,7 @@ import { EndpointChart } from "./endpoint-chart";
 import { useGetEndpointMultiRangeStats } from "@/services/probe-stats";
 import { StatCard, getUptimeColor } from "@/components/stat-card";
 import { useCopyEndpoint } from "@/services/monitored-endpoint";
+import { DesktopArea } from "@/layouts/responsive";
 
 interface EndpointItemProps {
   endpoint: any;
@@ -60,48 +61,50 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
               {!endpoint.enabled && <Tag color="default">已禁用</Tag>}
             </Flex>
             <Space>
-              <Button onClick={() => onEdit(endpoint.id)}>配置</Button>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "toggle",
-                      icon: endpoint.enabled ? (
-                        <PauseCircleOutlined />
-                      ) : (
-                        <PlayCircleOutlined />
-                      ),
-                      label: endpoint.enabled ? "禁用" : "启用",
-                      onClick: () => onSwitchEnabled(endpoint),
-                    },
-                    {
-                      key: "copy",
-                      icon: <CopyOutlined />,
-                      label: copying ? "复制中..." : "复制",
-                      disabled: copying,
-                      onClick: handleCopy,
-                    },
-                    { type: "divider" },
-                    {
-                      key: "delete",
-                      icon: <CloseOutlined />,
-                      label: "删除",
-                      danger: true,
-                      onClick: () => onDelete(endpoint),
-                    },
-                  ],
-                }}
-                trigger={["click"]}
-              >
-                <Button icon={<MoreOutlined />} />
-              </Dropdown>
+              <DesktopArea>
+                <Button onClick={() => onEdit(endpoint.id)}>配置</Button>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: "toggle",
+                        icon: endpoint.enabled ? (
+                          <PauseCircleOutlined />
+                        ) : (
+                          <PlayCircleOutlined />
+                        ),
+                        label: endpoint.enabled ? "禁用" : "启用",
+                        onClick: () => onSwitchEnabled(endpoint),
+                      },
+                      {
+                        key: "copy",
+                        icon: <CopyOutlined />,
+                        label: copying ? "复制中..." : "复制",
+                        disabled: copying,
+                        onClick: handleCopy,
+                      },
+                      { type: "divider" },
+                      {
+                        key: "delete",
+                        icon: <CloseOutlined />,
+                        label: "删除",
+                        danger: true,
+                        onClick: () => onDelete(endpoint),
+                      },
+                    ],
+                  }}
+                  trigger={["click"]}
+                >
+                  <Button icon={<MoreOutlined />} />
+                </Dropdown>
+              </DesktopArea>
               <Button
                 icon={expanded ? <UpOutlined /> : <DownOutlined />}
                 onClick={() => setExpanded(!expanded)}
               ></Button>
             </Space>
           </Flex>
-          <div className="text-gray-500">
+          <div className="text-gray-500 truncate">
             {endpoint.desc}
             {endpoint.desc && endpoint.url && <span className="mx-2">·</span>}
             {endpoint.url}
@@ -111,7 +114,7 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
           {expanded && hasData && (
             <Flex
               gap={16}
-              className="mt-3"
+              className="mt-3 w-full overflow-x-auto"
               align="center"
               justify="space-around"
             >

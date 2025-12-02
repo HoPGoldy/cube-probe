@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDeleteMonitoredHost } from "@/services/monitored-host";
 import { Card, Spin, Flex, Space, Button, Modal } from "antd";
 import { usePageTitle } from "@/store/global";
-import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  PlusOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import { NotificationStatusSummary } from "./notification-status-summary";
 import { useHostDetailAction } from "../host-detail/use-detail-action";
 import { useHostStatus } from "@/utils/use-host-status";
+import { DesktopArea } from "@/layouts/responsive";
+import {
+  ActionButton,
+  ActionIcon,
+  PageAction,
+  PageContent,
+} from "@/layouts/page-with-action";
+import { MobileSetting } from "../user-setting";
+import { logout } from "@/store/user";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [modal, contextHolder] = Modal.useModal();
+  const [mobileSettingVisible, setMobileSettingVisible] = useState(false);
 
   const { hosts, isLoading, getHostDisplayStatus, statusColorMap } =
     useHostStatus();
@@ -65,25 +78,26 @@ const HomePage: React.FC = () => {
                 />
                 {host.name}
               </Flex>
-              <Space onClick={(e) => e.stopPropagation()}>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    hostDetailActions.onEdit(host.id);
-                  }}
-                >
-                  编辑
-                </Button>
-                <Button
-                  danger
-                  icon={<CloseOutlined />}
-                  onClick={(e) => onHostDeleteConfirm(host, e)}
-                />
-              </Space>
+              <DesktopArea>
+                <Space onClick={(e) => e.stopPropagation()}>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      hostDetailActions.onEdit(host.id);
+                    }}
+                  >
+                    编辑
+                  </Button>
+                  <Button
+                    danger
+                    icon={<CloseOutlined />}
+                    onClick={(e) => onHostDeleteConfirm(host, e)}
+                  />
+                </Space>
+              </DesktopArea>
             </Flex>
             <div className="mt-2 text-gray-500">
-              {host.url && <span className="mr-4">{host.url}</span>}
-              <span>创建时间: {utcdayjsFormat(host.createdAt)}</span>
+              {host.desc && <span className="mr-4">{host.desc}</span>}
             </div>
           </div>
         </Flex>
@@ -93,49 +107,64 @@ const HomePage: React.FC = () => {
 
   return (
     <>
-      <Flex vertical gap={16} className="m-4">
-        <div>
-          <Flex gap={16} justify="space-between" align="center">
-            <div className="text-4xl font-bold">监控服务</div>
-            <Space>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={hostDetailActions.onAdd}
-              >
-                创建监控服务
-              </Button>
-              <Link to="/probe-env">
-                <Button block>环境变量管理</Button>
-              </Link>
-              <Link to="/notification-channel">
-                <Button block>通知管理</Button>
-              </Link>
-            </Space>
-          </Flex>
-          <div className="mt-2 text-gray-500">
-            管理和监控您的所有服务健康状态
+      <PageContent>
+        <Flex vertical gap={16} className="m-4">
+          <div>
+            <Flex gap={16} justify="space-between" align="center">
+              <div className="text-4xl font-bold">监控服务</div>
+              <DesktopArea>
+                <Space>
+                  <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={hostDetailActions.onAdd}
+                  >
+                    创建监控服务
+                  </Button>
+                  <Link to="/probe-env">
+                    <Button block>环境变量管理</Button>
+                  </Link>
+                  <Link to="/notification-channel">
+                    <Button block>通知管理</Button>
+                  </Link>
+                </Space>
+              </DesktopArea>
+            </Flex>
+            <div className="mt-2 text-gray-500">
+              管理和监控您的所有服务健康状态
+            </div>
           </div>
-        </div>
 
-        {/* 通知状态摘要 */}
-        <NotificationStatusSummary />
+          {/* 通知状态摘要 */}
+          <NotificationStatusSummary />
 
-        {/* Hosts 列表 */}
-        <Flex vertical gap={16}>
-          {hosts.length === 0 ? (
-            <EmptyTip
-              className="mt-8"
-              title="暂无监控服务"
-              subTitle={'点击右上角"创建服务"按钮开始添加'}
-            />
-          ) : (
-            hosts.map(renderHostItem)
-          )}
+          {/* Hosts 列表 */}
+          <Flex vertical gap={16}>
+            {hosts.length === 0 ? (
+              <EmptyTip
+                className="mt-8"
+                title="暂无监控服务"
+                subTitle={'点击右上角"创建服务"按钮开始添加'}
+              />
+            ) : (
+              hosts.map(renderHostItem)
+            )}
+          </Flex>
         </Flex>
-      </Flex>
 
-      {contextHolder}
+        {contextHolder}
+      </PageContent>
+      <MobileSetting
+        visible={mobileSettingVisible}
+        onVisibleChange={setMobileSettingVisible}
+      />
+      <PageAction>
+        <ActionIcon
+          icon={<SettingOutlined />}
+          onClick={() => setMobileSettingVisible(true)}
+        ></ActionIcon>
+        <ActionButton onClick={() => logout()}>登出</ActionButton>
+      </PageAction>
     </>
   );
 };
