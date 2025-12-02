@@ -55,7 +55,7 @@ export const Sidebar: FC = () => {
   return (
     <section className={s.sideberBox}>
       <div className="flex flex-row flex-nowrap items-center justify-center">
-        <div className="font-black text-lg">Cube Auth</div>
+        <div className="font-black text-lg">Cube Probe</div>
       </div>
 
       <div className="flex-grow flex-shrink overflow-y-auto noscrollbar overflow-x-hidden my-3">
@@ -73,13 +73,11 @@ export const Sidebar: FC = () => {
             创建监控服务
           </Button>
         )}
-        {userInfo.role === UserRole.ADMIN && (
-          <Link to="/home">
-            <Button className={`${s.toolBtn} keep-antd-style`} block>
-              主面板
-            </Button>
-          </Link>
-        )}
+        <Link to="/home">
+          <Button className={`${s.toolBtn} keep-antd-style`} block>
+            主面板
+          </Button>
+        </Link>
       </Flex>
     </section>
   );

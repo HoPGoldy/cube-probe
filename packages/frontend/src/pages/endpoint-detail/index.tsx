@@ -155,6 +155,7 @@ export const EndpointDetailModal: FC = () => {
             type: "CONFIG",
             method: "GET",
             timeout: 10,
+            intervalTime: 30,
             bodyContentType: "json",
           }}
           style={{
@@ -176,7 +177,12 @@ export const EndpointDetailModal: FC = () => {
             <Form.Item
               label="端点类型"
               name="type"
-              tooltip="CONFIG: 通过配置URL等参数进行探测；CODE: 通过代码逻辑进行探测"
+              tooltip={
+                <div>
+                  <div>CONFIG: 通过配置参数进行探测</div>
+                  <div>CODE: 通过编写代码进行探测</div>
+                </div>
+              }
             >
               <Radio.Group>
                 <Radio.Button value="CONFIG">配置模式</Radio.Button>
@@ -195,16 +201,12 @@ export const EndpointDetailModal: FC = () => {
                     <Form.Item
                       label="URL"
                       name="url"
-                      tooltip="端点的URL，如果为空则继承服务的URL"
+                      tooltip="端点的具体请求路径"
                     >
                       <Input placeholder="例如: /api/health" />
                     </Form.Item>
 
-                    <Form.Item
-                      label="请求方法"
-                      name="method"
-                      tooltip="HTTP请求方法"
-                    >
+                    <Form.Item label="请求方法" name="method">
                       <Select
                         placeholder="请选择请求方法"
                         options={[
@@ -219,22 +221,14 @@ export const EndpointDetailModal: FC = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item
-                      label="请求头 (JSON)"
-                      name="headers"
-                      tooltip="自定义请求头，使用JSON格式，为空则继承服务的请求头"
-                    >
+                    <Form.Item label="请求头 (JSON)" name="headers">
                       <Input.TextArea
                         rows={4}
                         placeholder='例如: {"Authorization": "Bearer token"}'
                       />
                     </Form.Item>
 
-                    <Form.Item
-                      label="请求体编码"
-                      name="bodyContentType"
-                      tooltip="请求体的编码类型"
-                    >
+                    <Form.Item label="请求体编码" name="bodyContentType">
                       <Select
                         placeholder="请选择请求体编码类型"
                         options={[
@@ -259,16 +253,12 @@ export const EndpointDetailModal: FC = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item
-                      label="超时时间 (秒)"
-                      name="timeout"
-                      tooltip="请求超时时间，默认10秒"
-                    >
+                    <Form.Item label="超时时间 (秒)" name="timeout">
                       <InputNumber
                         style={{ width: "100%" }}
                         min={1}
                         max={300}
-                        placeholder="10"
+                        placeholder="例如: 10"
                       />
                     </Form.Item>
                   </>
@@ -318,7 +308,7 @@ export const EndpointDetailModal: FC = () => {
             <Form.Item
               label="探测间隔 (秒)"
               name="intervalTime"
-              tooltip="定时探测的间隔时间（秒），为空则继承服务的间隔时间"
+              tooltip="每多少秒发送一次请求"
             >
               <InputNumber
                 style={{ width: "100%" }}

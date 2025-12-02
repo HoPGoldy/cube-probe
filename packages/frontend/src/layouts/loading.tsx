@@ -21,7 +21,7 @@ const Loading: FC<Props> = ({
   return showTip ? (
     <div
       className={
-        "w-full flex justify-center items-center dark:text-gray-400 " +
+        "w-full flex justify-center items-center dark:text-gray-400 my-6" +
         className
       }
     >

@@ -148,15 +148,15 @@ export const HostDetailModal: FC = () => {
             <Form.Item
               label="基础URL"
               name="url"
-              tooltip="服务的基础URL，端点可以继承此URL"
+              tooltip="服务的基础URL，端点的完整请求链接会以此URL为基础"
             >
               <Input placeholder="例如: https://api.example.com" />
             </Form.Item>
 
             <Form.Item
-              label="请求头 (JSON)"
+              label="通用请求头(JSON)"
               name="headers"
-              tooltip="自定义请求头，使用JSON格式"
+              tooltip="自定义请求头，会合并进每个端点的请求头"
             >
               <Input.TextArea
                 rows={4}

@@ -13,7 +13,7 @@ export const AboutModal: FC<AboutModalModalProps> = (props) => {
       open={props.open}
       onCancel={() => props.onClose()}
       onOk={() => props.onClose()}
-      title="关于应用 Cube Auth"
+      title="关于应用 Cube Probe"
       footer={(_, { OkBtn }) => (
         <Flex align="center" justify="space-between">
           <div className="text-gray-500 dark:text-gray-200">
@@ -25,9 +25,8 @@ export const AboutModal: FC<AboutModalModalProps> = (props) => {
     >
       <Flex gap={16} vertical className="mb-4">
         <div className="mt-4 mb-2 text-base">
-          轻量级单点登录应用。
-          包含用户管理、应用管理、并提供了账号密码登录、WebAuthN
-          等多种登录方式。
+          轻量级探针监控应用。 包含支持 nodejs 编码方式的 web 探针监控功能和
+          webhook 通知功能。
         </div>
 
         <a
