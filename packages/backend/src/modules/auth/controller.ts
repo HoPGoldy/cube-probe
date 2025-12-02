@@ -1,4 +1,3 @@
-import type { UserService } from "@/modules/user/service";
 import bcrypt from "bcryptjs";
 import { UserRole } from "@db/client";
 import { signJwtToken } from "./utils";
@@ -32,11 +31,10 @@ declare module "@fastify/jwt" {
 
 interface RegisterOptions {
   server: AppInstance;
-  userService: UserService;
 }
 
 export const registerController = (options: RegisterOptions) => {
-  const { server, userService } = options;
+  const { server } = options;
 
   // 根据配置给路由添加 swagger 安全定义
   server.addHook("onRoute", (routeOptions) => {
