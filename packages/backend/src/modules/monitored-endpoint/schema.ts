@@ -57,7 +57,6 @@ export const SchemaServiceDetail = Type.Object({
   name: Type.String(),
   url: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
-  intervalTime: Type.Union([Type.Integer(), Type.Null()]),
   enabled: Type.Boolean(),
   // 通知配置
   notifyEnabled: Type.Boolean(),
@@ -194,7 +193,6 @@ export const createServiceDetailVo = (
     name: data.name,
     url: data.url,
     headers: data.headers,
-    intervalTime: data.intervalTime,
     enabled: data.enabled,
     notifyEnabled: data.notifyEnabled,
     notifyFailureCount: data.notifyFailureCount,

@@ -299,7 +299,7 @@ Constraints:
 - `probe-result/` - View probe results
 - `probe-dashboard/` - Monitoring overview
 - `monitored-host/` - Host monitoring
-- `host-detail/` - Host details with notification settings
+- `host-home/` - Host details with notification settings
 - `notification-channel/` - Notification channel management
 - `notification-log/` - Notification history
 - `probe-env/` - Environment variables management

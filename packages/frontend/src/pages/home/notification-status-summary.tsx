@@ -139,7 +139,7 @@ export const NotificationStatusSummary: React.FC = () => {
                     </div>
                   }
                 >
-                  <Link to={`/host-detail/${service.serviceId}`}>
+                  <Link to={`/host-home/${service.serviceId}`}>
                     <Tag color="error" style={{ cursor: "pointer" }}>
                       {service.serviceName}
                     </Tag>
@@ -161,7 +161,7 @@ export const NotificationStatusSummary: React.FC = () => {
                     </div>
                   }
                 >
-                  <Link to={`/host-detail/${service.serviceId}`}>
+                  <Link to={`/host-home/${service.serviceId}`}>
                     <Tag color="warning" style={{ cursor: "pointer" }}>
                       {service.serviceName}
                     </Tag>

@@ -24,7 +24,6 @@ export interface MonitoredHostCreateDto {
   name: string;
   url?: string;
   headers?: any;
-  intervalTime?: number;
   enabled?: boolean;
   // 通知配置
   notifyEnabled?: boolean;

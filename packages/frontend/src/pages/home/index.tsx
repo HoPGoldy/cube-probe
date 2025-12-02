@@ -74,7 +74,7 @@ const HomePage: React.FC = () => {
   };
 
   const onHostClick = (hostId: string) => {
-    navigate(`/host-detail/${hostId}`);
+    navigate(`/host-home/${hostId}`);
   };
 
   if (isLoading) {

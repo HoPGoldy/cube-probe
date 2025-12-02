@@ -88,12 +88,12 @@ export const Sidebar: FC = () => {
         {hosts.length > 0 && (
           <>
             {hosts.map((host: any) => {
-              const isActive = location.pathname === `/host-detail/${host.id}`;
+              const isActive = location.pathname === `/host-home/${host.id}`;
               const className = [s.menuItem];
               if (isActive) className.push(s.menuItemActive);
 
               return (
-                <Link to={`/host-detail/${host.id}`} key={host.id}>
+                <Link to={`/host-home/${host.id}`} key={host.id}>
                   <div
                     className={className.join(" ")}
                     title={`${host.name} (${host.host}:${host.port})`}
