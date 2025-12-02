@@ -41,6 +41,7 @@ export type MonitoredHostMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   name: string | null
+  desc: string | null
   url: string | null
   enabled: boolean | null
   notifyEnabled: boolean | null
@@ -53,6 +54,7 @@ export type MonitoredHostMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   name: string | null
+  desc: string | null
   url: string | null
   enabled: boolean | null
   notifyEnabled: boolean | null
@@ -65,6 +67,7 @@ export type MonitoredHostCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   name: number
+  desc: number
   url: number
   headers: number
   enabled: number
@@ -91,6 +94,7 @@ export type MonitoredHostMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   name?: true
+  desc?: true
   url?: true
   enabled?: true
   notifyEnabled?: true
@@ -103,6 +107,7 @@ export type MonitoredHostMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   name?: true
+  desc?: true
   url?: true
   enabled?: true
   notifyEnabled?: true
@@ -115,6 +120,7 @@ export type MonitoredHostCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   name?: true
+  desc?: true
   url?: true
   headers?: true
   enabled?: true
@@ -216,6 +222,7 @@ export type MonitoredHostGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   name: string
+  desc: string | null
   url: string | null
   headers: runtime.JsonValue | null
   enabled: boolean
@@ -253,6 +260,7 @@ export type MonitoredHostWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"MonitoredHost"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MonitoredHost"> | Date | string
   name?: Prisma.StringFilter<"MonitoredHost"> | string
+  desc?: Prisma.StringNullableFilter<"MonitoredHost"> | string | null
   url?: Prisma.StringNullableFilter<"MonitoredHost"> | string | null
   headers?: Prisma.JsonNullableFilter<"MonitoredHost">
   enabled?: Prisma.BoolFilter<"MonitoredHost"> | boolean
@@ -268,6 +276,7 @@ export type MonitoredHostOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled?: Prisma.SortOrder
@@ -286,6 +295,7 @@ export type MonitoredHostWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"MonitoredHost"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"MonitoredHost"> | Date | string
   name?: Prisma.StringFilter<"MonitoredHost"> | string
+  desc?: Prisma.StringNullableFilter<"MonitoredHost"> | string | null
   url?: Prisma.StringNullableFilter<"MonitoredHost"> | string | null
   headers?: Prisma.JsonNullableFilter<"MonitoredHost">
   enabled?: Prisma.BoolFilter<"MonitoredHost"> | boolean
@@ -301,6 +311,7 @@ export type MonitoredHostOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   headers?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled?: Prisma.SortOrder
@@ -323,6 +334,7 @@ export type MonitoredHostScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MonitoredHost"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"MonitoredHost"> | Date | string
   name?: Prisma.StringWithAggregatesFilter<"MonitoredHost"> | string
+  desc?: Prisma.StringNullableWithAggregatesFilter<"MonitoredHost"> | string | null
   url?: Prisma.StringNullableWithAggregatesFilter<"MonitoredHost"> | string | null
   headers?: Prisma.JsonNullableWithAggregatesFilter<"MonitoredHost">
   enabled?: Prisma.BoolWithAggregatesFilter<"MonitoredHost"> | boolean
@@ -337,6 +349,7 @@ export type MonitoredHostCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   url?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: boolean
@@ -352,6 +365,7 @@ export type MonitoredHostUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   url?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: boolean
@@ -367,6 +381,7 @@ export type MonitoredHostUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -382,6 +397,7 @@ export type MonitoredHostUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -397,6 +413,7 @@ export type MonitoredHostCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   url?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: boolean
@@ -411,6 +428,7 @@ export type MonitoredHostUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -425,6 +443,7 @@ export type MonitoredHostUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -439,6 +458,7 @@ export type MonitoredHostCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrder
   url?: Prisma.SortOrder
   headers?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
@@ -458,6 +478,7 @@ export type MonitoredHostMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrder
   url?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   notifyEnabled?: Prisma.SortOrder
@@ -470,6 +491,7 @@ export type MonitoredHostMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrder
   url?: Prisma.SortOrder
   enabled?: Prisma.SortOrder
   notifyEnabled?: Prisma.SortOrder
@@ -506,6 +528,7 @@ export type MonitoredHostCreateWithoutEndpointsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   url?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: boolean
@@ -520,6 +543,7 @@ export type MonitoredHostUncheckedCreateWithoutEndpointsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   url?: string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: boolean
@@ -550,6 +574,7 @@ export type MonitoredHostUpdateWithoutEndpointsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -564,6 +589,7 @@ export type MonitoredHostUncheckedUpdateWithoutEndpointsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   headers?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -609,6 +635,7 @@ export type MonitoredHostSelect<ExtArgs extends runtime.Types.Extensions.Interna
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
+  desc?: boolean
   url?: boolean
   headers?: boolean
   enabled?: boolean
@@ -625,6 +652,7 @@ export type MonitoredHostSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
+  desc?: boolean
   url?: boolean
   headers?: boolean
   enabled?: boolean
@@ -639,6 +667,7 @@ export type MonitoredHostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
+  desc?: boolean
   url?: boolean
   headers?: boolean
   enabled?: boolean
@@ -653,6 +682,7 @@ export type MonitoredHostSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   name?: boolean
+  desc?: boolean
   url?: boolean
   headers?: boolean
   enabled?: boolean
@@ -662,7 +692,7 @@ export type MonitoredHostSelectScalar = {
   notifyChannelIds?: boolean
 }
 
-export type MonitoredHostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "url" | "headers" | "enabled" | "notifyEnabled" | "notifyFailureCount" | "notifyCooldownMin" | "notifyChannelIds", ExtArgs["result"]["monitoredHost"]>
+export type MonitoredHostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "desc" | "url" | "headers" | "enabled" | "notifyEnabled" | "notifyFailureCount" | "notifyCooldownMin" | "notifyChannelIds", ExtArgs["result"]["monitoredHost"]>
 export type MonitoredHostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   endpoints?: boolean | Prisma.MonitoredHost$endpointsArgs<ExtArgs>
   _count?: boolean | Prisma.MonitoredHostCountOutputTypeDefaultArgs<ExtArgs>
@@ -680,6 +710,7 @@ export type $MonitoredHostPayload<ExtArgs extends runtime.Types.Extensions.Inter
     createdAt: Date
     updatedAt: Date
     name: string
+    desc: string | null
     url: string | null
     headers: runtime.JsonValue | null
     enabled: boolean
@@ -1115,6 +1146,7 @@ export interface MonitoredHostFieldRefs {
   readonly createdAt: Prisma.FieldRef<"MonitoredHost", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"MonitoredHost", 'DateTime'>
   readonly name: Prisma.FieldRef<"MonitoredHost", 'String'>
+  readonly desc: Prisma.FieldRef<"MonitoredHost", 'String'>
   readonly url: Prisma.FieldRef<"MonitoredHost", 'String'>
   readonly headers: Prisma.FieldRef<"MonitoredHost", 'Json'>
   readonly enabled: Prisma.FieldRef<"MonitoredHost", 'Boolean'>

@@ -80,6 +80,7 @@ export const SchemaEndPointCreate = Type.Object({
     minLength: 1,
     maxLength: 100,
   }),
+  desc: Type.Optional(Type.String({ description: "描述" })),
   type: Type.Optional(SchemaEndPointType),
   // CONFIG 模式字段
   url: Type.Optional(Type.String({ description: "接口URL" })),
@@ -130,6 +131,7 @@ export const SchemaEndPointDetail = Type.Object({
   updatedAt: Type.String({ format: "date-time" }),
   hostId: Type.String(),
   name: Type.String(),
+  desc: Type.Union([Type.String(), Type.Null()]),
   type: SchemaEndPointType,
   // CONFIG 模式字段
   url: Type.Union([Type.String(), Type.Null()]),
@@ -210,6 +212,7 @@ export const createEndPointDetailVo = (
     updatedAt: data.updatedAt.toISOString(),
     hostId: data.hostId,
     name: data.name,
+    desc: data.desc,
     type: data.type,
     url: data.url,
     method: data.method,

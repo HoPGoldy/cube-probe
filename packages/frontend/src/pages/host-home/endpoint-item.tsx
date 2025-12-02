@@ -101,7 +101,11 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
               ></Button>
             </Space>
           </Flex>
-          <div className="text-gray-500">{endpoint.url}</div>
+          <div className="text-gray-500">
+            {endpoint.desc}
+            {endpoint.desc && endpoint.url && <span className="mx-2">·</span>}
+            {endpoint.url}
+          </div>
 
           {/* 统计指标 */}
           {expanded && hasData && (

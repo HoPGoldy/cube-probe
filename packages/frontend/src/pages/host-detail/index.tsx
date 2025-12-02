@@ -145,6 +145,10 @@ export const HostDetailModal: FC = () => {
               <Input placeholder="请输入服务名称" />
             </Form.Item>
 
+            <Form.Item label="描述" name="desc">
+              <Input.TextArea rows={2} placeholder="请输入描述（可选）" />
+            </Form.Item>
+
             <Form.Item
               label="基础URL"
               name="url"

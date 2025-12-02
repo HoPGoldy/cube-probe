@@ -16,6 +16,7 @@ describe("PrismaMock", () => {
         {
           id: "test-1",
           name: "Test Service",
+          desc: null,
           url: "https://example.com",
           enabled: true,
           headers: null,
@@ -39,6 +40,7 @@ describe("PrismaMock", () => {
       const mockService = {
         id: "test-service-1",
         name: "Test Service",
+          desc: null,
         url: "https://example.com",
         enabled: true,
         headers: null,
@@ -56,6 +58,7 @@ describe("PrismaMock", () => {
         data: {
           id: "test-service-1",
           name: "Test Service",
+          desc: null,
           url: "https://example.com",
           enabled: true,
         },
@@ -70,6 +73,7 @@ describe("PrismaMock", () => {
       prismaMock.monitoredHost.findUnique.mockResolvedValue({
         id: "test-service-2",
         name: "Test Service 2",
+        desc: null,
         url: null,
         enabled: true,
         headers: null,
@@ -99,6 +103,7 @@ describe("PrismaMock", () => {
         id: "test-endpoint-1",
         hostId: "service-1",
         name: "Test EndPoint",
+        desc: null,
         url: "/api/health",
         method: "GET",
         enabled: true,
@@ -120,6 +125,7 @@ describe("PrismaMock", () => {
           id: "test-endpoint-1",
           hostId: "service-1",
           name: "Test EndPoint",
+        desc: null,
           url: "/api/health",
           method: "GET",
         },
@@ -242,6 +248,7 @@ describe("PrismaMock", () => {
         {
           id: "1",
           name: "Test",
+          desc: null,
           url: null,
           enabled: true,
           headers: null,
@@ -277,6 +284,7 @@ describe("PrismaMock", () => {
       prismaMock.monitoredHost.create.mockResolvedValue({
         id: "1",
         name: "Test",
+          desc: null,
         url: null,
         enabled: true,
         headers: null,

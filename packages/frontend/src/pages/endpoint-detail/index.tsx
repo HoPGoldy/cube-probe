@@ -174,6 +174,10 @@ export const EndpointDetailModal: FC = () => {
               <Input placeholder="请输入端点名称" />
             </Form.Item>
 
+            <Form.Item label="描述" name="desc">
+              <Input.TextArea rows={2} placeholder="请输入描述（可选）" />
+            </Form.Item>
+
             <Form.Item
               label="端点类型"
               name="type"

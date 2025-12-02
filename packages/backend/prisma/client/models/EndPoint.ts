@@ -42,6 +42,7 @@ export type EndPointMinAggregateOutputType = {
   updatedAt: Date | null
   hostId: string | null
   name: string | null
+  desc: string | null
   type: $Enums.EndPointType | null
   url: string | null
   method: string | null
@@ -59,6 +60,7 @@ export type EndPointMaxAggregateOutputType = {
   updatedAt: Date | null
   hostId: string | null
   name: string | null
+  desc: string | null
   type: $Enums.EndPointType | null
   url: string | null
   method: string | null
@@ -76,6 +78,7 @@ export type EndPointCountAggregateOutputType = {
   updatedAt: number
   hostId: number
   name: number
+  desc: number
   type: number
   url: number
   method: number
@@ -106,6 +109,7 @@ export type EndPointMinAggregateInputType = {
   updatedAt?: true
   hostId?: true
   name?: true
+  desc?: true
   type?: true
   url?: true
   method?: true
@@ -123,6 +127,7 @@ export type EndPointMaxAggregateInputType = {
   updatedAt?: true
   hostId?: true
   name?: true
+  desc?: true
   type?: true
   url?: true
   method?: true
@@ -140,6 +145,7 @@ export type EndPointCountAggregateInputType = {
   updatedAt?: true
   hostId?: true
   name?: true
+  desc?: true
   type?: true
   url?: true
   method?: true
@@ -245,6 +251,7 @@ export type EndPointGroupByOutputType = {
   updatedAt: Date
   hostId: string
   name: string
+  desc: string | null
   type: $Enums.EndPointType
   url: string | null
   method: string | null
@@ -286,6 +293,7 @@ export type EndPointWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"EndPoint"> | Date | string
   hostId?: Prisma.StringFilter<"EndPoint"> | string
   name?: Prisma.StringFilter<"EndPoint"> | string
+  desc?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   type?: Prisma.EnumEndPointTypeFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableFilter<"EndPoint"> | string | null
@@ -308,6 +316,7 @@ export type EndPointOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -333,6 +342,7 @@ export type EndPointWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"EndPoint"> | Date | string
   hostId?: Prisma.StringFilter<"EndPoint"> | string
   name?: Prisma.StringFilter<"EndPoint"> | string
+  desc?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   type?: Prisma.EnumEndPointTypeFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableFilter<"EndPoint"> | string | null
@@ -355,6 +365,7 @@ export type EndPointOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -381,6 +392,7 @@ export type EndPointScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EndPoint"> | Date | string
   hostId?: Prisma.StringWithAggregatesFilter<"EndPoint"> | string
   name?: Prisma.StringWithAggregatesFilter<"EndPoint"> | string
+  desc?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
   type?: Prisma.EnumEndPointTypeWithAggregatesFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableWithAggregatesFilter<"EndPoint"> | string | null
@@ -398,6 +410,7 @@ export type EndPointCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -420,6 +433,7 @@ export type EndPointUncheckedCreateInput = {
   updatedAt?: Date | string
   hostId: string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -440,6 +454,7 @@ export type EndPointUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -462,6 +477,7 @@ export type EndPointUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -483,6 +499,7 @@ export type EndPointCreateManyInput = {
   updatedAt?: Date | string
   hostId: string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -500,6 +517,7 @@ export type EndPointUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -518,6 +536,7 @@ export type EndPointUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -546,6 +565,7 @@ export type EndPointCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -569,6 +589,7 @@ export type EndPointMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -586,6 +607,7 @@ export type EndPointMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  desc?: Prisma.SortOrder
   type?: Prisma.SortOrder
   url?: Prisma.SortOrder
   method?: Prisma.SortOrder
@@ -708,6 +730,7 @@ export type EndPointCreateWithoutMonitoredHostInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -728,6 +751,7 @@ export type EndPointUncheckedCreateWithoutMonitoredHostInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -777,6 +801,7 @@ export type EndPointScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"EndPoint"> | Date | string
   hostId?: Prisma.StringFilter<"EndPoint"> | string
   name?: Prisma.StringFilter<"EndPoint"> | string
+  desc?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   type?: Prisma.EnumEndPointTypeFilter<"EndPoint"> | $Enums.EndPointType
   url?: Prisma.StringNullableFilter<"EndPoint"> | string | null
   method?: Prisma.StringNullableFilter<"EndPoint"> | string | null
@@ -794,6 +819,7 @@ export type EndPointCreateWithoutResultsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -815,6 +841,7 @@ export type EndPointUncheckedCreateWithoutResultsInput = {
   updatedAt?: Date | string
   hostId: string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -850,6 +877,7 @@ export type EndPointUpdateWithoutResultsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -871,6 +899,7 @@ export type EndPointUncheckedUpdateWithoutResultsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -890,6 +919,7 @@ export type EndPointCreateWithoutHourlyStatsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -911,6 +941,7 @@ export type EndPointUncheckedCreateWithoutHourlyStatsInput = {
   updatedAt?: Date | string
   hostId: string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -946,6 +977,7 @@ export type EndPointUpdateWithoutHourlyStatsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -967,6 +999,7 @@ export type EndPointUncheckedUpdateWithoutHourlyStatsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -986,6 +1019,7 @@ export type EndPointCreateWithoutDailyStatsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -1007,6 +1041,7 @@ export type EndPointUncheckedCreateWithoutDailyStatsInput = {
   updatedAt?: Date | string
   hostId: string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -1042,6 +1077,7 @@ export type EndPointUpdateWithoutDailyStatsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1063,6 +1099,7 @@ export type EndPointUncheckedUpdateWithoutDailyStatsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1082,6 +1119,7 @@ export type EndPointCreateManyMonitoredHostInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   name: string
+  desc?: string | null
   type?: $Enums.EndPointType
   url?: string | null
   method?: string | null
@@ -1099,6 +1137,7 @@ export type EndPointUpdateWithoutMonitoredHostInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1119,6 +1158,7 @@ export type EndPointUncheckedUpdateWithoutMonitoredHostInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1139,6 +1179,7 @@ export type EndPointUncheckedUpdateManyWithoutMonitoredHostInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  desc?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.EnumEndPointTypeFieldUpdateOperationsInput | $Enums.EndPointType
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   method?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1206,6 +1247,7 @@ export type EndPointSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   hostId?: boolean
   name?: boolean
+  desc?: boolean
   type?: boolean
   url?: boolean
   method?: boolean
@@ -1229,6 +1271,7 @@ export type EndPointSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   updatedAt?: boolean
   hostId?: boolean
   name?: boolean
+  desc?: boolean
   type?: boolean
   url?: boolean
   method?: boolean
@@ -1248,6 +1291,7 @@ export type EndPointSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   updatedAt?: boolean
   hostId?: boolean
   name?: boolean
+  desc?: boolean
   type?: boolean
   url?: boolean
   method?: boolean
@@ -1267,6 +1311,7 @@ export type EndPointSelectScalar = {
   updatedAt?: boolean
   hostId?: boolean
   name?: boolean
+  desc?: boolean
   type?: boolean
   url?: boolean
   method?: boolean
@@ -1279,7 +1324,7 @@ export type EndPointSelectScalar = {
   enabled?: boolean
 }
 
-export type EndPointOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "hostId" | "name" | "type" | "url" | "method" | "headers" | "timeout" | "bodyContentType" | "bodyContent" | "codeContent" | "intervalTime" | "enabled", ExtArgs["result"]["endPoint"]>
+export type EndPointOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "hostId" | "name" | "desc" | "type" | "url" | "method" | "headers" | "timeout" | "bodyContentType" | "bodyContent" | "codeContent" | "intervalTime" | "enabled", ExtArgs["result"]["endPoint"]>
 export type EndPointInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   results?: boolean | Prisma.EndPoint$resultsArgs<ExtArgs>
   hourlyStats?: boolean | Prisma.EndPoint$hourlyStatsArgs<ExtArgs>
@@ -1308,6 +1353,7 @@ export type $EndPointPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     updatedAt: Date
     hostId: string
     name: string
+    desc: string | null
     type: $Enums.EndPointType
     url: string | null
     method: string | null
@@ -1750,6 +1796,7 @@ export interface EndPointFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"EndPoint", 'DateTime'>
   readonly hostId: Prisma.FieldRef<"EndPoint", 'String'>
   readonly name: Prisma.FieldRef<"EndPoint", 'String'>
+  readonly desc: Prisma.FieldRef<"EndPoint", 'String'>
   readonly type: Prisma.FieldRef<"EndPoint", 'EndPointType'>
   readonly url: Prisma.FieldRef<"EndPoint", 'String'>
   readonly method: Prisma.FieldRef<"EndPoint", 'String'>

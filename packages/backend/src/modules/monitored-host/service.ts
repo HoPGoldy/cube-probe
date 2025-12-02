@@ -50,6 +50,7 @@ export class MonitoredHostService {
       data: {
         name: updateData.name,
         url: updateData.url,
+        desc: updateData.desc,
         headers:
           updateData.headers !== undefined ? updateData.headers : undefined,
         enabled: updateData.enabled,

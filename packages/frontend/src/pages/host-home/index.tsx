@@ -22,7 +22,6 @@ import {
   Dropdown,
 } from "antd";
 import { usePageTitle } from "@/store/global";
-import { utcdayjsFormat } from "@/utils/dayjs";
 import { EmptyTip } from "@/components/empty-tip";
 import {
   CloseOutlined,
@@ -232,8 +231,11 @@ const HostDetailPage: React.FC = () => {
             </Space>
           </Flex>
           <div className="mt-2 text-gray-500">
-            创建时间: {utcdayjsFormat(hostDetail?.createdAt)} | 更新时间:{" "}
-            {utcdayjsFormat(hostDetail?.updatedAt)}
+            {hostDetail.desc}
+            {hostDetail.desc && hostDetail.url && (
+              <span className="mx-2">·</span>
+            )}
+            {hostDetail.url}
           </div>
         </div>
 

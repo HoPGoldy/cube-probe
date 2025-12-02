@@ -88,6 +88,7 @@ model MonitoredHost {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   name      String
+  desc      String? // 描述
   url       String?
   headers   Json?
   enabled   Boolean    @default(true)
@@ -106,6 +107,7 @@ model EndPoint {
   updatedAt       DateTime          @updatedAt
   hostId          String
   name            String
+  desc            String? // 描述
   type            EndPointType      @default(CONFIG) // 端点类型：CONFIG 或 CODE
   // CONFIG 模式字段
   url             String?
