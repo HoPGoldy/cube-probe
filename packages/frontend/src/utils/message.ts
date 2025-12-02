@@ -8,8 +8,8 @@ export const useInitMessage = () => {
   messageInstance = staticFunction.message;
 };
 
-export const message = (type: NoticeType, content?: string) => {
-  return messageInstance.open({ type, content });
+export const message = (type: NoticeType, content: string, key?: string) => {
+  return messageInstance.open({ type, content, key });
 };
 
 export const messageSuccess = (message: string) => {
@@ -26,4 +26,8 @@ export const messageWarning = (message: string) => {
 
 export const messageInfo = (message: string) => {
   return messageInstance.info(message);
+};
+
+export const showGlobalMessage = (type: NoticeType, content: string) => {
+  return message(type, content, "global");
 };

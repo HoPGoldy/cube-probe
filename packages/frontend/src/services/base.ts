@@ -1,6 +1,6 @@
 import { AppResponse } from "@/types/global";
 import { logout, stateUserToken } from "@/store/user";
-import { message } from "../utils/message";
+import { showGlobalMessage } from "../utils/message";
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
 import { QueryClient } from "@tanstack/react-query";
@@ -31,21 +31,21 @@ axiosInstance.interceptors.response.use(
     const { code, message: msg } = resp.data;
 
     if (code !== 200 && msg) {
-      message("warning", msg);
+      showGlobalMessage("warning", msg);
     }
 
     return resp;
   },
   (resp) => {
     if (!resp.response) {
-      message("error", "网络错误，请检查网络连接是否正常");
+      showGlobalMessage("error", "网络错误，请检查网络连接是否正常");
       return Promise.reject(resp);
     }
 
     const { status, data } = resp.response;
 
     if (status === 413) {
-      message("error", "上传失败，文件大小超出上限");
+      showGlobalMessage("error", "上传失败，文件大小超出上限");
       return Promise.reject(resp);
     }
 
@@ -59,7 +59,7 @@ axiosInstance.interceptors.response.use(
     }
 
     if (data?.message) {
-      message("warning", data.message);
+      showGlobalMessage("warning", data.message);
     }
 
     return Promise.reject(resp);
