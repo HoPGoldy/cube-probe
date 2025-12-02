@@ -12,8 +12,8 @@ RUN npm install -g pnpm && \
 COPY . .
 
 RUN cd /app/packages/backend && \
-  pnpm prisma generate && \
   pnpm run build && \
+  pnpm prisma generate && \
   cd /app/packages/frontend && \
   pnpm run build
 
@@ -30,7 +30,6 @@ RUN apk add --no-cache gosu && \
   npm install -g pnpm && \
   cd /app/packages/backend && \
   pnpm install --prod --filter backend && \
-  pnpm prisma generate && \
   chmod +x /app/packages/backend/entrypoint.sh
 
 RUN addgroup --system --gid 1001 nodejs

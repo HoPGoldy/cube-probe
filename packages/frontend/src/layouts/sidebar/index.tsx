@@ -1,9 +1,6 @@
 import { FC } from "react";
 import { Link, useLocation } from "react-router-dom";
 import s from "./styles.module.css";
-import { useAtomValue } from "jotai";
-import { stateUserJwtData } from "@/store/user";
-import { UserRole } from "@/services/user";
 import { Button, Flex } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useHostDetailAction } from "@/pages/host-detail/use-detail-action";
@@ -17,8 +14,6 @@ interface MenuItem {
 
 export const Sidebar: FC = () => {
   const location = useLocation();
-  const userInfo = useAtomValue(stateUserJwtData);
-
   const { hosts, getHostDisplayStatus, statusColorMap } = useHostStatus();
 
   const hostDetailActions = useHostDetailAction();
@@ -63,16 +58,14 @@ export const Sidebar: FC = () => {
       </div>
 
       <Flex vertical gap={8}>
-        {userInfo.role === UserRole.ADMIN && (
-          <Button
-            className={`${s.toolBtn} keep-antd-style`}
-            icon={<PlusOutlined />}
-            block
-            onClick={hostDetailActions.onAdd}
-          >
-            创建监控服务
-          </Button>
-        )}
+        <Button
+          className={`${s.toolBtn} keep-antd-style`}
+          icon={<PlusOutlined />}
+          block
+          onClick={hostDetailActions.onAdd}
+        >
+          创建监控服务
+        </Button>
         <Link to="/home">
           <Button className={`${s.toolBtn} keep-antd-style`} block>
             主面板

@@ -31,16 +31,6 @@ export const routes = createBrowserRouter(
           path: "/home",
           element: lazyLoad(() => import("./pages/home")),
         },
-        // 用户管理
-        {
-          path: "/setting-user",
-          element: lazyLoad(() => import("./pages/setting-user")),
-        },
-        // 应用管理
-        {
-          path: "/setting-application",
-          element: lazyLoad(() => import("./pages/setting-application")),
-        },
         // 监控服务详情
         {
           path: "/host-home/:hostId",
@@ -60,11 +50,6 @@ export const routes = createBrowserRouter(
         {
           path: "/probe-env",
           element: lazyLoad(() => import("./pages/probe-env")),
-        },
-        // 个人资料
-        {
-          path: "/user-profile",
-          element: lazyLoad(() => import("./pages/user-profile")),
         },
       ],
       element: (
