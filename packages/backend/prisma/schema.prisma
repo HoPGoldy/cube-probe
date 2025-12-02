@@ -83,7 +83,7 @@ enum EndPointType {
   CODE // 编码模式：填写代码内容
 }
 
-model Service {
+model MonitoredHost {
   id        String     @id @default(uuid())
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -104,7 +104,7 @@ model EndPoint {
   id              String            @id @default(uuid())
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-  serviceId       String
+  hostId          String
   name            String
   type            EndPointType      @default(CONFIG) // 端点类型：CONFIG 或 CODE
   // CONFIG 模式字段
@@ -123,7 +123,7 @@ model EndPoint {
   hourlyStats     ProbeHourlyStat[]
   dailyStats      ProbeDailyStat[]
 
-  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  monitoredHost MonitoredHost @relation(fields: [hostId], references: [id], onDelete: Cascade)
 }
 
 model ProbeResult {
@@ -192,7 +192,7 @@ model NotificationChannel {
 model NotificationLog {
   id         String   @id @default(uuid())
   createdAt  DateTime @default(now())
-  serviceId  String // Host ID
+  hostId     String // Host ID
   endpointId String // 触发通知的端点
   channelId  String // 发送到的渠道
   eventType  String // FAILURE / RECOVERY
@@ -201,7 +201,7 @@ model NotificationLog {
   success    Boolean
   errorMsg   String?
 
-  @@index([serviceId])
+  @@index([hostId])
   @@index([endpointId])
   @@index([channelId])
   @@index([createdAt])

@@ -37,8 +37,8 @@ export const NotificationStatusSummary: React.FC = () => {
   const allStatusList = (statusData?.data as HostNotificationStatus[]) ?? [];
 
   // 分类统计
-  const pausedHosts = allStatusList.filter((s) => !s.serviceEnabled).length;
-  const enabledList = allStatusList.filter((s) => s.serviceEnabled);
+  const pausedHosts = allStatusList.filter((s) => !s.hostEnabled).length;
+  const enabledList = allStatusList.filter((s) => s.hostEnabled);
 
   const downHosts = enabledList.filter(
     (s) => getDisplayStatus(s) === "DOWN",
@@ -126,7 +126,7 @@ export const NotificationStatusSummary: React.FC = () => {
               )}
               {downServices.map((service) => (
                 <Tooltip
-                  key={service.serviceId}
+                  key={service.hostId}
                   title={
                     <div>
                       <div className="font-medium mb-1">失败端点：</div>
@@ -139,16 +139,16 @@ export const NotificationStatusSummary: React.FC = () => {
                     </div>
                   }
                 >
-                  <Link to={`/host-home/${service.serviceId}`}>
+                  <Link to={`/host-home/${service.hostId}`}>
                     <Tag color="error" style={{ cursor: "pointer" }}>
-                      {service.serviceName}
+                      {service.hostName}
                     </Tag>
                   </Link>
                 </Tooltip>
               ))}
               {warningServices.map((service) => (
                 <Tooltip
-                  key={service.serviceId}
+                  key={service.hostId}
                   title={
                     <div>
                       <div className="font-medium mb-1">异常端点：</div>
@@ -161,9 +161,9 @@ export const NotificationStatusSummary: React.FC = () => {
                     </div>
                   }
                 >
-                  <Link to={`/host-home/${service.serviceId}`}>
+                  <Link to={`/host-home/${service.hostId}`}>
                     <Tag color="warning" style={{ cursor: "pointer" }}>
-                      {service.serviceName}
+                      {service.hostName}
                     </Tag>
                   </Link>
                 </Tooltip>

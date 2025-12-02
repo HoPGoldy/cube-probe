@@ -28,19 +28,19 @@ export class ResultService {
 
   async getProbeResults(params: {
     endPointId?: string;
-    serviceId?: string;
+    hostId?: string;
     limit?: number;
   }) {
-    const { endPointId, serviceId, limit } = params;
+    const { endPointId, hostId, limit } = params;
 
     // 构建查询条件
     const where: any = {};
 
     if (endPointId) {
       where.endPointId = endPointId;
-    } else if (serviceId) {
+    } else if (hostId) {
       where.endPoint = {
-        serviceId,
+        hostId,
       };
     }
 

@@ -24,7 +24,7 @@
 ### 2.2 EndPoint 模型
 
 - `id`: 主键
-- `serviceId`: 关联 Service 的外键
+- `hostId`: 关联 Service 的外键
 - `name`: 接口名称
 - `url`: 接口 URL (如果为空则使用 Service 的 URL)
 - `headers`: 自定义请求头 JSON (如果为空则使用 Service 的 headers)
@@ -70,15 +70,15 @@
   - DELETE /api/services/:id - 删除服务
 
 - EndPoint 相关接口：
-  - GET /api/services/:serviceId/endpoints - 获取服务下所有接口
-  - POST /api/services/:serviceId/endpoints - 创建接口
+  - GET /api/services/:hostId/endpoints - 获取服务下所有接口
+  - POST /api/services/:hostId/endpoints - 创建接口
   - GET /api/endpoints/:id - 获取特定接口
   - PUT /api/endpoints/:id - 更新接口
   - DELETE /api/endpoints/:id - 删除接口
 
 - 结果和监控相关接口：
   - GET /api/endpoints/:id/results - 获取接口的探针结果
-  - GET /api/services/:serviceId/results - 获取服务下所有接口的结果
+  - GET /api/services/:hostId/results - 获取服务下所有接口的结果
   - GET /api/dashboard/overview - 获取整体监控概览
 
 ### 3.4 DTOs 和验证

@@ -37,7 +37,7 @@ export interface TemplateItem {
 export interface NotificationLog {
   id: string;
   createdAt: string;
-  serviceId: string;
+  hostId: string;
   endpointId: string;
   channelId: string;
   eventType: string;
@@ -48,7 +48,7 @@ export interface NotificationLog {
 }
 
 export interface LogListQueryDto {
-  serviceId?: string;
+  hostId?: string;
   endpointId?: string;
   channelId?: string;
   limit?: number;
@@ -149,9 +149,9 @@ export interface FailedEndpoint {
 }
 
 export interface HostNotificationStatus {
-  serviceId: string;
-  serviceName: string;
-  serviceEnabled: boolean;
+  hostId: string;
+  hostName: string;
+  hostEnabled: boolean;
   currentStatus: "UP" | "DOWN";
   lastNotifiedAt: string | null;
   failedEndpoints: FailedEndpoint[];

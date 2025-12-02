@@ -117,7 +117,7 @@ Services are instantiated first in `register-service.ts`, then passed to control
 **Notification Models:**
 
 - `NotificationChannel` - Notification channels (name, type: EMAIL/WEBHOOK/TELEGRAM, config JSON)
-- `NotificationLog` - Notification history (serviceId, channelId, status, message)
+- `NotificationLog` - Notification history (hostId, channelId, status, message)
 
 **Probe Environment Models:**
 

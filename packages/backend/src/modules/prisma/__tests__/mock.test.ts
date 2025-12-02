@@ -12,13 +12,12 @@ describe("PrismaMock", () => {
     });
 
     it("应该能够 mock findMany 返回值", async () => {
-      prismaMock.service.findMany.mockResolvedValue([
+      prismaMock.monitoredHost.findMany.mockResolvedValue([
         {
           id: "test-1",
           name: "Test Service",
           url: "https://example.com",
           enabled: true,
-          intervalTime: 60,
           headers: null,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -29,20 +28,19 @@ describe("PrismaMock", () => {
         },
       ]);
 
-      const services = await prismaMock.service.findMany();
+      const services = await prismaMock.monitoredHost.findMany();
       expect(services).toHaveLength(1);
       expect(services[0].name).toBe("Test Service");
     });
   });
 
-  describe("Service mock 操作", () => {
+  describe("MonitoredHost mock 操作", () => {
     it("应该能够 mock create 返回值", async () => {
       const mockService = {
         id: "test-service-1",
         name: "Test Service",
         url: "https://example.com",
         enabled: true,
-        intervalTime: 60,
         headers: null,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -52,9 +50,9 @@ describe("PrismaMock", () => {
         notifyChannelIds: [],
       };
 
-      prismaMock.service.create.mockResolvedValue(mockService);
+      prismaMock.monitoredHost.create.mockResolvedValue(mockService);
 
-      const service = await prismaMock.service.create({
+      const service = await prismaMock.monitoredHost.create({
         data: {
           id: "test-service-1",
           name: "Test Service",
@@ -65,11 +63,11 @@ describe("PrismaMock", () => {
 
       expect(service.id).toBe("test-service-1");
       expect(service.name).toBe("Test Service");
-      expect(prismaMock.service.create).toHaveBeenCalledTimes(1);
+      expect(prismaMock.monitoredHost.create).toHaveBeenCalledTimes(1);
     });
 
     it("应该能够 mock findUnique 返回值", async () => {
-      prismaMock.service.findUnique.mockResolvedValue({
+      prismaMock.monitoredHost.findUnique.mockResolvedValue({
         id: "test-service-2",
         name: "Test Service 2",
         url: null,
@@ -83,13 +81,13 @@ describe("PrismaMock", () => {
         notifyChannelIds: [],
       });
 
-      const found = await prismaMock.service.findUnique({
+      const found = await prismaMock.monitoredHost.findUnique({
         where: { id: "test-service-2" },
       });
 
       expect(found).not.toBeNull();
       expect(found?.name).toBe("Test Service 2");
-      expect(prismaMock.service.findUnique).toHaveBeenCalledWith({
+      expect(prismaMock.monitoredHost.findUnique).toHaveBeenCalledWith({
         where: { id: "test-service-2" },
       });
     });
@@ -99,7 +97,7 @@ describe("PrismaMock", () => {
     it("应该能够 mock EndPoint 创建", async () => {
       const mockEndpoint = {
         id: "test-endpoint-1",
-        serviceId: "service-1",
+        hostId: "service-1",
         name: "Test EndPoint",
         url: "/api/health",
         method: "GET",
@@ -120,7 +118,7 @@ describe("PrismaMock", () => {
       const endpoint = await prismaMock.endPoint.create({
         data: {
           id: "test-endpoint-1",
-          serviceId: "service-1",
+          hostId: "service-1",
           name: "Test EndPoint",
           url: "/api/health",
           method: "GET",
@@ -128,7 +126,7 @@ describe("PrismaMock", () => {
       });
 
       expect(endpoint.id).toBe("test-endpoint-1");
-      expect(endpoint.serviceId).toBe("service-1");
+      expect(endpoint.hostId).toBe("service-1");
     });
   });
 
@@ -240,7 +238,7 @@ describe("PrismaMock", () => {
 
   describe("Mock 重置", () => {
     it("resetPrismaMock 应该清空所有 mock 状态", async () => {
-      prismaMock.service.findMany.mockResolvedValue([
+      prismaMock.monitoredHost.findMany.mockResolvedValue([
         {
           id: "1",
           name: "Test",
@@ -257,26 +255,26 @@ describe("PrismaMock", () => {
       ]);
 
       // 第一次调用
-      const first = await prismaMock.service.findMany();
+      const first = await prismaMock.monitoredHost.findMany();
       expect(first).toHaveLength(1);
 
       // 重置
       resetPrismaMock();
 
       // 重置后 mock 返回 undefined（默认行为）
-      const second = await prismaMock.service.findMany();
+      const second = await prismaMock.monitoredHost.findMany();
       expect(second).toBeUndefined();
     });
 
     it("每个测试之间 mock 状态应该独立", () => {
       // 这个测试验证 beforeEach 中的 resetPrismaMock 工作正常
-      expect(prismaMock.service.create).not.toHaveBeenCalled();
+      expect(prismaMock.monitoredHost.create).not.toHaveBeenCalled();
     });
   });
 
   describe("Mock 验证调用参数", () => {
     it("应该能够验证调用次数", async () => {
-      prismaMock.service.create.mockResolvedValue({
+      prismaMock.monitoredHost.create.mockResolvedValue({
         id: "1",
         name: "Test",
         url: null,
@@ -290,10 +288,10 @@ describe("PrismaMock", () => {
         notifyChannelIds: [],
       });
 
-      await prismaMock.service.create({ data: { name: "Test 1" } });
-      await prismaMock.service.create({ data: { name: "Test 2" } });
+      await prismaMock.monitoredHost.create({ data: { name: "Test 1" } });
+      await prismaMock.monitoredHost.create({ data: { name: "Test 2" } });
 
-      expect(prismaMock.service.create).toHaveBeenCalledTimes(2);
+      expect(prismaMock.monitoredHost.create).toHaveBeenCalledTimes(2);
     });
 
     it("应该能够验证调用参数", async () => {

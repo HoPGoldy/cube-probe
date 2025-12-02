@@ -120,8 +120,8 @@ export class IntervalProbeService {
       }
 
       // 获取 service 详情用于回退值
-      const service = await this.options.prisma.service.findUnique({
-        where: { id: endPoint.serviceId },
+      const service = await this.options.prisma.monitoredHost.findUnique({
+        where: { id: endPoint.hostId },
       });
 
       if (!service || !service.enabled) {
@@ -443,7 +443,7 @@ export class IntervalProbeService {
     const endpoints = await this.options.prisma.endPoint.findMany({
       where: { enabled: true },
       include: {
-        service: true,
+        monitoredHost: true,
       },
     });
 
@@ -484,7 +484,7 @@ export class IntervalProbeService {
     const endpoint = await this.options.prisma.endPoint.findUnique({
       where: { id: endPointId },
       include: {
-        service: true,
+        monitoredHost: true,
       },
     });
 

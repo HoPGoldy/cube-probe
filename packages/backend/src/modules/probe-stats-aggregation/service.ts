@@ -485,17 +485,17 @@ export class ProbeStatsAggregationService {
   /**
    * 获取 Host（Service）的多时间范围统计数据
    * 实时聚合该 Host 下所有 Endpoint 的指标
-   * @param serviceId Host/Service ID
+   * @param hostId Host ID
    */
-  async getHostMultiRangeStats(serviceId: string) {
-    // 获取该 Service 下所有 Endpoint
+  async getHostMultiRangeStats(hostId: string) {
+    // 获取该 Host 下所有 Endpoint
     const endpoints = await this.options.prisma.endPoint.findMany({
-      where: { serviceId },
+      where: { hostId },
       select: { id: true },
     });
 
     const emptyStats = {
-      serviceId,
+      hostId,
       endpointCount: 0,
       current: { avgResponseTime: null, successRate: null, timestamp: null },
       stats24h: {
@@ -548,7 +548,7 @@ export class ProbeStatsAggregationService {
       await this.getAggregatedStatsForEndpoints(endpointIds);
 
     return {
-      serviceId,
+      hostId,
       endpointCount: endpoints.length,
       current: {
         avgResponseTime: currentAvgResponseTime,

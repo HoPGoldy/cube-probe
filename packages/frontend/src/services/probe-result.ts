@@ -4,7 +4,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 
 export interface ProbeResultListQueryDto extends CommonListQueryDto {
   endPointId?: string;
-  serviceId?: string;
+  hostId?: string;
   limit?: number;
   refetchInterval?: number;
 }
@@ -16,8 +16,8 @@ export const useGetProbeResultList = (query?: ProbeResultListQueryDto) => {
     queryKey: ["probe-result/list", params],
     enabled: params.endPointId
       ? !!params.endPointId
-      : params.serviceId
-        ? !!params.serviceId
+      : params.hostId
+        ? !!params.hostId
         : true,
     refetchInterval,
     queryFn: () => requestPost("probe-result/list", params),

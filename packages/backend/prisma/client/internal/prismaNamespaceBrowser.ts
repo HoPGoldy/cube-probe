@@ -56,7 +56,7 @@ export const ModelName = {
   Application: 'Application',
   WebAuthnCredential: 'WebAuthnCredential',
   AppConfig: 'AppConfig',
-  Service: 'Service',
+  MonitoredHost: 'MonitoredHost',
   EndPoint: 'EndPoint',
   ProbeResult: 'ProbeResult',
   ProbeHourlyStat: 'ProbeHourlyStat',
@@ -147,7 +147,7 @@ export const AppConfigScalarFieldEnum = {
 export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
 
 
-export const ServiceScalarFieldEnum = {
+export const MonitoredHostScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -161,14 +161,14 @@ export const ServiceScalarFieldEnum = {
   notifyChannelIds: 'notifyChannelIds'
 } as const
 
-export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
+export type MonitoredHostScalarFieldEnum = (typeof MonitoredHostScalarFieldEnum)[keyof typeof MonitoredHostScalarFieldEnum]
 
 
 export const EndPointScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  serviceId: 'serviceId',
+  hostId: 'hostId',
   name: 'name',
   type: 'type',
   url: 'url',
@@ -242,7 +242,7 @@ export type NotificationChannelScalarFieldEnum = (typeof NotificationChannelScal
 export const NotificationLogScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  serviceId: 'serviceId',
+  hostId: 'hostId',
   endpointId: 'endpointId',
   channelId: 'channelId',
   eventType: 'eventType',

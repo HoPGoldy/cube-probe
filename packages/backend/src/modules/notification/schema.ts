@@ -78,7 +78,7 @@ export type SchemaChannelTestType = Static<typeof SchemaChannelTest>;
 // ==================== Log Schemas ====================
 
 export const SchemaLogList = Type.Object({
-  serviceId: Type.Optional(Type.String({ description: "Host/Service ID" })),
+  hostId: Type.Optional(Type.String({ description: "Host ID" })),
   endpointId: Type.Optional(Type.String({ description: "端点 ID" })),
   channelId: Type.Optional(Type.String({ description: "渠道 ID" })),
   limit: Type.Optional(
@@ -96,7 +96,7 @@ export type SchemaLogListType = Static<typeof SchemaLogList>;
 export const SchemaLogDetail = Type.Object({
   id: Type.String(),
   createdAt: Type.String({ format: "date-time" }),
-  serviceId: Type.String(),
+  hostId: Type.String(),
   endpointId: Type.String(),
   channelId: Type.String(),
   eventType: Type.String(),
@@ -131,7 +131,7 @@ export const createLogDetailVo = (
   return {
     id: data.id,
     createdAt: data.createdAt.toISOString(),
-    serviceId: data.serviceId,
+    hostId: data.hostId,
     endpointId: data.endpointId,
     channelId: data.channelId,
     eventType: data.eventType,

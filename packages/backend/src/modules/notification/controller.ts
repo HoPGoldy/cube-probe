@@ -211,8 +211,9 @@ export const registerController = async (options: ControllerOptions) => {
         response: {
           200: Type.Array(
             Type.Object({
-              serviceId: Type.String(),
-              serviceName: Type.String(),
+              hostId: Type.String(),
+              hostName: Type.String(),
+              hostEnabled: Type.Boolean(),
               currentStatus: Type.Union([
                 Type.Literal("UP"),
                 Type.Literal("DOWN"),

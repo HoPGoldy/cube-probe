@@ -3,7 +3,7 @@ import { queryClient, requestPost } from "./base";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 export interface EndpointListQueryDto extends CommonListQueryDto {
-  serviceId?: string;
+  hostId?: string;
 }
 
 export const useGetEndpointList = (query?: EndpointListQueryDto) => {
@@ -22,7 +22,7 @@ export const useGetEndpointDetail = (id: string) => {
 };
 
 export interface EndpointCreateDto {
-  serviceId: string;
+  hostId: string;
   name: string;
   url?: string;
   method?: string;

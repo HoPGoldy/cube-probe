@@ -43,10 +43,10 @@ export type WebAuthnCredential = Prisma.WebAuthnCredentialModel
  */
 export type AppConfig = Prisma.AppConfigModel
 /**
- * Model Service
+ * Model MonitoredHost
  * 
  */
-export type Service = Prisma.ServiceModel
+export type MonitoredHost = Prisma.MonitoredHostModel
 /**
  * Model EndPoint
  * 

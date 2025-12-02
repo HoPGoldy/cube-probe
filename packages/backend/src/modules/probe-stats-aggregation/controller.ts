@@ -64,11 +64,11 @@ export const registerController = async (options: ControllerOptions) => {
       schema: {
         description: "获取 Host 多时间范围统计（聚合所有 Endpoint）",
         body: Type.Object({
-          serviceId: Type.String({ description: "Service/Host ID" }),
+          hostId: Type.String({ description: "Host ID" }),
         }),
         response: {
           200: Type.Object({
-            serviceId: Type.String(),
+            hostId: Type.String(),
             endpointCount: Type.Number(),
             current: Type.Object({
               avgResponseTime: Type.Union([Type.Number(), Type.Null()]),
@@ -96,9 +96,9 @@ export const registerController = async (options: ControllerOptions) => {
       },
     },
     async (req) => {
-      const { serviceId } = req.body;
+      const { hostId } = req.body;
       const result =
-        await probeStatsAggregationService.getHostMultiRangeStats(serviceId);
+        await probeStatsAggregationService.getHostMultiRangeStats(hostId);
       return result;
     },
   );

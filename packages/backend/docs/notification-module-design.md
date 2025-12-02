@@ -59,7 +59,7 @@ model Service {
 model NotificationLog {
   id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
-  serviceId   String   // Host ID
+  hostId   String   // Host ID
   endpointId  String   // 触发通知的端点
   eventType   String   // FAILURE
   title       String
@@ -68,7 +68,7 @@ model NotificationLog {
   success     Boolean
   errorMsg    String?
 
-  @@index([serviceId])
+  @@index([hostId])
   @@index([endpointId])
   @@index([createdAt])
 }

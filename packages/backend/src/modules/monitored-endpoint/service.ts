@@ -13,7 +13,7 @@ export class EndPointService {
   async createEndPoint(data: SchemaEndPointCreateType) {
     const endPoint = await this.options.prisma.endPoint.create({
       data: {
-        serviceId: data.serviceId,
+        hostId: data.hostId,
         name: data.name,
         url: data.url,
         method: data.method || "GET",
@@ -40,9 +40,9 @@ export class EndPointService {
     });
   }
 
-  async getAllEndPoints(serviceId?: string) {
+  async getAllEndPoints(hostId?: string) {
     return await this.options.prisma.endPoint.findMany({
-      where: serviceId ? { serviceId } : undefined,
+      where: hostId ? { hostId } : undefined,
       orderBy: {
         createdAt: "desc",
       },

@@ -389,7 +389,7 @@ export const ModelName = {
   Application: 'Application',
   WebAuthnCredential: 'WebAuthnCredential',
   AppConfig: 'AppConfig',
-  Service: 'Service',
+  MonitoredHost: 'MonitoredHost',
   EndPoint: 'EndPoint',
   ProbeResult: 'ProbeResult',
   ProbeHourlyStat: 'ProbeHourlyStat',
@@ -412,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "service" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat" | "notificationChannel" | "notificationLog" | "probeEnv"
+    modelProps: "user" | "attachment" | "application" | "webAuthnCredential" | "appConfig" | "monitoredHost" | "endPoint" | "probeResult" | "probeHourlyStat" | "probeDailyStat" | "notificationChannel" | "notificationLog" | "probeEnv"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -786,77 +786,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Service: {
-      payload: Prisma.$ServicePayload<ExtArgs>
-      fields: Prisma.ServiceFieldRefs
+    MonitoredHost: {
+      payload: Prisma.$MonitoredHostPayload<ExtArgs>
+      fields: Prisma.MonitoredHostFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.ServiceFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload> | null
+          args: Prisma.MonitoredHostFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.ServiceFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+          args: Prisma.MonitoredHostFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>
         }
         findFirst: {
-          args: Prisma.ServiceFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload> | null
+          args: Prisma.MonitoredHostFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.ServiceFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+          args: Prisma.MonitoredHostFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>
         }
         findMany: {
-          args: Prisma.ServiceFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>[]
+          args: Prisma.MonitoredHostFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>[]
         }
         create: {
-          args: Prisma.ServiceCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+          args: Prisma.MonitoredHostCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>
         }
         createMany: {
-          args: Prisma.ServiceCreateManyArgs<ExtArgs>
+          args: Prisma.MonitoredHostCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.ServiceCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>[]
+          args: Prisma.MonitoredHostCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>[]
         }
         delete: {
-          args: Prisma.ServiceDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+          args: Prisma.MonitoredHostDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>
         }
         update: {
-          args: Prisma.ServiceUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+          args: Prisma.MonitoredHostUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>
         }
         deleteMany: {
-          args: Prisma.ServiceDeleteManyArgs<ExtArgs>
+          args: Prisma.MonitoredHostDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.ServiceUpdateManyArgs<ExtArgs>
+          args: Prisma.MonitoredHostUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.ServiceUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>[]
+          args: Prisma.MonitoredHostUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>[]
         }
         upsert: {
-          args: Prisma.ServiceUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServicePayload>
+          args: Prisma.MonitoredHostUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MonitoredHostPayload>
         }
         aggregate: {
-          args: Prisma.ServiceAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateService>
+          args: Prisma.MonitoredHostAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMonitoredHost>
         }
         groupBy: {
-          args: Prisma.ServiceGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ServiceGroupByOutputType>[]
+          args: Prisma.MonitoredHostGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MonitoredHostGroupByOutputType>[]
         }
         count: {
-          args: Prisma.ServiceCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.ServiceCountAggregateOutputType> | number
+          args: Prisma.MonitoredHostCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MonitoredHostCountAggregateOutputType> | number
         }
       }
     }
@@ -1482,7 +1482,7 @@ export const AppConfigScalarFieldEnum = {
 export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
 
 
-export const ServiceScalarFieldEnum = {
+export const MonitoredHostScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -1496,14 +1496,14 @@ export const ServiceScalarFieldEnum = {
   notifyChannelIds: 'notifyChannelIds'
 } as const
 
-export type ServiceScalarFieldEnum = (typeof ServiceScalarFieldEnum)[keyof typeof ServiceScalarFieldEnum]
+export type MonitoredHostScalarFieldEnum = (typeof MonitoredHostScalarFieldEnum)[keyof typeof MonitoredHostScalarFieldEnum]
 
 
 export const EndPointScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  serviceId: 'serviceId',
+  hostId: 'hostId',
   name: 'name',
   type: 'type',
   url: 'url',
@@ -1577,7 +1577,7 @@ export type NotificationChannelScalarFieldEnum = (typeof NotificationChannelScal
 export const NotificationLogScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  serviceId: 'serviceId',
+  hostId: 'hostId',
   endpointId: 'endpointId',
   channelId: 'channelId',
   eventType: 'eventType',
@@ -1803,7 +1803,7 @@ export type GlobalOmitConfig = {
   application?: Prisma.ApplicationOmit
   webAuthnCredential?: Prisma.WebAuthnCredentialOmit
   appConfig?: Prisma.AppConfigOmit
-  service?: Prisma.ServiceOmit
+  monitoredHost?: Prisma.MonitoredHostOmit
   endPoint?: Prisma.EndPointOmit
   probeResult?: Prisma.ProbeResultOmit
   probeHourlyStat?: Prisma.ProbeHourlyStatOmit

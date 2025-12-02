@@ -28,7 +28,7 @@ export const useHostStatus = () => {
       return "DISABLED";
     }
 
-    const status = statusList.find((s: any) => s.serviceId === hostId);
+    const status = statusList.find((s: any) => s.hostId === hostId);
     if (!status) {
       return "UP"; // 未启用通知的服务默认显示正常
     }

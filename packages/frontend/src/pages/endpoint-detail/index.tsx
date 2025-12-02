@@ -69,7 +69,7 @@ export const EndpointDetailModal: FC = () => {
     await form.validateFields();
     const values = form.getFieldsValue();
 
-    values.serviceId = hostId;
+    values.hostId = hostId;
 
     const currentType = values.type || "CONFIG";
 
@@ -150,7 +150,7 @@ export const EndpointDetailModal: FC = () => {
           layout="vertical"
           disabled={isReadonly}
           initialValues={{
-            serviceId: hostId,
+            hostId: hostId,
             enabled: true,
             type: "CONFIG",
             method: "GET",

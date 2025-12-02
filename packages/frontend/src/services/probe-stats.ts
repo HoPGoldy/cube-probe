@@ -42,7 +42,7 @@ export const useGetEndpointMultiRangeStats = (
 
 // Host 多时间范围统计响应类型
 export interface HostMultiRangeStatsResponse {
-  serviceId: string;
+  hostId: string;
   endpointCount: number;
   current: {
     avgResponseTime: number | null;
@@ -67,13 +67,13 @@ export interface HostMultiRangeStatsResponse {
   };
 }
 
-export const useGetHostMultiRangeStats = (serviceId: string) => {
+export const useGetHostMultiRangeStats = (hostId: string) => {
   return useQuery({
-    queryKey: ["probe-stats/host/multi-range", serviceId],
-    enabled: !!serviceId,
+    queryKey: ["probe-stats/host/multi-range", hostId],
+    enabled: !!hostId,
     queryFn: () =>
       requestPost<HostMultiRangeStatsResponse>("probe-stats/host/multi-range", {
-        serviceId,
+        hostId,
       }),
   });
 };

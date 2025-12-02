@@ -63,10 +63,10 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -98,10 +98,10 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -123,10 +123,10 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -147,10 +147,10 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -172,10 +172,10 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -197,10 +197,10 @@ describe("IntervalProbeService", () => {
         id: "endpoint-1",
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -226,10 +226,10 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: true,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
-      mockPrisma.service.findUnique.mockResolvedValue({
+      mockPrisma.monitoredHost.findUnique.mockResolvedValue({
         id: "service-1",
         enabled: true,
         url: "https://example.com",
@@ -258,7 +258,7 @@ describe("IntervalProbeService", () => {
         id: endpointId,
         enabled: false,
         url: "https://example.com",
-        serviceId: "service-1",
+        hostId: "service-1",
       });
 
       await service.addEndpointToScheduler(endpointId, intervalSeconds);

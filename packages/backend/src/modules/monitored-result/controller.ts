@@ -68,8 +68,8 @@ export const registerController = async (options: ControllerOptions) => {
             endPointId: Type.Optional(
               Type.String({ description: "筛选特定端点的结果" }),
             ),
-            serviceId: Type.Optional(
-              Type.String({ description: "筛选特定服务的结果" }),
+            hostId: Type.Optional(
+              Type.String({ description: "筛选特定 Host 的结果" }),
             ),
             limit: Type.Optional(
               Type.Integer({
@@ -86,10 +86,10 @@ export const registerController = async (options: ControllerOptions) => {
       },
     },
     async (req) => {
-      const { endPointId, serviceId, limit } = req.body || {};
+      const { endPointId, hostId, limit } = req.body || {};
       const results = await resultService.getProbeResults({
         endPointId,
-        serviceId,
+        hostId,
         limit,
       });
       return results.map(createProbeResultDetailVo);

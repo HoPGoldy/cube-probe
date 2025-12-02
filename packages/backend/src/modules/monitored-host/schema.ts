@@ -1,4 +1,4 @@
-import { EndPoint, ProbeResult, Service } from "@db/client";
+import { EndPoint, ProbeResult, MonitoredHost } from "@db/client";
 import { Type } from "typebox";
 
 // Service Schemas
@@ -66,7 +66,7 @@ export type SchemaServiceDetailType = Type.Static<typeof SchemaServiceDetail>;
 
 // EndPoint Schemas
 export const SchemaEndPointCreate = Type.Object({
-  serviceId: Type.String({ description: "关联服务ID" }),
+  hostId: Type.String({ description: "关联Host ID" }),
   name: Type.String({
     description: "接口名称",
     minLength: 1,
@@ -102,7 +102,7 @@ export const SchemaEndPointDetail = Type.Object({
   id: Type.String(),
   createdAt: Type.String({ format: "date-time" }),
   updatedAt: Type.String({ format: "date-time" }),
-  serviceId: Type.String(),
+  hostId: Type.String(),
   name: Type.String(),
   url: Type.Union([Type.String(), Type.Null()]),
   headers: Type.Union([Type.Any(), Type.Null()]),
@@ -150,7 +150,7 @@ export type SchemaProbeResultDetailType = Type.Static<
 
 // Helper functions to create VO (Value Objects)
 export const createServiceDetailVo = (
-  data: Service,
+  data: MonitoredHost,
 ): SchemaServiceDetailType => {
   return {
     id: data.id,
@@ -174,7 +174,7 @@ export const createEndPointDetailVo = (
     id: data.id,
     createdAt: data.createdAt.toISOString(),
     updatedAt: data.updatedAt.toISOString(),
-    serviceId: data.serviceId,
+    hostId: data.hostId,
     name: data.name,
     url: data.url,
     headers: data.headers,

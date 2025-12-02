@@ -27,10 +27,10 @@ export const useSettingMenu = () => {
   const { data: statusData } = useGetNotificationStatusList();
   const statusList = (statusData?.data as any[]) ?? [];
   /** 启用的服务数量 */
-  const enabledCount = statusList.filter((s) => s.serviceEnabled).length;
+  const enabledCount = statusList.filter((s) => s.hostEnabled).length;
   /** 正常运行的服务数量 */
   const upCount = statusList.filter(
-    (s) => s.serviceEnabled && s.currentStatus === "UP",
+    (s) => s.hostEnabled && s.currentStatus === "UP",
   ).length;
 
   const settingConfig = [

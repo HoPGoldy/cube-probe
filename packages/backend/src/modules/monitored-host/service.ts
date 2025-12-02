@@ -9,7 +9,7 @@ export class MonitoredHostService {
   constructor(private options: ServiceOptions) {}
 
   async createService(data: SchemaServiceCreateType) {
-    return await this.options.prisma.service.create({
+    return await this.options.prisma.monitoredHost.create({
       data: {
         name: data.name,
         url: data.url,
@@ -24,7 +24,7 @@ export class MonitoredHostService {
   }
 
   async getServiceById(id: string) {
-    return await this.options.prisma.service.findUnique({
+    return await this.options.prisma.monitoredHost.findUnique({
       where: { id },
       include: {
         endpoints: true,
@@ -33,7 +33,7 @@ export class MonitoredHostService {
   }
 
   async getAllServices() {
-    return await this.options.prisma.service.findMany({
+    return await this.options.prisma.monitoredHost.findMany({
       include: {
         endpoints: true,
       },
@@ -45,7 +45,7 @@ export class MonitoredHostService {
 
   async updateService(data: SchemaServiceUpdateType) {
     const { id, ...updateData } = data;
-    return await this.options.prisma.service.update({
+    return await this.options.prisma.monitoredHost.update({
       where: { id },
       data: {
         name: updateData.name,
@@ -62,7 +62,7 @@ export class MonitoredHostService {
   }
 
   async deleteService(id: string) {
-    return await this.options.prisma.service.delete({
+    return await this.options.prisma.monitoredHost.delete({
       where: { id },
     });
   }
@@ -73,7 +73,7 @@ export class MonitoredHostService {
    */
   async copyService(id: string) {
     // 获取原始服务及其端点
-    const original = await this.options.prisma.service.findUnique({
+    const original = await this.options.prisma.monitoredHost.findUnique({
       where: { id },
       include: { endpoints: true },
     });
@@ -97,7 +97,7 @@ export class MonitoredHostService {
     // 使用事务确保原子性
     return await this.options.prisma.$transaction(async (tx) => {
       // 创建新服务
-      const newService = await tx.service.create({
+      const newService = await tx.monitoredHost.create({
         data: {
           ...serviceRest,
           name: `${name} (副本)`,
@@ -115,13 +115,13 @@ export class MonitoredHostService {
               id: _epId,
               createdAt: _epCreatedAt,
               updatedAt: _epUpdatedAt,
-              serviceId: _serviceId,
+              hostId: _hostId,
               headers: epHeaders,
               ...epRest
             } = ep;
             return {
               ...epRest,
-              serviceId: newService.id,
+              hostId: newService.id,
               headers: epHeaders ?? undefined, // 处理 null 值
               enabled: false, // 所有端点默认禁用
             };
@@ -130,7 +130,7 @@ export class MonitoredHostService {
       }
 
       // 返回新服务及其端点
-      return await tx.service.findUnique({
+      return await tx.monitoredHost.findUnique({
         where: { id: newService.id },
         include: { endpoints: true },
       });

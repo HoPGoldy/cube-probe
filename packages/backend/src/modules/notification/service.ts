@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PrismaClient, NotificationChannel, Service } from "@db/client";
+import { PrismaClient, NotificationChannel, MonitoredHost } from "@db/client";
 import { renderTemplate, TemplateContext } from "./template";
 
 interface ServiceOptions {
@@ -82,15 +82,15 @@ export class NotificationService {
   // ==================== Log CRUD ====================
 
   async listLogs(params: {
-    serviceId?: string;
+    hostId?: string;
     endpointId?: string;
     channelId?: string;
     limit?: number;
   }) {
-    const { serviceId, endpointId, channelId, limit = 100 } = params;
+    const { hostId, endpointId, channelId, limit = 100 } = params;
 
     const where: any = {};
-    if (serviceId) where.serviceId = serviceId;
+    if (hostId) where.hostId = hostId;
     if (endpointId) where.endpointId = endpointId;
     if (channelId) where.channelId = channelId;
 
@@ -112,7 +112,7 @@ export class NotificationService {
     // 获取端点和服务信息
     const endpoint = await this.options.prisma.endPoint.findUnique({
       where: { id: endPointId },
-      include: { service: true },
+      include: { monitoredHost: true },
     });
 
     if (!endpoint) {
@@ -120,7 +120,7 @@ export class NotificationService {
       return;
     }
 
-    const service = endpoint.service;
+    const service = endpoint.monitoredHost;
 
     // 检查服务是否启用通知
     if (!service.notifyEnabled) {
@@ -277,12 +277,12 @@ export class NotificationService {
   private async sendNotificationToChannels(
     channels: NotificationChannel[],
     context: TemplateContext,
-    serviceId: string,
+    hostId: string,
   ): Promise<void> {
     const title = `${context.eventType} - ${context.service.name}`;
 
     for (const channel of channels) {
-      await this.sendNotificationToChannel(channel, context, serviceId, title);
+      await this.sendNotificationToChannel(channel, context, hostId, title);
     }
   }
 
@@ -292,7 +292,7 @@ export class NotificationService {
   private async sendNotificationToChannel(
     channel: NotificationChannel,
     context: TemplateContext,
-    serviceId: string,
+    hostId: string,
     title: string,
   ): Promise<void> {
     // 渲染模板
@@ -328,7 +328,7 @@ export class NotificationService {
     // 记录日志
     await this.options.prisma.notificationLog.create({
       data: {
-        serviceId,
+        hostId: hostId,
         endpointId: context.endpoint.id,
         channelId: channel.id,
         eventType: context.eventType,
@@ -395,15 +395,15 @@ export class NotificationService {
   /**
    * 清除指定 Host 的内存状态（Host 被删除时调用）
    */
-  clearHostStatus(serviceId: string): void {
-    this.hostStatus.delete(serviceId);
+  clearHostStatus(hostId: string): void {
+    this.hostStatus.delete(hostId);
   }
 
   /**
    * 清除指定端点的状态（端点被删除时调用）
    */
-  clearEndpointStatus(serviceId: string, endpointId: string): void {
-    const hostState = this.hostStatus.get(serviceId);
+  clearEndpointStatus(hostId: string, endpointId: string): void {
+    const hostState = this.hostStatus.get(hostId);
     if (hostState) {
       hostState.failedEndpoints.delete(endpointId);
       // 如果没有失败的端点了，状态变为 UP
@@ -416,8 +416,8 @@ export class NotificationService {
   /**
    * 获取 Host 当前状态（用于调试/监控）
    */
-  getHostStatus(serviceId: string): HostStatus | undefined {
-    return this.hostStatus.get(serviceId);
+  getHostStatus(hostId: string): HostStatus | undefined {
+    return this.hostStatus.get(hostId);
   }
 
   /**
@@ -425,9 +425,9 @@ export class NotificationService {
    */
   async getAllHostStatus(): Promise<
     Array<{
-      serviceId: string;
-      serviceName: string;
-      serviceEnabled: boolean;
+      hostId: string;
+      hostName: string;
+      hostEnabled: boolean;
       currentStatus: "UP" | "DOWN";
       lastNotifiedAt: Date | null;
       failedEndpoints: Array<{
@@ -438,9 +438,9 @@ export class NotificationService {
     }>
   > {
     const result: Array<{
-      serviceId: string;
-      serviceName: string;
-      serviceEnabled: boolean;
+      hostId: string;
+      hostName: string;
+      hostEnabled: boolean;
       currentStatus: "UP" | "DOWN";
       lastNotifiedAt: Date | null;
       failedEndpoints: Array<{
@@ -451,7 +451,7 @@ export class NotificationService {
     }> = [];
 
     // 获取所有启用通知的服务
-    const services = await this.options.prisma.service.findMany({
+    const services = await this.options.prisma.monitoredHost.findMany({
       where: { notifyEnabled: true },
       include: { endpoints: true },
     });
@@ -479,9 +479,9 @@ export class NotificationService {
       }
 
       result.push({
-        serviceId: service.id,
-        serviceName: service.name,
-        serviceEnabled: service.enabled,
+        hostId: service.id,
+        hostName: service.name,
+        hostEnabled: service.enabled,
         currentStatus: hostState?.currentStatus || "UP",
         lastNotifiedAt: hostState?.lastNotifiedAt || null,
         failedEndpoints,

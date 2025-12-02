@@ -50,7 +50,7 @@ const HostDetailPage: React.FC = () => {
 
   const { data: endpointsData, isLoading: loadingEndpoints } =
     useGetEndpointList({
-      serviceId: hostId,
+      hostId: hostId,
     });
 
   const { data: hostStatsData } = useGetHostMultiRangeStats(hostId || "");
