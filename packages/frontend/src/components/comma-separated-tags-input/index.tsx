@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Select } from "antd";
-import type { SelectProps } from "antd";
 
 interface CommaSeparatedTagsInputProps {
   value?: string;
