@@ -63,6 +63,8 @@ export const EndpointItem: React.FC<EndpointItemProps> = ({
             <Space>
               <DesktopArea>
                 <Button onClick={() => onEdit(endpoint.id)}>配置</Button>
+              </DesktopArea>
+              <DesktopArea>
                 <Dropdown
                   menu={{
                     items: [

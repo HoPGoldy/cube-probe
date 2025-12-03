@@ -13,7 +13,6 @@ COPY . .
 
 RUN cd /app/packages/backend && \
   pnpm run build && \
-  pnpm prisma generate && \
   cd /app/packages/frontend && \
   pnpm run build
 
@@ -23,22 +22,22 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/backend/package.json ./packages/backend/
-COPY packages/backend/prisma ./packages/backend/prisma
-COPY packages/backend/entrypoint.sh ./packages/backend/entrypoint.sh
 
 RUN apk add --no-cache gosu && \
   npm install -g pnpm && \
   cd /app/packages/backend && \
-  pnpm install --prod --filter backend && \
-  chmod +x /app/packages/backend/entrypoint.sh
+  pnpm install --prod --filter backend
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 backenduser
-
+COPY packages/backend/entrypoint.sh ./packages/backend/entrypoint.sh
+COPY packages/backend/prisma ./packages/backend/prisma
+COPY packages/backend/prisma.config.ts ./packages/backend/prisma.config.ts
 COPY --from=build-stage /app/packages/backend/dist /app/packages/backend/dist
 COPY --from=build-stage /app/packages/frontend/dist /app/packages/backend/dist/frontend
 
-RUN chown -R backenduser:nodejs /app/packages/backend/
+RUN addgroup --system --gid 1001 nodejs && \
+  adduser --system --uid 1001 backenduser && \
+  chown -R backenduser:nodejs /app/packages/backend/ && \
+  chmod +x /app/packages/backend/entrypoint.sh
 
 WORKDIR /app/packages/backend
 

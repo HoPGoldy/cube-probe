@@ -19,10 +19,10 @@ jobs:
         run: docker -v
 
       - name: Build the Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cube-auth:${{ env.PACKAGE_VERSION }} .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cube-probe:${{ env.PACKAGE_VERSION }} .
 
       - name: Log in to Docker Hub
         run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cube-auth:${{ env.PACKAGE_VERSION }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cube-probe:${{ env.PACKAGE_VERSION }}

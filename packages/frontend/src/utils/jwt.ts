@@ -1,5 +1,9 @@
-import { UserRole } from "@/services/user";
 import { decode } from "js-base64";
+
+enum UserRole {
+  ADMIN = "admin",
+  USER = "user",
+}
 
 interface JwtPayload {
   username: string;
