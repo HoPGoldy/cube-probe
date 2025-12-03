@@ -7,7 +7,7 @@ COPY packages/backend/package.json ./packages/backend/
 COPY packages/frontend/package.json ./packages/frontend/
 
 RUN npm install -g pnpm && \
-  pnpm install
+  pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -18,6 +18,8 @@ RUN cd /app/packages/backend && \
 
 FROM node:20-alpine AS production-stage
 
+ENV NODE_ENV=production
+
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -26,7 +28,7 @@ COPY packages/backend/package.json ./packages/backend/
 RUN apk add --no-cache gosu && \
   npm install -g pnpm && \
   cd /app/packages/backend && \
-  pnpm install --prod --filter backend
+  pnpm install --frozen-lockfile --prod --filter backend
 
 COPY packages/backend/entrypoint.sh ./packages/backend/entrypoint.sh
 COPY packages/backend/prisma ./packages/backend/prisma
