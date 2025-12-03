@@ -13,6 +13,7 @@ export class MonitoredHostService {
       data: {
         name: data.name,
         url: data.url,
+        desc: data.desc || null,
         headers: data.headers || null,
         enabled: data.enabled ?? true,
         notifyEnabled: data.notifyEnabled ?? false,

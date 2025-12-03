@@ -9,6 +9,7 @@ import {
   CodeExecutionTimeoutError,
   CodeExecutorError,
 } from "./error";
+import { ProbeEnvService } from "@/modules/probe-env/service";
 
 interface ServiceOptions {
   /**
@@ -25,6 +26,10 @@ interface ServiceOptions {
    * 允许的域名白名单（如果为空则允许所有域名）
    */
   allowedDomains?: string[];
+  /**
+   * 环境变量服务（可选，用于注入 env 到沙箱）
+   */
+  probeEnvService?: ProbeEnvService;
 }
 
 export class CodeExecutorService {
@@ -166,6 +171,11 @@ export class CodeExecutorService {
       throw new CodeExecutorError(`超时时间不能超过 ${this.MAX_TIMEOUT}ms`);
     }
 
+    // 获取环境变量用于注入
+    const env = this.options.probeEnvService
+      ? await this.options.probeEnvService.getAllForInjection()
+      : {};
+
     // 记录 console.log 输出
     const logs: string[] = [];
     const startTime = Date.now();
@@ -176,6 +186,7 @@ export class CodeExecutorService {
         timeout,
         sandbox: {
           ...context,
+          env, // 注入环境变量
           // 如果启用 HTTP，注入 http 对象
           ...(this.options.enableHttp && { http: this.createHttpFunction() }),
           console: {
@@ -204,6 +215,32 @@ export class CodeExecutorService {
       const finalResult = result instanceof Promise ? await result : result;
 
       const executionTime = Date.now() - startTime;
+
+      // 处理环境变量更新
+      if (
+        this.options.probeEnvService &&
+        finalResult &&
+        typeof finalResult === "object" &&
+        finalResult.env
+      ) {
+        try {
+          const updateResult =
+            await this.options.probeEnvService.updateFromProbe(finalResult.env);
+          if (updateResult.updated.length > 0) {
+            logs.push(`[ENV] Updated: ${updateResult.updated.join(", ")}`);
+          }
+          if (updateResult.skipped.length > 0) {
+            logs.push(
+              `[ENV] Skipped (not exist): ${updateResult.skipped.join(", ")}`,
+            );
+          }
+          if (updateResult.errors.length > 0) {
+            logs.push(`[ENV] Errors: ${updateResult.errors.join("; ")}`);
+          }
+        } catch (envError: any) {
+          logs.push(`[ENV] Update failed: ${envError.message}`);
+        }
+      }
 
       return {
         success: true,

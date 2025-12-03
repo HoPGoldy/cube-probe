@@ -16,6 +16,7 @@ export class EndPointService {
         hostId: data.hostId,
         name: data.name,
         url: data.url,
+        desc: data.desc || null,
         method: data.method || "GET",
         headers: data.headers || null,
         intervalTime: data.intervalTime || null,

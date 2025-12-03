@@ -3,14 +3,12 @@ import { PrismaClient } from "@db/client";
 import { ResultService } from "@/modules/monitored-result/service";
 import { CodeExecutorService } from "@/modules/code-executor/service";
 import { NotificationService } from "@/modules/notification/service";
-import { ProbeEnvService } from "@/modules/probe-env/service";
 
 interface ServiceOptions {
   prisma: PrismaClient;
   resultService: ResultService;
   codeExecutorService: CodeExecutorService;
   notificationService?: NotificationService;
-  probeEnvService?: ProbeEnvService;
 }
 
 interface IntervalTask {
@@ -165,15 +163,9 @@ export class IntervalProbeService {
     }
 
     try {
-      // 获取环境变量用于注入
-      const env = this.options.probeEnvService
-        ? await this.options.probeEnvService.getAllForInjection()
-        : {};
-
       const result = await this.options.codeExecutorService.execute({
         code: codeContent,
         timeout: 30000, // 代码执行最大 30 秒
-        context: { env }, // 注入环境变量
       });
 
       const responseTime = Date.now() - startTime;
@@ -191,44 +183,15 @@ export class IntervalProbeService {
               status?: number;
             }
           | undefined;
-        let envUpdates: Record<string, string> | undefined;
 
         if (rawResult && typeof rawResult === "object") {
           probeResult = rawResult.result;
-          envUpdates = rawResult.env;
         }
 
         const success = probeResult?.success ?? true;
         const message = probeResult?.message ?? "Code executed successfully";
         const finalResponseTime = probeResult?.responseTime ?? responseTime;
         const status = probeResult?.status;
-
-        // 处理环境变量更新
-        if (envUpdates && this.options.probeEnvService) {
-          try {
-            const updateResult =
-              await this.options.probeEnvService.updateFromProbe(envUpdates);
-            if (updateResult.updated.length > 0) {
-              console.log(
-                `[Interval] Env updated by probe ${endPointId}: ${updateResult.updated.join(", ")}`,
-              );
-            }
-            if (updateResult.skipped.length > 0) {
-              console.log(
-                `[Interval] Env skipped (not exist): ${updateResult.skipped.join(", ")}`,
-              );
-            }
-            if (updateResult.errors.length > 0) {
-              console.warn(
-                `[Interval] Env update errors: ${updateResult.errors.join("; ")}`,
-              );
-            }
-          } catch (envError: any) {
-            console.error(
-              `[Interval] Failed to update env from probe: ${envError.message}`,
-            );
-          }
-        }
 
         await this.saveProbeResultAndNotify({
           endPointId,
