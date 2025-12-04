@@ -104,6 +104,7 @@ export const registerService = async (instance: AppInstance) => {
 
     registerCodeExecutorController({
       codeExecutorService,
+      monitoredHostService,
       server,
     });
 

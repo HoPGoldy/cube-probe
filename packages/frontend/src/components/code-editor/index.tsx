@@ -143,7 +143,22 @@ export const CodeEditor: FC<CodeEditorProps> = ({
            * 在"探针环境变量"页面配置的变量会注入到此对象
            */
           declare const env: Record<string, string>;
-          
+
+          /**
+           * 当前监控主机信息
+           * 当在主机下的端点详情页面执行测试时，会自动注入该主机的配置
+           */
+          declare const host: {
+            /** 主机 ID */
+            id: string;
+            /** 主机名称 */
+            name: string;
+            /** 主机基础 URL */
+            url: string;
+            /** 主机默认请求头 */
+            headers: Record<string, string>;
+          };
+
           /**
            * 探针结果
            */

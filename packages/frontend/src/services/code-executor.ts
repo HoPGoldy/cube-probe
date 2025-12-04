@@ -4,6 +4,7 @@ export interface CodeExecuteRequest {
   code: string;
   timeout?: number;
   context?: Record<string, any>;
+  hostId?: string;
 }
 
 export interface CodeExecuteResponse {

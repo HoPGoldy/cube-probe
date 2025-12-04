@@ -131,7 +131,7 @@ export class IntervalProbeService {
 
       // 根据类型执行不同的探测逻辑
       if (endPoint.type === "CODE") {
-        await this.executeCodeProbe(endPointId, endPoint.codeContent);
+        await this.executeCodeProbe(endPointId, endPoint, service);
       } else {
         await this.executeConfigProbe(endPointId, endPoint, service);
       }
@@ -147,11 +147,19 @@ export class IntervalProbeService {
    */
   private executeCodeProbe = async (
     endPointId: string,
-    codeContent: string | null,
+    endPoint: {
+      codeContent: string | null;
+    },
+    host: {
+      id: string;
+      name: string;
+      url: string | null;
+      headers: any;
+    },
   ) => {
     const startTime = Date.now();
 
-    if (!codeContent) {
+    if (!endPoint.codeContent) {
       await this.saveProbeResultAndNotify({
         endPointId,
         status: undefined,
@@ -164,8 +172,17 @@ export class IntervalProbeService {
 
     try {
       const result = await this.options.codeExecutorService.execute({
-        code: codeContent,
+        code: endPoint.codeContent,
         timeout: 30000, // 代码执行最大 30 秒
+        context: {
+          // 注入 host 配置，供代码中使用
+          host: {
+            id: host.id,
+            name: host.name,
+            url: host.url,
+            headers: host.headers,
+          },
+        },
       });
 
       const responseTime = Date.now() - startTime;

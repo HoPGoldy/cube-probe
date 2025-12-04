@@ -165,6 +165,7 @@ export const EndpointDetailModal: FC = () => {
       const resp = await executeCode({
         code,
         timeout: 10000,
+        hostId,
       });
       if (resp.data) {
         setTestResult(resp.data);

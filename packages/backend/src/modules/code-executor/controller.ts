@@ -1,15 +1,17 @@
 import type { AppInstance } from "@/types";
 import type { CodeExecutorService } from "./service";
+import type { MonitoredHostService } from "@/modules/monitored-host/service";
 import { Type } from "typebox";
 import { SchemaCodeExecuteRequest, SchemaCodeExecuteResponse } from "./schema";
 
 interface RegisterOptions {
   server: AppInstance;
   codeExecutorService: CodeExecutorService;
+  monitoredHostService: MonitoredHostService;
 }
 
 export const registerController = (options: RegisterOptions) => {
-  const { server, codeExecutorService } = options;
+  const { server, codeExecutorService, monitoredHostService } = options;
 
   /**
    * 执行代码
@@ -31,7 +33,25 @@ export const registerController = (options: RegisterOptions) => {
       },
     },
     async (request) => {
-      const result = await codeExecutorService.execute(request.body);
+      const { hostId, ...executeParams } = request.body;
+
+      // 如果提供了 hostId，获取 host 信息并注入到 context
+      if (hostId) {
+        const host = await monitoredHostService.getServiceById(hostId);
+        if (host) {
+          executeParams.context = {
+            ...executeParams.context,
+            host: {
+              id: host.id,
+              name: host.name,
+              url: host.url,
+              headers: host.headers,
+            },
+          };
+        }
+      }
+
+      const result = await codeExecutorService.execute(executeParams);
       return result;
     },
   );

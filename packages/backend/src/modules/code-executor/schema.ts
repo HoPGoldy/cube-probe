@@ -17,6 +17,11 @@ export const SchemaCodeExecuteRequest = Type.Object({
       description: "传递给代码的上下文变量",
     }),
   ),
+  hostId: Type.Optional(
+    Type.String({
+      description: "Host ID，用于注入 host 配置到代码执行上下文",
+    }),
+  ),
 });
 
 export type SchemaCodeExecuteRequestType = Type.Static<
