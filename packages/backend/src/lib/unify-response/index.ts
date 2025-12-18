@@ -68,23 +68,29 @@ export const registerUnifyResponse = (server: FastifyInstance) => {
     }
   });
 
-  // 不能用这个，response schema 没设置时这个会被跳过，没法统一处理
-  // server.setSerializerCompiler(() => {
-  //   return (data) => {
-  //     console.log("data", data);
-  //     // const safeData = Value.Clean(schema, data);
-  //     // const errors = Value.Errors(schema, data);
-  //     // console.log("safeData", safeData);
-  //     return JSON.stringify({ success: true, code: 200, data });
-  //   };
-  // });
+  /**
+   * 不能使用 setSerializerCompiler，因为没有设置 response schema 时不会被调用
+   * 不能使用 preSerialization 和 setReplySerializer，因为基础类型不会走序列化，也就不会走这两个钩子
+   * 只能用 onSend，在这里重新走一遍序列化，统一包装响应结果
+   */
+  server.addHook("onSend", async (request, reply, payload) => {
+    if (
+      reply.statusCode >= 200 &&
+      reply.statusCode < 300 &&
+      typeof payload === "string"
+    ) {
+      let data = payload;
+      try {
+        data = JSON.parse(payload);
+      } catch (e) {
+        // json 解析失败，可能是原始类型，包裹一下直接返回
+      }
 
-  server.setReplySerializer((data, statusCode) => {
-    if (statusCode >= 200 && statusCode < 300) {
-      return JSON.stringify({ success: true, code: 200, data });
+      return JSON.stringify({
+        success: true,
+        code: 200,
+        data: data,
+      });
     }
-
-    // 如果不是成功状态码，返回原始数据，让错误处理器自己处理
-    return JSON.stringify(data);
   });
 };
