@@ -15,20 +15,24 @@ cube-probe 是基于 nodejs 开发的全栈项目，致力于打造轻量级的 
 - 数据库：prisma / sqlite
 - 文档：swagger
 
-## cube-probe docker 容器使用
+## 部署方式
 
-- `FRONTEND_BASE_URL` 参数用于指定应用部署到的路径，例如想要部署到 `https://your-domain/my-sso/`，那么该参数就需要配置为 `/my-sso/`。
-- `BACKEND_JWT_SECRET` 参数用于指定应用的 jwt 密钥，不配置的话，每次重启应用都会生成一个新的密钥。
+本项目以极其简单的快速启动为目标，从零部署仅需一条命令：
 
 ```
 docker run -d \
   --restart=always \
   -p 9736:3499 \
   -v cube-probe-storage:/app/packages/backend/storage \
-  -e FRONTEND_BASE_URL=/cube-probe/ \
-  -e BACKEND_JWT_SECRET=V1StGXR8_Z5jdHi6B-myT \
+  -e BACKEND_LOGIN_PASSWORD=V1StGXR8 \
   hopgoldy/cube-probe:0.1.1
 ```
+
+启动命令说明：
+
+- `BACKEND_LOGIN_PASSWORD`：用于指定登录密码，必填项，建议设置一个强密码。
+- `FRONTEND_BASE_URL`：指定应用部署到的二级路径，例如想要部署到 `https://your-domain/my-app/`，那么该参数就需要配置为 `/my-app/`。
+- `BACKEND_JWT_SECRET` 参数用于指定应用的 jwt 密钥，不配置的话，每次重启应用都会生成一个新的密钥。
 
 ## 初始化安装
 
