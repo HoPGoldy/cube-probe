@@ -8,6 +8,7 @@ import {
   CloudServerOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
+import { APP_NAME } from "@/config";
 import { Cell, SplitLine } from "@/components/cell";
 import { SettingLinkItem, useSettingMenu } from "./use-setting-menu";
 import { AboutModal } from "../about";
@@ -121,7 +122,7 @@ export const MobileSetting: FC<MobileProps> = (props) => {
       }
     >
       <Flex vertical className="p-4" gap={16}>
-        <h1 className="text-center">Cube Probe</h1>
+        <h1 className="text-center">{APP_NAME}</h1>
         <Flex vertical gap={16} className="flex-grow">
           <Card size="small">
             <Row justify="space-around">

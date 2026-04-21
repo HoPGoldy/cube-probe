@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Flex, Modal } from "antd";
 import { SendOutlined, GithubOutlined } from "@ant-design/icons";
+import { APP_NAME } from "@/config";
 
 interface AboutModalModalProps {
   open: boolean;
@@ -13,7 +14,7 @@ export const AboutModal: FC<AboutModalModalProps> = (props) => {
       open={props.open}
       onCancel={() => props.onClose()}
       onOk={() => props.onClose()}
-      title="关于应用 Cube Probe"
+      title={`关于应用 ${APP_NAME}`}
       footer={(_, { OkBtn }) => (
         <Flex align="center" justify="space-between">
           <div className="text-gray-500 dark:text-gray-200">
@@ -30,7 +31,7 @@ export const AboutModal: FC<AboutModalModalProps> = (props) => {
         </div>
 
         <a
-          href="mailto:hopgoldy@gmail.com?&subject=cube-dnote 相关"
+          href={`mailto:hopgoldy@gmail.com?&subject=${APP_NAME} 相关`}
           className="p-2 text-gray-500 dark:text-neutral-200 bg-gray-100 rounded-md"
         >
           <Flex justify="space-between">

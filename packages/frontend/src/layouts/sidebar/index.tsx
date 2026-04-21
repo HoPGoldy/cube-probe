@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import s from "./styles.module.css";
 import { Button, Flex } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { APP_NAME } from "@/config";
 import { useHostDetailAction } from "@/pages/host-detail/use-detail-action";
 import { useHostStatus } from "@/utils/use-host-status";
 
@@ -50,7 +51,7 @@ export const Sidebar: FC = () => {
   return (
     <section className={s.sideberBox}>
       <div className="flex flex-row flex-nowrap items-center justify-center">
-        <div className="font-black text-lg">Cube Probe</div>
+        <div className="font-black text-lg">{APP_NAME}</div>
       </div>
 
       <div className="flex-grow flex-shrink overflow-y-auto noscrollbar overflow-x-hidden my-3">
